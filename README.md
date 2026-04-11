@@ -14,7 +14,7 @@
   Gustavo Mafra Paluski
 
 - **Data da Proposta:**  
-  24/03/2026
+  12/04/2026
 
 - **Versão:**  
   1.0
@@ -22,8 +22,6 @@
 ---
 
 # 1. Visão do Produto e Impacto (O Problema)
-
----
 
 ## 1.1 Contexto e Problema
 
