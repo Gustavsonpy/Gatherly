@@ -35,60 +35,22 @@ Atualmente esses problemas são resolvidos através de grupos em redes sociais o
 
 Exemplo:
 
+<img src="img_readme/lista_fut_borrado.png" alt="lista_de_confirmados_futebol">
+IMAGEM  01 - FOTO DE MENSAGEM COM AS LISTAS DOS CONFIRMADOS PARA UMA PARTIDA DE FUTEBOL.   
+
+<br>
+Com isso, o projeto não se limita a um desafio técnico, mas busca atender a uma necessidade real, de facilitar a organização, descoberta e participação em eventos, promovendo a conexão entre pessoas nas suas localidades.  
 
 ---
 
 ## 1.2 Origem da Demanda e Evidências
 
-É necessário demonstrar que existe **interesse real pela solução**.
+A fim de validar a relevância do projeto e descobrir as dores latentes do projeto, foi conduzida uma pesquisa, via formulário eletrônico, para identificar lacunas na criação de eventos informais entre amigos, colegas e entre pessoas desconhecidas.
 
-Apresente pelo menos **uma evidência concreta**.
+A pesquisa continha perguntas sobre como era a dificuldade do entrevistado em criar e participar de eventos, sendo por meios externos ou pessoais, e como um sistema iria ajudar a diminuir ou amenizar esse problema.
 
-### Demanda Externa
+Ao todo, 16 (dezesseis) pessoas responderam ao formulário. Os resultados, como mostra a imagem abaixo, indicam que as principais dificuldades estão relacionadas à desistência de participantes (43,8%) e à dificuldade de atingir o número mínimo de pessoas necessárias para a realização do evento (31,3%).
 
-Projeto solicitado por:
-
-- empresa
-- ONG
-- órgão público
-- grupo de usuários
-
-Inclua:
-
-- nome da organização
-- contexto da demanda
-- descrição do problema relatado
-
----
-
-### Pesquisa com Usuários
-
-Pode incluir:
-
-- entrevistas
-- questionários
-- observação de processos
-
-Inclua:
-
-- número de pessoas entrevistadas
-- principais dores identificadas
-- padrões observados
-
-Adicione **tabelas, gráficos ou prints**.
-
----
-
-### Evidência de Interesse
-
-Podem ser incluídos:
-
-- cartas de intenção
-- feedback de usuários
-- comentários de comunidades
-- resultados de formulários
-
----
 
 ## 1.3 Análise de Soluções Existentes (Benchmark)
 
