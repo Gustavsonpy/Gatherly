@@ -45,15 +45,21 @@ Com isso, o projeto não se limita a um desafio técnico, mas busca atender a um
 
 ## 1.2 Origem da Demanda e Evidências
 
-A fim de validar a relevância do projeto e descobrir as dores latentes do projeto, foi conduzida uma pesquisa, via formulário eletrônico, para identificar lacunas na criação de eventos informais entre amigos, colegas e entre pessoas desconhecidas.
+A fim de validar a relevância do projeto e descobrir as dores latentes, foi conduzida uma pesquisa, via formulário eletrônico, para identificar lacunas na criação de eventos informais entre amigos, colegas e entre pessoas desconhecidas.
 
 A pesquisa continha perguntas sobre como era a dificuldade do entrevistado em criar e participar de eventos, sendo por meios externos ou pessoais, e como um sistema iria ajudar a diminuir ou amenizar esse problema.
 
-Ao todo, 16 (dezesseis) pessoas responderam ao formulário. Os resultados, como mostra a imagem abaixo, indicam que as principais dificuldades estão relacionadas à desistência de participantes (43,8%) e à dificuldade de atingir o número mínimo de pessoas necessárias para a realização do evento (31,3%).
+Ao todo, 19 (dezenove) pessoas responderam ao formulário. Os resultados, como mostra a imagem abaixo, indicam que as principais dificuldades estão relacionadas à desistência de participantes (47,4%) e à dificuldade de atingir o número mínimo de pessoas necessárias para a realização do evento (31,6%).
 
 <img src="img_readme/spreadsheet_problems.png" alt="Maiores dificuldades ao organizar eventos">
 
 IMAGEM 02 - GRÁFICO MOSTRANDO AS MAIORES DIFICULDADES AO ORGANIZAR EVENTOS 
+
+Além disso, a pesquisa demonstra que existe um possível interesse de uso da plataforma pelos usuários, onde 78,9% dos entrevistados responderam que usariam o novo sistema proposto.
+
+<img src="img_readme/spreadsheet_use.png" alt="Usaria esse sistema">
+
+IMAGEM 03 - GRÁFICO MOSTRANDO COMO SÃO MARCADOS OS EVENTOS ATUALMENTE
 
 Esses dados evidenciam que há uma dor recorrente na organização de eventos informais, especialmente no que diz respeito à previsibilidade de participação e à formação de grupos. Tais dificuldades reforçam a necessidade de uma solução que facilite a descoberta de participantes e aumente o engajamento, validando a proposta do projeto.
 
@@ -64,6 +70,8 @@ Esses dados evidenciam que há uma dor recorrente na organização de eventos in
 O Meetup é uma plataforma voltada à criação e participação em eventos baseados em interesses em comum, organizados principalmente por grupos temáticos. Seu principal objetivo é promover conexões sociais e profissionais por meio de encontros presenciais ou online.
 
 <img src="img_readme/meetup_img.png" alt="Print da plataforma Meetup">
+
+IMAGEM 04 - IMAGEM DA PLATAFORMA "MEETUP"
 
 Link: https://www.meetup.com/pt-BR/
 
@@ -82,6 +90,8 @@ O Eventbrite é uma plataforma voltada à criação, gestão e comercialização
 
 <img src="img_readme/eventbrite_img.png" alt="Print da plataforma Eventbrite">
 
+IMAGEM 05 - IMAGEM DA PLATAFORMA "Eventbrite"
+
 Link: https://www.eventbrite.com.br/
 
 **Público-alvo**: 
@@ -99,6 +109,8 @@ Participantes em busca de eventos e organizadores de eventos que buscam criar, d
 O Fubles é uma plataforma voltada à organização de partidas informais de futebol, permitindo a criação de jogos e a participação aberta de jogadores para completar equipes. A solução atende diretamente ao problema de formação de grupos em atividades esportivas, porém é limitada a um nicho específico, não contemplando outros tipos de eventos sociais.
 
 <img src="img_readme/fubles_img.png" alt="Print da plataforma Fubles">
+
+IMAGEM 05 - IMAGEM DA PLATAFORMA "Fubles"
 
 Link: https://www.fubles.com/pt/
 
