@@ -49,7 +49,7 @@ A pesquisa continha perguntas sobre como era a dificuldade do entrevistado em cr
 
 Ao todo, 19 (dezenove) pessoas responderam ao formulário. Os resultados, como mostra a imagem abaixo, indicam que as principais dificuldades estão relacionadas à desistência de participantes (47,4%) e à dificuldade de atingir o número mínimo de pessoas necessárias para a realização do evento (31,6%).
 
-<img src="img_readme/spreadsheet_problems.png" alt="Maiores dificuldades ao organizar eventos">
+<img src="img_readme/spreadsheet_problems.png" alt="Maior dificuldade em realizar eventos">
 
 IMAGEM 02 - GRÁFICO MOSTRANDO AS MAIORES DIFICULDADES AO ORGANIZAR EVENTOS 
 
@@ -108,7 +108,7 @@ O Fubles é uma plataforma voltada à organização de partidas informais de fut
 
 <img src="img_readme/fubles_img.png" alt="Print da plataforma Fubles">
 
-IMAGEM 05 - IMAGEM DA PLATAFORMA "Fubles"
+IMAGEM 06 - IMAGEM DA PLATAFORMA "Fubles"
 
 Link: https://www.fubles.com/pt/
 
