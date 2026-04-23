@@ -184,3 +184,142 @@ O principal objetivo do projeto é acabar com a dificuldade de organizar e criar
 - Média de avaliação dos usuários igual ou superior a 4 (em uma escala de 1 a 5).
 
 ---
+
+# 2. Engenharia de Requisitos
+
+## 2.1 Personas
+
+## Persona 1 — O Organizador Frustrado
+
+**Nome:** Lucas Andrade
+
+**Idade:** 24 anos
+
+**Contexto:**
+
+Lucas mora em uma cidade de médio porte e gosta de organizar partidas de futebol com amigos. Ele costuma criar grupos no WhatsApp, mas frequentemente tem dificuldades para fechar o número de jogadores.
+
+**Objetivos:**
+
+- Conseguir completar times com facilidade
+- Organizar eventos de forma rápida
+- Evitar cancelamentos de última hora
+
+**Principais dificuldades:**
+
+- Pessoas desmarcam em cima da hora
+- Falta de jogadores suficientes
+- Organização bagunçada em grupos de mensagem
+- Dificuldade de alcançar novas pessoas fora do círculo de amigos
+
+## Persona 2 — O Participante Interessado
+
+**Nome:** Ana Maria
+
+**Idade:** 22 anos
+
+**Contexto:**
+
+Ana é nova na cidade em que reside, não tem amigos, conhecidos e nem familiares por perto. Ela gosta de fazer caminhadas e exercícios físicos com pelo menos uma pessoa, porém não conhece ninguém para participar com ela, querendo buscar novas amizades para realizar tais atividades.
+
+**Objetivos:**
+
+- Conseguir novas amizades
+- Encontrar pessoas procurando por companhia para caminhadas
+
+**Principais dificuldades:**
+
+- Não ter pessoas conhecidas por perto
+- Medo de entrar em grupos desconhecidos
+- Não conhecer os lugares da cidades para realizar as atividades
+
+## Persona 3 — O Usuário Cauteloso
+
+**Nome:** Rafael Lima
+
+**Idade:** 28 anos
+
+**Contexto:**
+
+Rafael gosta de esportes e eventos sociais, mas já teve experiências ruins com grupos desorganizados e pessoas irresponsáveis.
+
+**Objetivos:**
+
+- Participar de eventos confiáveis
+- Evitar experiências negativas
+- Garantir segurança e organização
+
+**Principais dificuldades:**
+
+- Falta de confiança nos participantes
+- Eventos mal organizados
+- Falta de avaliação/reputação dos usuários
+- Medo de perder tempo com eventos ruins
+
+---
+
+## 2.2 Casos de Uso Principais
+
+Liste os principais fluxos do sistema.
+
+Exemplo:
+
+- criar conta
+- registrar dados
+- consultar informações
+- gerar relatórios
+
+Sempre que possível inclua **diagramas de caso de uso**.
+
+---
+
+## 2.3 Requisitos Funcionais (RF)
+
+Use a estrutura:
+
+> O sistema deve permitir que **[ator] realize [ação]**.
+
+Exemplo:
+
+RF01 — O sistema deve permitir que o usuário crie uma conta.
+
+RF02 — O sistema deve permitir que o usuário registre informações.
+
+RF03 — O sistema deve permitir que o usuário visualize dados registrados.
+
+---
+
+## 2.4 Requisitos Não Funcionais (RNF)
+
+Inclua requisitos relacionados a:
+
+- desempenho
+- segurança
+- disponibilidade
+- escalabilidade
+- usabilidade
+
+Exemplo:
+
+RNF01 — O sistema deve suportar 100 usuários simultâneos.  
+RNF02 — O tempo de resposta deve ser inferior a 300ms.  
+RNF03 — O sistema deve utilizar autenticação segura.
+
+---
+
+## 2.5 Regras de Negócio
+
+Exemplos:
+
+- apenas usuários autenticados podem acessar determinados recursos
+- determinadas operações exigem validação adicional
+
+---
+
+## 2.6 Fora do Escopo
+
+Liste explicitamente **o que o sistema não fará**.
+
+Isso ajuda a evitar crescimento descontrolado do projeto.
+
+---
