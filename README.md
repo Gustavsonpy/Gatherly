@@ -275,35 +275,99 @@ Sempre que possível inclua **diagramas de caso de uso**.
 
 ## 2.3 Requisitos Funcionais (RF)
 
-Use a estrutura:
+RF01 – O sistema deve permitir que usuários realizem cadastro utilizando nome, e-mail, senha e informações básicas de perfil.
 
-> O sistema deve permitir que **[ator] realize [ação]**.
+RF02 – O sistema deve permitir que usuários autenticados realizem login utilizando e-mail e senha.
 
-Exemplo:
+RF03 – O sistema deve permitir que usuários recuperem suas senhas através do e-mail cadastrado.
 
-RF01 — O sistema deve permitir que o usuário crie uma conta.
+RF04 – O sistema deve permitir que usuários editem informações do perfil, como foto, descrição, interesses e cidade.
 
-RF02 — O sistema deve permitir que o usuário registre informações.
+RF05 – O sistema deve permitir que usuários criem eventos informais contendo título, descrição, data, horário, local, categoria e limite de participantes.
 
-RF03 — O sistema deve permitir que o usuário visualize dados registrados.
+RF06 – O sistema deve permitir que o organizador edite informações de eventos criados.
+
+RF07 – O sistema deve permitir que o organizador exclua eventos criados.
+
+RF08 – O sistema deve permitir que usuários visualizem eventos disponíveis na plataforma.
+
+RF09 – O sistema deve permitir que usuários pesquisem eventos por nome, categoria ou cidade.
+
+RF10 – O sistema deve permitir que usuários filtrem eventos por categoria, data, localização e quantidade de vagas.
+
+RF11 – O sistema deve permitir que usuários confirmem participação em eventos.
+
+RF12 – O sistema deve permitir que usuários cancelem participação em eventos antes de sua realização.
+
+RF13 – O sistema deve impedir novas participações quando o limite máximo de participantes for atingido.
+
+RF14 – O sistema deve permitir que o organizador visualize a lista de participantes do evento.
+
+RF15 – O sistema deve disponibilizar um chat para comunicação entre participantes de um mesmo evento.
+
+RF16 – O sistema deve enviar notificações relacionadas a eventos, como confirmação de participação, cancelamentos e alterações.
+
+RF17 – O sistema deve permitir que usuários denunciem outros usuários por comportamento inadequado.
+
+RF18 – O sistema deve permitir que usuários denunciem eventos considerados inadequados.
+
+RF19 – O sistema deve permitir que administradores analisem denúncias e realizem ações de moderação.
+
+RF20 – O sistema deve permitir que organizadores cancelem eventos.
+
+RF21 – O sistema deve permitir que usuários visualizem eventos passados dos quais participaram ou organizaram.
+
+RF22 – O sistema deve permitir a categorização de eventos, como esportes, jogos, tecnologia, música e encontros sociais.
+
+RF23 – O sistema deve permitir que usuários salvem eventos como favoritos.
+
+RF24 – O sistema deve permitir que usuários visualizem detalhes completos do evento, incluindo descrição, participantes, data, local e organizador.
+
+RF25 – O sistema deve permitir que administradores gerenciem usuários, eventos e denúncias.
 
 ---
 
 ## 2.4 Requisitos Não Funcionais (RNF)
 
-Inclua requisitos relacionados a:
+RNF01 – O sistema deve responder às requisições principais em até 3 segundos em condições normais de uso.
 
-- desempenho
-- segurança
-- disponibilidade
-- escalabilidade
-- usabilidade
+RNF02 – O sistema deve possuir disponibilidade mínima de 95%.
 
-Exemplo:
+RNF03 – O sistema deve armazenar senhas utilizando criptografia.
 
-RNF01 — O sistema deve suportar 100 usuários simultâneos.  
-RNF02 — O tempo de resposta deve ser inferior a 300ms.  
-RNF03 — O sistema deve utilizar autenticação segura.
+RNF04 – O sistema deve proteger os dados dos usuários conforme as boas práticas de segurança e privacidade.
+
+RNF05 – O sistema deve ser responsivo e funcionar corretamente em dispositivos móveis e desktops.
+
+RNF06 – O sistema deve funcionar nos principais navegadores modernos, como Google Chrome, Mozilla Firefox e Microsoft Edge.
+
+RNF07 – O sistema deve suportar aumento gradual de usuários e eventos sem perda significativa de desempenho.
+
+RNF08 – A interface deve ser intuitiva e de fácil utilização para usuários iniciantes.
+
+RNF09 – O sistema deve garantir integridade dos dados mesmo em casos de falhas ou interrupções.
+
+RNF10 – O sistema deve possuir código organizado e documentado para facilitar manutenção e evolução.
+
+RNF11 – O sistema deve realizar backup periódico das informações armazenadas.
+
+RNF12 – O sistema deve registrar ações importantes, como criação de eventos, denúncias e exclusões.
+
+RNF13 – O sistema deve conseguir retornar ao funcionamento em tempo adequado após falhas críticas.
+
+RNF14 – O sistema deve seguir princípios básicos de acessibilidade digital.
+
+RNF15 – O sistema deve ser desenvolvido utilizando arquitetura web cliente-servidor.
+
+RNF16 – O sistema deve utilizar um banco de dados relacional para armazenamento das informações.
+
+RNF17 – O chat entre participantes deve suportar atualização de mensagens em tempo real.
+
+RNF18 – O sistema deve suportar múltiplos usuários simultaneamente.
+
+RNF19 – O sistema deve manter histórico das ações realizadas pelos administradores.
+
+RNF20 – O sistema deve permitir futuras adaptações para múltiplos idiomas.
 
 ---
 
