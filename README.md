@@ -463,10 +463,24 @@ RNF20 – O sistema deve permitir futuras adaptações para múltiplos idiomas.
 
 ## 2.5 Regras de Negócio
 
-Exemplos:
 
-- apenas usuários autenticados podem acessar determinados recursos
-- determinadas operações exigem validação adicional
+| Código | Regra de Negócio |
+|---|---|
+| RN01 | Apenas usuários autenticados podem criar, editar ou participar de eventos. |
+| RN02 | O usuário só poderá acessar o chat de um evento caso esteja confirmado como participante. |
+| RN03 | Eventos podem possuir limite máximo de participantes definido pelo organizador. |
+| RN04 | Quando o limite de participantes for atingido, novas inscrições no evento devem ser bloqueadas. |
+| RN05 | O organizador do evento poderá editar ou cancelar o evento antes da sua realização. |
+| RN06 | Participantes podem cancelar sua presença em um evento a qualquer momento antes do início. |
+| RN07 | Usuários denunciados poderão ser analisados pela moderação do sistema. |
+| RN08 | Conteúdos considerados inadequados ou ofensivos podem ser removidos pela administração. |
+| RN09 | Cada evento deve possuir informações mínimas obrigatórias, como título, descrição, data, horário e local. |
+| RN10 | O sistema deve impedir a criação de eventos com datas retroativas. |
+| RN11 | Apenas o criador do evento poderá gerenciar participantes e informações do evento. |
+| RN12 | O sistema poderá enviar notificações relacionadas a eventos, como confirmação de participação ou cancelamentos. |
+| RN13 | Usuários podem filtrar eventos com base em categorias, localização ou data. |
+| RN14 | O sistema deve registrar as interações principais dos usuários para fins de segurança e auditoria. |
+| RN15 | Usuários bloqueados ou suspensos não poderão criar eventos nem utilizar funcionalidades sociais do sistema. |
 
 ---
 
