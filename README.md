@@ -260,16 +260,106 @@ Rafael gosta de esportes e eventos sociais, mas já teve experiências ruins com
 
 ## 2.2 Casos de Uso Principais
 
-Liste os principais fluxos do sistema.
+### Caso de Uso: Criar Evento
 
-Exemplo:
+#### Objetivo
+Permitir que organizadores criem eventos na plataforma.
 
-- criar conta
-- registrar dados
-- consultar informações
-- gerar relatórios
+#### Atores
+Organizador.
 
-Sempre que possível inclua **diagramas de caso de uso**.
+#### Fluxo Principal
+1. O organizador acessa a área de criação de eventos;
+2. O sistema exibe o formulário de cadastro;
+3. O organizador informa os dados do evento;
+4. O sistema valida as informações;
+5. O evento é publicado na plataforma.
+<br>
+<br>
+<img src="img_readme/criar_evento_caso_de_uso.png" alt="Criar evento caso de uso">
+
+---
+
+### Caso de Uso: Participar de Evento
+
+#### Objetivo
+Permitir que participantes se inscrevam em eventos disponíveis.
+
+#### Atores
+Participante.
+
+#### Fluxo Principal
+1. O participante acessa a lista de eventos;
+2. O sistema exibe os eventos disponíveis;
+3. O participante seleciona um evento;
+4. O sistema exibe os detalhes do evento;
+5. O participante realiza sua inscrição;
+
+<br>
+<br>
+<img src="img_readme/participar_de_evento_caso_de_uso.png" alt="Participar de evento caso de uso">
+
+---
+
+### Caso de Uso: Conversar no Chat do Evento
+
+#### Objetivo
+Permitir a interação entre participantes inscritos em um evento.
+
+#### Atores
+Participante.
+
+#### Fluxo Principal
+1. O participante acessa o evento inscrito;
+2. O sistema libera acesso ao chat;
+3. O participante envia mensagens;
+4. O sistema distribui as mensagens em tempo real para os demais participantes.
+
+<br>
+<br>
+<img src="img_readme/conversar_no_char_caso_de_uso.png" alt="Conversar no chat caso de uso">
+
+---
+
+### Caso de Uso: Denunciar Usuário ou Evento
+
+#### Objetivo
+Permitir que usuários denunciem comportamentos ou conteúdos inadequados.
+
+#### Atores
+Participante.
+
+#### Fluxo Principal
+1. O participante acessa o perfil do usuário ou evento;
+2. O participante seleciona a opção de denúncia;
+3. O sistema solicita o motivo da denúncia;
+4. A denúncia é registrada;
+5. O administrador analisa a ocorrência.
+
+<br>
+<br>
+<img src="img_readme/denunciar_usuario_evento_caso_de_uso.png" alt="Denunciar usuário ou evento caso de uso">
+
+---
+
+### Caso de Uso: Avaliar Usuários
+
+#### Objetivo
+Permitir que participantes avaliem outros usuários após a participação em eventos.
+
+#### Atores
+Participante.
+
+#### Fluxo Principal
+1. O participante acessa o histórico de eventos;
+2. O sistema exibe os participantes do evento;
+3. O usuário seleciona um participante;
+4. O sistema permite registrar uma avaliação;
+5. A avaliação é armazenada na plataforma.
+
+<br>
+<br>
+<img src="img_readme/avaliar_usuario_caso_de_uso.png" alt="Avaliar usuário caso de uso">
 
 ---
 
