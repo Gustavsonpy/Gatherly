@@ -486,8 +486,28 @@ RNF20 – O sistema deve permitir futuras adaptações para múltiplos idiomas.
 
 ## 2.6 Fora do Escopo
 
-Liste explicitamente **o que o sistema não fará**.
+O sistema não terá como objetivo substituir plataformas completas de redes sociais ou aplicativos de mensagens instantâneas. O foco será exclusivamente na criação, divulgação e participação em eventos sociais.
 
-Isso ajuda a evitar crescimento descontrolado do projeto.
+Estão fora do escopo do projeto:
+
+- Integração com sistemas de pagamento online
+- Compra e venda de ingressos
+- Streaming ou transmissão ao vivo de eventos
+- Chamadas de vídeo ou áudio entre usuários
+- Integração com APIs externas de redes sociais
+- Sistema avançado de recomendação baseado em inteligência artificial
+- Aplicativo mobile nativo para Android e iOS
+- Controle financeiro ou gerenciamento empresarial de eventos
+- Geolocalização em tempo real dos usuários
+- Moderação automatizada por IA
+- Criação de eventos corporativos complexos com múltiplos organizadores e hierarquias
+- Sistema de gamificação com recompensas monetárias
+- Funcionalidades offline
+- Integração com calendários externos, como Google Calendar ou Outlook
+- Suporte multilíngue completo
+- Sistema de autenticação biométrica
+- Painel administrativo avançado para análise de métricas em tempo real
+
+O projeto será limitado às funcionalidades essenciais de interação social entre usuários, gerenciamento básico de eventos, chat entre participantes e mecanismos simples de denúncia e moderação.
 
 ---
