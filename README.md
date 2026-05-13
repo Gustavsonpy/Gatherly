@@ -369,51 +369,47 @@ RF01 – O sistema deve permitir que usuários realizem cadastro utilizando nome
 
 RF02 – O sistema deve permitir que usuários autenticados realizem login utilizando e-mail e senha.
 
-RF03 – O sistema deve permitir que usuários recuperem suas senhas através do e-mail cadastrado.
+RF03 – O sistema deve permitir que usuários editem informações do perfil, como foto, descrição, interesses e cidade.
 
-RF04 – O sistema deve permitir que usuários editem informações do perfil, como foto, descrição, interesses e cidade.
+RF04 – O sistema deve permitir que usuários criem eventos informais contendo título, descrição, data, horário, local, categoria e limite de participantes.
 
-RF05 – O sistema deve permitir que usuários criem eventos informais contendo título, descrição, data, horário, local, categoria e limite de participantes.
+RF05 – O sistema deve permitir que o organizador edite informações de eventos criados.
 
-RF06 – O sistema deve permitir que o organizador edite informações de eventos criados.
+RF06 – O sistema deve permitir que o organizador exclua eventos criados.
 
-RF07 – O sistema deve permitir que o organizador exclua eventos criados.
+RF07 – O sistema deve permitir que usuários visualizem eventos disponíveis na plataforma.
 
-RF08 – O sistema deve permitir que usuários visualizem eventos disponíveis na plataforma.
+RF08 – O sistema deve permitir que usuários pesquisem eventos por nome, categoria ou cidade.
 
-RF09 – O sistema deve permitir que usuários pesquisem eventos por nome, categoria ou cidade.
+RF09 – O sistema deve permitir que usuários filtrem eventos por categoria, data, localização e quantidade de vagas.
 
-RF10 – O sistema deve permitir que usuários filtrem eventos por categoria, data, localização e quantidade de vagas.
+RF10 – O sistema deve permitir que usuários confirmem participação em eventos.
 
-RF11 – O sistema deve permitir que usuários confirmem participação em eventos.
+RF11 – O sistema deve permitir que usuários cancelem participação em eventos antes de sua realização.
 
-RF12 – O sistema deve permitir que usuários cancelem participação em eventos antes de sua realização.
+RF12 – O sistema deve impedir novas participações quando o limite máximo de participantes for atingido.
 
-RF13 – O sistema deve impedir novas participações quando o limite máximo de participantes for atingido.
+RF13 – O sistema deve permitir que o organizador visualize a lista de participantes do evento.
 
-RF14 – O sistema deve permitir que o organizador visualize a lista de participantes do evento.
+RF14 – O sistema deve disponibilizar um chat para comunicação entre participantes de um mesmo evento.
 
-RF15 – O sistema deve disponibilizar um chat para comunicação entre participantes de um mesmo evento.
+RF15 – O sistema deve enviar notificações relacionadas a eventos, como confirmação de participação, cancelamentos e alterações.
 
-RF16 – O sistema deve enviar notificações relacionadas a eventos, como confirmação de participação, cancelamentos e alterações.
+RF16 – O sistema deve permitir que usuários denunciem outros usuários por comportamento inadequado.
 
-RF17 – O sistema deve permitir que usuários denunciem outros usuários por comportamento inadequado.
+RF17 – O sistema deve permitir que usuários denunciem eventos considerados inadequados.
 
-RF18 – O sistema deve permitir que usuários denunciem eventos considerados inadequados.
+RF18 – O sistema deve permitir que administradores analisem denúncias e realizem ações de moderação.
 
-RF19 – O sistema deve permitir que administradores analisem denúncias e realizem ações de moderação.
+RF19 – O sistema deve permitir que organizadores cancelem eventos.
 
-RF20 – O sistema deve permitir que organizadores cancelem eventos.
+RF20 – O sistema deve permitir que usuários visualizem eventos passados dos quais participaram ou organizaram.
 
-RF21 – O sistema deve permitir que usuários visualizem eventos passados dos quais participaram ou organizaram.
+RF21 – O sistema deve permitir a categorização de eventos, como esportes, jogos, tecnologia, música e encontros sociais.
 
-RF22 – O sistema deve permitir a categorização de eventos, como esportes, jogos, tecnologia, música e encontros sociais.
+RF22 – O sistema deve permitir que usuários visualizem detalhes completos do evento, incluindo descrição, participantes, data, local e organizador.
 
-RF23 – O sistema deve permitir que usuários salvem eventos como favoritos.
-
-RF24 – O sistema deve permitir que usuários visualizem detalhes completos do evento, incluindo descrição, participantes, data, local e organizador.
-
-RF25 – O sistema deve permitir que administradores gerenciem usuários, eventos e denúncias.
+RF23 – O sistema deve permitir que administradores gerenciem usuários, eventos e denúncias.
 
 ---
 
