@@ -507,3 +507,37 @@ Estão fora do escopo do projeto:
 O projeto será limitado às funcionalidades essenciais de interação social entre usuários, gerenciamento básico de eventos, chat entre participantes e mecanismos simples de denúncia e moderação.
 
 ---
+
+# 3. Fluxos e Comportamento do Sistema
+
+Esta seção demonstra **como o sistema funciona**.
+
+Use diagramas sempre que possível.
+
+---
+
+## 3.1 Fluxo Principal do Usuário
+
+
+
+Apresente o fluxo principal do sistema.
+
+Utilize:
+
+- fluxogramas
+- diagramas de atividades
+- diagramas de sequência
+
+Inclua **imagens dos diagramas**.
+
+---
+
+## 3.2 Fluxos Alternativos
+
+Descreva cenários como:
+
+- erros
+- cancelamentos
+- exceções
+
+---
