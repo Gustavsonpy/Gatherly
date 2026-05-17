@@ -510,15 +510,35 @@ O projeto será limitado às funcionalidades essenciais de interação social en
 
 # 3. Fluxos e Comportamento do Sistema
 
-Esta seção demonstra **como o sistema funciona**.
-
-Use diagramas sempre que possível.
+Nesta seção, será mostrado os principais fluxos do sistema "Gatherly" através de diagramas de atividade e doagramas de sequência.
 
 ---
 
 ## 3.1 Fluxo Principal do Usuário
 
+- A imagem abaixo, demonstra uma visão geral das ações possíveis do sistema
 
+<img src="img_readme/Diagrama de sequência Gatherly-Geral.png" alt="Diagrama de sequência Gatherly - Geral">
+
+Analisando o fluxo do sistema, é possível visualizar a ação de criar evento, onde é uma das mais importantes do sistema, permitindo que contenha eventos para serem participados por outros usuários.
+
+- A criação de evento consiste em colocar informações e descrições sobre o que vai ser criado, a localização, horário e o número de participantes. 
+
+<img src="img_readme/Diagrama de sequência Gatherly-Criar evento.png" alt="Diagrama de sequência Gatherly - Criar evento">
+
+- Com um evento criado, é possível participar dele, pesquisando e se inscrevendo nele, demonstrando na imagem abaixo:
+
+<img src="img_readme/Diagrama de sequência Gatherly-Participar de evento.png" alt="Diagrama de sequência Gatherly - Participar de evento">
+
+- Uma vez dentro de um evento, é possível se comunicar com participantes através de chat, melhorando o ambiente social. É possível verificar através da imagem abaixo:
+
+<img src="img_readme/Diagrama de sequência Gatherly-Enviar mensagem no chat.png" alt="Diagrama de sequência Gatherly - Enviar mensagem no chat">
+
+O sistema também conta com funcionalidades de avaliação de usuários, permitindo realizar elogios ou critícas para os companheiros do mesmo evento, possibilitando fazer a análise do usuário que irá participar do evento atráves da nota dele, melhorando o ambiente e evitando usuários com pouca avaliação de participar de eventos.
+
+- Essa etapa consiste em buscar o usuário que vai ser avaliado através do histórico de eventos participados do usuário que irá avaliar o outro, com isso basta apenas escolher a opção de avaliar participante e fazer uma avalização sobre ele, como é demonstrado abaixo:
+
+<img src="img_readme/Diagrama de sequência Gatherly-Avaliar usuário.png" alt="Diagrama de sequência Gatherly - Avaliar usuário">
 
 Apresente o fluxo principal do sistema.
 
