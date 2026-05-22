@@ -554,10 +554,84 @@ Inclua **imagens dos diagramas**.
 
 ## 3.2 Fluxos Alternativos
 
-Descreva cenários como:
+### 1. Login inválido
 
-- erros
-- cancelamentos
-- exceções
+Caso o usuário informe credenciais incorretas durante o login.
 
----
+**Fluxo:**
+
+- Usuário informa e-mail e senha
+- Sistema valida as credenciais
+- Sistema identifica dados inválidos
+- Mensagem de erro é exibida
+- Usuário pode tentar novamente
+
+### 2. Cancelamento de participação
+
+Caso o usuário desista de participar do evento.
+
+**Fluxo:**
+
+- Usuário acessa evento confirmado
+- Usuário seleciona opção de cancelamento
+- Sistema remove participação
+- Vaga é liberada novamente
+- Sistema exibe confirmação do cancelamento
+
+### 3. Falha de conexão
+
+Caso ocorra perda de conexão com a internet durante uma operação.
+
+**Fluxo:**
+
+- Usuário realiza uma ação no sistema
+- Conexão é interrompida
+- Sistema não consegue concluir a solicitação
+- Mensagem de erro de conexão é exibida
+- Usuário pode tentar novamente posteriormente
+
+### 4. Evento cancelado pelo organizador
+
+Caso o organizador cancele um evento já criado.
+
+**Fluxo:**
+
+- Organizador solicita cancelamento do evento
+- Sistema altera status do evento
+- Participantes são notificados
+- Evento deixa de aceitar novas participações
+
+### 5. Tentativa de acesso sem autenticação
+
+Caso um usuário tente acessar funcionalidades restritas sem estar logado.
+
+**Fluxo:**
+
+- Usuário tenta acessar funcionalidade protegida
+- Sistema verifica autenticação
+- Usuário não autenticado é identificado
+- Sistema redireciona para tela de login
+
+### 6. Erro interno do sistema
+
+Caso ocorra falha inesperada no servidor.
+
+**Fluxo:**
+
+- Usuário realiza solicitação
+- Sistema encontra erro interno
+- Operação é interrompida
+- Mensagem genérica de erro é exibida
+- Sistema registra ocorrência para análise futura
+
+### 7. Denúncia inválida
+
+Caso o usuário tente enviar denúncia sem informações obrigatórias.
+
+**Fluxo:**
+
+- Usuário preenche formulário de denúncia
+- Sistema valida os dados
+- Informações obrigatórias ausentes são identificadas
+- Sistema impede envio
+- Mensagem de validação é exibida
