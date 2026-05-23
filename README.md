@@ -635,3 +635,87 @@ Caso o usuário tente enviar denúncia sem informações obrigatórias.
 - Informações obrigatórias ausentes são identificadas
 - Sistema impede envio
 - Mensagem de validação é exibida
+
+---
+
+# 4. Mockups e Experiência do Usuário (UX)
+
+Esta seção apresenta **a visualização inicial do produto antes da implementação**.
+
+Mockups ajudam a validar:
+
+- fluxo de navegação
+- organização da interface
+- interações do usuário
+- clareza da experiência
+
+Ferramentas sugeridas:
+
+- Figma
+- Excalidraw
+- Balsamiq
+- Whimsical
+- protótipos desenhados à mão
+
+---
+
+## 4.1 Fluxo de Navegação
+
+Apresente um diagrama mostrando como o usuário navega entre telas.
+
+Exemplo:
+
+Login → Dashboard → Cadastro → Relatório
+
+Inclua **imagem do fluxo de navegação**.
+
+---
+
+## 4.2 Wireframes ou Mockups das Telas
+
+Apresente os principais mockups do sistema.
+
+Inclua pelo menos:
+
+- tela inicial
+- fluxo principal
+- tela de entrada de dados
+- tela de resultado ou visualização
+
+Para cada tela inclua:
+
+- imagem
+- breve descrição da funcionalidade
+- ações principais do usuário
+
+Sempre que possível:
+
+- inclua **links para protótipo navegável**
+- inclua **prints das telas**
+
+---
+
+## 4.3 Fluxo de Interação do Usuário
+
+Demonstre passo a passo um fluxo importante.
+
+Exemplo:
+
+1. usuário acessa o sistema  
+2. cria conta  
+3. registra dados  
+4. visualiza resultados  
+
+Inclua **sequência de telas ou fluxo visual**.
+
+---
+
+## 4.4 Feedback Inicial de Usuários (Opcional)
+
+Se possível, inclua:
+
+- comentários de usuários
+- sugestões de melhoria
+- validação inicial do mockup
+
+---
