@@ -747,39 +747,71 @@ Ao clicar em denunciar um participante o modal de denúncia aparece, pedindo o m
 
 Assim como a denúncia de participante, a avaliação dele também é mostrada por meio de um modal, mostrando qual participante está sendo avaliado, de qual evento está sendo essa avaliação e a nota, em formato de estrelas, que deseja enviar.
 
-Apresente os principais mockups do sistema.
+### Retorno para o usuário
+Após concluir uma ação, será mostrado para o usuário um aviso informando que a operação foi concluída com sucesso ou que algo deu errado, como mostra abaixo:
 
-Inclua pelo menos:
+<img src="img_readme/mensagem_sucesso_erro_base.png" alt="Mockup da base dos avisos de sucesso ou erro - Gatherly">
 
-- tela inicial
-- fluxo principal
-- tela de entrada de dados
-- tela de resultado ou visualização
+Um exemplo de retorno para o usuário, é a mensagem informando que o evento foi criado com sucesso:
 
-Para cada tela inclua:
+<img src="img_readme/Mensagem de sucesso Gatherly.png" alt="Mensagem de sucesso ao criar evento - Gatherly">
 
-- imagem
-- breve descrição da funcionalidade
-- ações principais do usuário
-
-Sempre que possível:
-
-- inclua **links para protótipo navegável**
-- inclua **prints das telas**
+### Link
+Toda a parte de criação dos mockups foi realizado através da plataforma "Figma".
+Link para acesso ao design: https://www.figma.com/design/EvgAtCGAUA9d0BuCmliouv/Gatherly?node-id=0-1&t=I1lSeSoxVVpX4jk4-1
 
 ---
 
 ## 4.3 Fluxo de Interação do Usuário
 
-Demonstre passo a passo um fluxo importante.
+As imagens abaixo demonstram o passo a passo para participar de um evento, que é o fluxo pricipal do sistema. Nele vai ser demonstrado onde o usuário tem que seguir para poder se inscrever em um evento
 
-Exemplo:
+### Fluxo: Participar de um evento
 
-1. usuário acessa o sistema  
-2. cria conta  
-3. registra dados  
-4. visualiza resultados  
+### Passo 1 - Acesso ao sistema
 
-Inclua **sequência de telas ou fluxo visual**.
+O usuário acessa a plataforma Gatherly por meio da tela inicial.
+
+<img src="img_readme/home_sem_login.png" alt="Homepage sem login - Gatherly">
+
+### Passo 2 - Autenticação
+
+O usuário realiza login utilizando e-mail e senha.
+
+<img src="img_readme/login_mockup.png" alt="Tela de login - Gatherly">
+
+### Passo 3 - Visualização dos eventos
+
+Após autenticado, o sistema apresenta a lista de eventos disponíveis.
+
+<img src="img_readme/homepage_mockup.png" alt="Homepage com login - Gatherly">
+<img src="img_readme/eventos_mockup.png" alt="Tela de eventos - Gatherly">
+
+### Passo 4 - Seleção do evento
+
+O usuário seleciona um evento para visualizar mais detalhes.
+
+<img src="img_readme/evento_tela_cheia.png" alt="Tela de evento em tela cheia - Gatherly">
+
+### Passo 5 - Participação no evento
+
+O usuário clica no botão “Participar do evento”, se tiver vaga ele vai ser cadastrado, aparecendo a informação no canto inferior direito da página. Além do aviso o botão de participar do evento é desabilitado, visto que o usuário logado acabou de se inscrever no evento.
+
+<img src="img_readme/confirmacao_de_participacao_de_evento.png" alt="Tela confirmação de evento - Gatherly">
+
+### Passo 6 - Evento concluído
+
+Após o evento ser concluído, é possível o participante seguir para a página de histórico, onde ele vai encontar esse último evento participado, podendo conferir algumas informações, denunciar e avaliar os participantes presentes no evento.
+
+<img src="img_readme/historico_mockup.png" alt="Tela histórico - Gatherly">
+
+<img src="img_readme/participantes_evento_mockup.png" alt="Tela de confirmação de evento - Gatherly">
+
+### Passo 7 - Avaliação ou denúncia
+
+O usuário pode avaliar participantes ou denunciar comportamentos inadequados.
+
+<img src="img_readme/denunciar_usuario_mockup.png" alt="Tela de denúncia - Gatherly">
+<img src="img_readme/avaliar_participante_mockup.png" alt="Tela de avaliação - Gatherly">
 
 ---
