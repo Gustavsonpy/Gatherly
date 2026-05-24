@@ -661,6 +661,8 @@ Ferramentas sugeridas:
 
 ## 4.1 Fluxo de Navegação
 
+<img src="img_readme/fluxo_diagrama.png" alt="Diagrama de fluxo visual - Gatherly">
+
 Apresente um diagrama mostrando como o usuário navega entre telas.
 
 Exemplo:
@@ -672,6 +674,78 @@ Inclua **imagem do fluxo de navegação**.
 ---
 
 ## 4.2 Wireframes ou Mockups das Telas
+
+Nessa seção será mostrada os principais Mockups do sistema, assim como o que terá de funcionalidade para eles.
+
+---
+
+### Cadastro
+<img src="img_readme/cadastro_usuario_mockup.png" alt="Mockup de cadastro de usuário - Gatherly">
+
+A imagem acima pertence a tela de cadastro do usuário, onde ele pode criar a conta para acessar as funcionalidades dentro do sistema. Para criar a conta basta apenas inserir algumas informações pessoais, como nome completo, email, data de nascimento e a senha que deseja utilizar no acesso ao sistema.
+
+### Login
+<img src="img_readme/login_mockup.png" alt="Mockup de cadastro de usuário - Gatherly">
+
+A tela de login permite o usuário a realizar o login no sistema, aproveitando as diversas funcionalidades que o sistema oferece.
+
+### Homepage
+<img src="img_readme/homepage_mockup.png" alt="Mockup da homapage - Gatherly">
+
+A homepage é a página principal do sistema, contendo um resumo dos eventos possíveis e em destaque para participar. <br>
+
+No canto esquerdo da tela possuí um menu lateral, contendo as páginas existentes do sistema, como os eventos, os eventos que o usuário participa ou criou, o histórico dos eventos participados e as configurações.
+
+No centro da página contém um carrossel mostrando os eventos em destaque para participar, na parte de baixo as categorias para realizar o filtro de eventos através de categorias. Na última parte central contém os eventos em destaque na região.
+
+Nao canto direito da imagem aparecem duas informações para o usuário, sendo elas a de eventos que estão marcados para o futuro, ou que esteja perto do dia de acesso do usuário, e os eventos que usuário visualizou recentemente.
+
+### Eventos
+<img src="img_readme/eventos_mockup.png" alt="Mockup de eventos - Gatherly">
+
+A imagem acima mostra a tela que mostra todos os eventos criados e ainda não iniciados, permitindo ao usuário escolher algum evento para participar. Nela também consta uma barra de pesquisa para procurar o nome de um evento em específico, caso seja necessário.
+
+Ao clicar em algum evento de interesse, ele será aberto em tela cheia, mostrando mais informações, como a localização e chat para conversas.
+
+<img src="img_readme/evento_tela_cheia.png" alt="Mockup do evento em tela cheia - Gatherly">
+
+Voltando para a página de eventos, é possível apertar um botão roxo no menu lateral para criar os eventos, onde levará para a página de criação do evento, pedindo alguns informações necessáras para a criação.
+
+### Criar evento
+<img src="img_readme/criar_evento_mockup.png" alt="Mockup de criação de eventos - Gatherly">
+
+Para criar um evento basta colocar algumas informações nos campos pedidos, onde aqueles que tem o *asterisco* em vermelho indica que é um campo obrigatório.
+
+Ao finalizar a criação, irá aparecer o evento para que outros usuários possam participar, indicando nas informações quem é o criador do evento e as informações necessárias para os interessados participarem.
+
+### Meus eventos
+<img src="img_readme/meus_eventos_mockup.png" alt="Mockup de meus eventos - Gatherly">
+
+A página **"Meus eventos"** informa para o usuário os eventos que ele está participando, os que não começaram e ele se candidatou, os concluídos e os cancelados. Sendo possível ele utilizar o filtro de acordo com as preferências do usuário.
+
+### Histórico
+<img src="img_readme/historico_mockup.png" alt="Mockup de histórico - Gatherly">
+
+O histórico é bem parecido com a tela "meus eventos", mudando que ela só aparece os eventos que o usuário criou ou participou e que já tenha sido finalizado.
+
+Nele também é possível filtrar entre eventos que ele participou ou nos eventos que ele criou.
+
+Ao acessar os eventos já finalizados, o usuário pode retornar ao evento e denunciar ou avaliar um usuário, indo no filtro de eventos dentro de um evento em específico.
+
+### Participantes
+<img src="img_readme/participantes_evento_mockup.png" alt="Mockup de participantes de um evento - Gatherly">
+
+Os particiapentes aparecem no filtro de "Participantes", mostrando a foto, nome e a avaliação dele. Tendo também 2 botões, um permitindo os participantes do evento denunciar alguma ação ou ato que algum integrante cometeu durante o período do evento. O outro botão permite ao usuário avaliar outro participante, sendo positivamente ou negativamente.
+
+### Denunciar participante
+<img src="img_readme/denunciar_usuario_mockup.png" alt="Mockup de denunciar participante - Gatherly">
+
+Ao clicar em denunciar um participante o modal de denúncia aparece, pedindo o motivo pelo qual a denúncia está sendo feita, e o campo opcional de texto, para dar mais detalhes para o responsável que irá avaliar a denúncia.
+
+### Avaliar usuário
+<img src="img_readme/avaliar_participante_mockup.png" alt="Mockup de avaliar participante - Gatherly">
+
+Assim como a denúncia de participante, a avaliação dele também é mostrada por meio de um modal, mostrando qual participante está sendo avaliado, de qual evento está sendo essa avaliação e a nota, em formato de estrelas, que deseja enviar.
 
 Apresente os principais mockups do sistema.
 
@@ -707,15 +781,5 @@ Exemplo:
 4. visualiza resultados  
 
 Inclua **sequência de telas ou fluxo visual**.
-
----
-
-## 4.4 Feedback Inicial de Usuários (Opcional)
-
-Se possível, inclua:
-
-- comentários de usuários
-- sugestões de melhoria
-- validação inicial do mockup
 
 ---
