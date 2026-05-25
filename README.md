@@ -815,3 +815,170 @@ O usuário pode avaliar participantes ou denunciar comportamentos inadequados.
 <img src="img_readme/avaliar_participante_mockup.png" alt="Tela de avaliação - Gatherly">
 
 ---
+
+# 5. Arquitetura do Sistema
+
+Esta seção demonstra **como o sistema será construído**.
+
+---
+
+## 5.1 Diagrama C4
+
+Apresente três níveis.
+## 1. Nível 1: Diagrama de Contexto
+
+O diagrama de contexto representa a visão mais macro e abstrata do ecossistema do projeto, tendo como objetivo principal estabelecer as fronteiras do sistema e identificar como ele se posiciona em relação ao ambiente externo e aos seus usuários. Neste nível, o software é tratado como uma "caixa preta" centralizada, ocultando complexidades técnicas e focando exclusivamente nas jornadas e fluxos de valor do negócio. Para o Gatherly, o diagrama evidencia a interação de três atores essenciais com a plataforma: o Participante, que busca e confirma presença em programações locais; o Organizador, que cria e gerencia os eventos informais; e o Administrador, responsável pela moderação de usuários e análise de denúncias.
+
+<img src="img_readme/nivel_1_c4.png" alt="Nivel 1 do modelo C4 - Gatherly">
+
+---
+
+## 2. Nível 2: Diagrama de Containers
+
+O diagrama de contêineres avança para o primeiro nível de detalhamento técnico do modelo C4, abrindo a caixa preta do sistema para ilustrar como a aplicação é dividida em unidades físicas de execução e armazenamento que podem ser implantadas de forma independente. Este nível descreve os limites de software, as tecnologias escolhidas para cada bloco e os protocolos de rede utilizados para a comunicação interna e externa da arquitetura cliente-servidor. No contexto do Gatherly, as personas de participante e organizador são tecnicamente unificadas em um único ator denominado Usuário Autenticado, refletindo a realidade física de que ambos interagem com a mesma aplicação cliente. O diagrama expõe a divisão do sistema em quatro grandes contêineres: a aplicação Web responsiva desenvolvida em Angular, a API Application responsável pelo processamento do back-end, o Realtime Chat Service baseado em WebSockets para a troca de mensagens instantâneas entre os confirmados nos eventos, e o Banco de Dados Relacional encarregado da persistência segura das informações. Trata-se de um mapa de infraestrutura de alto valor para engenheiros de software, desenvolvedores e administradores de sistemas, pois define o ambiente onde o ecossistema de software irá rodar.
+
+<img src="img_readme/nivel_2_c4.png" alt="Nivel 2 do modelo C4 - Gatherly">
+
+---
+
+## 3. Nível 3: Diagrama de Componentes
+
+O diagrama de componentes realiza um zoom profundo em um contêiner específico do sistema, para decompor sua estrutura interna em blocos de código logicamente acoplados e com responsabilidades bem delimitadas. Este nível detalha como os padrões arquiteturais de código e os requisitos não funcionais são estruturados para atender às regras de negócio estabelecidas na especificação do produto. No Gatherly, o diagrama demonstra uma arquitetura organizada em camadas bem definidas e baseada no padrão MVC. O fluxo se inicia nos componentes controladores de interface, como o AuthController, EventController, UserController e AdminController, que recebem e validam as requisições HTTP REST enviadas pelo front-end. Essas requisições são delegadas para a camada de serviços de negócio, composta pelo Auth Service, Event Service, Evaluation & Moderation Service e Notification Service, onde residem os algoritmos e regras críticas, como o controle de limite de vagas e o fluxo de denúncias de má conduta. Por fim, as operações de persistência e consulta são isoladas pela camada de acesso a dados (Data Access Layer), que se comunica diretamente com o banco de dados externo. Este nível funciona como o manual técnico definitivo para a equipe de desenvolvimento, mapeando com precisão a estrutura de diretórios e o fluxo de dependências que devem ser implementados no código-fonte.
+
+<img src="img_readme/nivel_3_c4.png" alt="Nivel 3 do modelo C4 - Gatherly">
+
+---
+
+## 5.2 Modelo de Dados
+
+### DER
+<img src="img_readme/DER_Gatherly.png" alt="DER - Gatherly">
+
+### Esquema relacional
+
+### Usuário
+| Campo | Tipo | Restrição        |
+| :------- | :----: | ----------: |
+| id_usuario | INT    | PK          |
+| nome    |VARCHAR(100)| NOT NULL  |
+| email   |VARCHAR(100)| UNIQUE |
+| nome_usuario |VARCHAR(100)| NOT NULL |
+| data_nascimento |DATETIME| NOT NULL |
+| senha_hash | VARCHAR(255) | NOT NULL |
+| descricao | VARCHAR(100) | NULL |
+| cidade | VARCHAR(100) | NOT NULL |
+| foto_url | VARCHAR(200) | NULL |
+| is_suspenso | boolean | NOT NULL |
+| is_admin | boolean | NOT NULL |
+| data_cadastro | DATETIME | NOT NULL |
+
+### Evento
+| Campo | Tipo | Restrição        |
+| :------- | :----: | ----------: |
+| id_evento | INT    | PK          |
+| titulo    |VARCHAR(100)| NOT NULL  |
+| categoria |VARCHAR(100)| NOT NULL |
+| descricao |VARCHAR(100)| NOT NULL |
+| data_horario |DATETIME| NOT NULL |
+| local | VARCHAR(255) | NOT NULL |
+| limite_vagas | INT | NOT NULL |
+| cidade | VARCHAR(100) | NOT NULL |
+| nivel | VARCHAR(100) | NULL |
+| imagem_url | VARCHAR(100) | NOT NULL |
+| data_criacao | DATETIME | NOT NULL |
+| criador_id | INT | FK |
+
+### Participante_evento
+| Campo | Tipo | Restrição        |
+| :------- | :----: | ----------: |
+|  id_participante_evento | INT    | PK |
+| usuario_id | INT | FK |
+| evento_id | INT | FK |
+| data_inscricao | DATETIME | NOT NULL |
+
+### Mensagem
+| Campo | Tipo | Restrição        |
+| :------- | :----: | ----------: |
+|  id_mensagem | INT    | PK |
+| evento_id | INT | FK |
+| usuario_id | INT | FK |
+| conteudo | VARCHARR(100) | NOT NULL |
+| data_inscricao | DATETIME | NOT NULL |
+
+### Avaliacao
+| Campo | Tipo | Restrição        |
+| :------- | :----: | ----------: |
+|  id_avaliacao | INT    | PK |
+| avaliador_id | INT | FK |
+| avaliado_id | INT | FK |
+| evento_id | INT | FK |
+| nota_estrelas | INT | NOT NULL |
+| data_avaliacao | DATETIME | NOT NULL |
+
+### Denuncia
+| Campo | Tipo | Restrição        |
+| :------- | :----: | ----------: |
+|  id_mensagem | INT    | PK |
+| autor_id | INT | FK |
+| usuario_alvo_id | INT | FK |
+| evento_alvo_id | INT | FK |
+| motivo | INT | FK |
+| detalhes_adicionais | DATETIME | NULL |
+| data_denuncia | DATETIME | NOT NULL |
+
+### Motivo
+| Campo | Tipo | Restrição        |
+| :------- | :----: | ----------: |
+|  id_motivo | INT    | PK |
+| nome | VARCHAR(100) | NOT NULL |
+
+---
+
+## 5.3 Principais Componentes
+
+### Interface Web (Frontend)
+A interface web é responsável pela interação do usuário com o sistema. Por meio dela, os usuários conseguem realizar cadastro, login, visualizar eventos, criar eventos, participar de eventos, utilizar o chat e acessar funcionalidades relacionadas ao perfil. Esse componente foi desenvolvido para oferecer uma navegação intuitiva e facilitar a utilização da plataforma.
+
+### API Backend
+A API Backend é responsável pelo processamento das regras de negócio e pela comunicação entre o frontend e o banco de dados. Ela gerencia funcionalidades como autenticação de usuários, gerenciamento de eventos, controle de participantes, avaliações, denúncias e demais operações do sistema, garantindo o funcionamento correto da aplicação.
+
+### Sistema de Autenticação
+O sistema de autenticação é responsável pelo controle de acesso e segurança da plataforma. Esse componente realiza a validação das credenciais dos usuários durante o login, protege rotas privadas do sistema e garante que apenas usuários autenticados possam acessar determinadas funcionalidades.
+
+### Módulo de Gerenciamento de Eventos
+O módulo de gerenciamento de eventos é responsável pelas funcionalidades relacionadas aos eventos da plataforma. Por meio dele, os usuários podem criar, editar, cancelar e visualizar eventos, além de gerenciar participantes e acompanhar informações relacionadas às atividades cadastradas.
+
+### Módulo de Chat
+O módulo de chat permite a comunicação entre os participantes dos eventos. Esse componente possibilita a troca de mensagens em tempo real, promovendo maior interação social entre os usuários e facilitando a comunicação durante a participação nos eventos.
+
+### Camada de Persistência
+A camada de persistência é responsável pelo armazenamento e gerenciamento das informações do sistema no banco de dados. Esse componente garante o salvamento e recuperação de dados relacionados a usuários, eventos, mensagens, avaliações e denúncias, mantendo a integridade das informações da aplicação.
+
+---
+
+## 5.4 Stack Tecnológica
+
+### Angular
+Framework utilizado no desenvolvimento do frontend da aplicação. Foi escolhido por oferecer uma estrutura robusta para criação de interfaces modernas, componentizadas e organizadas.
+
+### ASP.NET Core
+
+Framework utilizado no backend da aplicação. Foi escolhido pela alta performance, segurança e facilidade na criação de APIs REST escaláveis.
+
+### PostgreSQL
+
+Banco de dados relacional escolhido pela confiabilidade, estabilidade e excelente suporte a relacionamentos entre tabelas.
+
+### Entity Framework
+
+ORM utilizado para facilitar a comunicação entre a aplicação e o banco de dados, permitindo manipulação dos dados de forma mais simples e produtiva.
+
+### Figma
+
+Ferramenta utilizada para criação dos protótipos das telas e planejamento visual da interface do sistema.
+
+### Draw.io
+
+Ferramenta utilizada para modelagem dos diagramas do sistema, como DER, fluxos de navegação e diagramas UML.
+
+---
