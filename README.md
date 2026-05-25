@@ -818,13 +818,10 @@ O usuário pode avaliar participantes ou denunciar comportamentos inadequados.
 
 # 5. Arquitetura do Sistema
 
-Esta seção demonstra **como o sistema será construído**.
-
 ---
 
 ## 5.1 Diagrama C4
 
-Apresente três níveis.
 ## 1. Nível 1: Diagrama de Contexto
 
 O diagrama de contexto representa a visão mais macro e abstrata do ecossistema do projeto, tendo como objetivo principal estabelecer as fronteiras do sistema e identificar como ele se posiciona em relação ao ambiente externo e aos seus usuários. Neste nível, o software é tratado como uma "caixa preta" centralizada, ocultando complexidades técnicas e focando exclusivamente nas jornadas e fluxos de valor do negócio. Para o Gatherly, o diagrama evidencia a interação de três atores essenciais com a plataforma: o Participante, que busca e confirma presença em programações locais; o Organizador, que cria e gerencia os eventos informais; e o Administrador, responsável pela moderação de usuários e análise de denúncias.
