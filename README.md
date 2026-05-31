@@ -940,3 +940,90 @@ Ferramenta utilizada para criação dos protótipos das telas e planejamento vis
 Ferramenta utilizada para modelagem dos diagramas do sistema, como DER, fluxos de navegação e diagramas UML.
 
 ---
+
+# 6. Segurança e Privacidade
+
+Inclua preocupações básicas de segurança.
+
+Exemplos:
+
+- proteção contra OWASP Top 10
+- autenticação e autorização
+- criptografia de dados sensíveis
+
+---
+
+## 6.1 Privacidade e LGPD
+
+Explique:
+
+- quais dados serão coletados
+- como serão armazenados
+- como o usuário poderá solicitar remoção de dados
+
+---
+
+# 7. Planejamento do Projeto
+
+Defina os principais marcos de desenvolvimento.
+
+| Marco | Descrição | Prazo |
+|---|---|---|
+| M1 | Setup do ambiente e prova de conceito | Semana X |
+| M2 | MVP funcional | Semana Y |
+| M3 | Testes e melhorias | Semana Z |
+
+---
+
+# 8. Referências
+
+Tutorial do Diagrama de Sequência: Guia completo com exemplos. Disponível em: <https://creately.com/blog/pt/diagrama/tutorial-do-diagrama-de-sequencia/>. Acesso em: 31 maio. 2026.
+
+Disponível em: <https://unsplash.com/pt-br/fotografias/closeup-photography-of-woman-smiling-mEZ3PoFGs_k>. Acesso em: 31 maio. 2026.
+
+Disponível em: <https://unsplash.com/pt-br/fotografias/man-sitting-on-gray-concrete-wall-_M6gy9oHgII>. Acesso em: 31 maio. 2026b.
+
+Disponível em: <https://unsplash.com/pt-br/fotografias/pessoa-vestindo-top-azul-sorrindo-j3lf-Jn6deo>. Acesso em: 31 maio. 2026c.
+
+Disponível em: <https://unsplash.com/pt-br/fotografias/homem-na-camisa-branca-em-pe-perto-do-corpo-de-agua-durante-o-dia-4XK2oKKvzVU>. Acesso em: 31 maio. 2026d.
+
+Disponível em: <https://unsplash.com/pt-br/fotografias/fotografia-de-foco-seletivo-da-mulher-com-fundo-marrom-da-parede-de-madeira-K_b41GaWC5Y>. Acesso em: 31 maio. 2026e.
+
+---
+
+# 9. Apêndices
+
+Podem incluir:
+
+- mockups adicionais
+- resultados de pesquisa
+- entrevistas com usuários
+- diagramas complementares
+- links para protótipos ou repositórios
+
+Sempre que possível inclua **imagens, protótipos ou referências visuais**.
+
+---
+
+# 10. Parecer do Comitê de Avaliação
+
+(A ser preenchido pelos professores)
+
+**Avaliador 1:** __________________________  
+**Status:** [ ] Aprovado  [ ] Ajustar
+
+Observações:
+
+---
+
+**Avaliador 2:** __________________________  
+**Status:** [ ] Aprovado  [ ] Ajustar
+
+Observações:
+
+---
+
+**Avaliador 3:** __________________________  
+**Status:** [ ] Aprovado  [ ] Ajustar
+
+Observações:
