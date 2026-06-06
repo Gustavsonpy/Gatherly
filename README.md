@@ -177,7 +177,7 @@ O principal objetivo do projeto é acabar com a dificuldade de organizar e criar
 
 ## 1.6 Métricas de Sucesso (KPIs)
 
-- Tempo médio de resposta inferior a 300ms nas principais operações;
+- Tempo médio de resposta inferior a 3000ms nas principais operações;
 - Suporte a pelo menos 50 usuários simultâneos sem degradação significativa de desempenho;
 - Pelo menos 70% dos eventos criados atingirem o número mínimo de participantes;
 - Taxa de participação em eventos superior a 60% dos usuários cadastrados;
@@ -943,23 +943,55 @@ Ferramenta utilizada para modelagem dos diagramas do sistema, como DER, fluxos d
 
 # 6. Segurança e Privacidade
 
-Inclua preocupações básicas de segurança.
+A segurança da informação é um aspecto importante do Gatherly, visando proteger os dados dos usuários e garantir a confiabilidade da plataforma. Para isso, serão adotadas práticas recomendadas de desenvolvimento seguro, com foco na proteção contra vulnerabilidades conhecidas e no controle de acesso aos recursos do sistema.
 
-Exemplos:
+**Proteção contra vulnerabilidades (OWASP Top 10)**
 
-- proteção contra OWASP Top 10
-- autenticação e autorização
-- criptografia de dados sensíveis
+O sistema será desenvolvido seguindo as recomendações da OWASP Top 10, buscando prevenir vulnerabilidades comuns em aplicações web, como injeção de SQL, falhas de autenticação, exposição de dados sensíveis, controle inadequado de acesso e ataques de Cross-Site Scripting (XSS). A utilização do Entity Framework contribui para a mitigação de ataques de injeção de SQL por meio de consultas parametrizadas.
+
+**Autenticação e Autorização**
+
+O acesso às funcionalidades do sistema será controlado por mecanismos de autenticação baseados em credenciais de usuário. Após o login, o usuário receberá um token de acesso (JWT - JSON Web Token), utilizado para validar sua identidade nas requisições realizadas à API. Além disso, serão implementadas regras de autorização para garantir que cada usuário possa acessar apenas os recursos permitidos, como editar ou excluir apenas eventos criados por ele.
+
+**Proteção de Dados Sensíveis**
+
+As senhas dos usuários não serão armazenadas em texto puro no banco de dados. Para garantir sua proteção, será utilizado um algoritmo de hash seguro com salt. Além disso, a comunicação entre cliente e servidor deverá ocorrer por meio do protocolo HTTPS, garantindo a criptografia dos dados transmitidos pela rede.
+
+**Privacidade dos Usuários**
+
+O Gatherly armazenará apenas os dados necessários para o funcionamento da plataforma, respeitando os princípios de minimização de dados. Informações pessoais dos usuários serão utilizadas exclusivamente para fins relacionados à participação e gerenciamento de eventos, não sendo compartilhadas com terceiros sem consentimento.
+
+**Controle de Acesso e Auditoria**
+
+As operações realizadas pelos usuários poderão ser registradas por meio de logs da aplicação, permitindo o monitoramento de atividades relevantes e auxiliando na identificação de possíveis falhas ou tentativas de uso indevido do sistema.
 
 ---
 
 ## 6.1 Privacidade e LGPD
 
-Explique:
+O Gatherly coleta apenas as informações necessárias para o funcionamento da plataforma e para a participação dos usuários nos eventos cadastrados.
 
-- quais dados serão coletados
-- como serão armazenados
-- como o usuário poderá solicitar remoção de dados
+### Dados Coletados
+
+Durante o cadastro e utilização do sistema, poderão ser coletados os seguintes dados:
+
+- Nome do usuário;
+- Endereço de e-mail;
+- Senha (armazenada de forma criptografada por meio de hash);
+- Informações relacionadas aos eventos criados ou participados;
+- Data e horário de acesso e utilização do sistema.
+
+Esses dados são utilizados exclusivamente para autenticação, gerenciamento de contas, criação de eventos e controle da participação dos usuários na plataforma.
+
+### Armazenamento dos Dados
+
+Os dados serão armazenados em um banco de dados PostgreSQL hospedado em ambiente seguro. Informações sensíveis, como senhas, não serão armazenadas em texto puro, sendo protegidas por algoritmos de hash. Além disso, o acesso aos dados será restrito aos componentes autorizados da aplicação, seguindo boas práticas de segurança e controle de acesso.
+
+### Remoção de Dados
+
+O usuário poderá solicitar a exclusão de sua conta e dos dados pessoais associados por meio das configurações do sistema ou entrando em contato com os administradores da plataforma. Após a solicitação, os dados pessoais serão removidos ou anonimizados, desde que não exista obrigação legal ou necessidade técnica que exija sua manutenção temporária.
+
+Essa abordagem busca atender aos princípios da privacidade e da proteção de dados, garantindo transparência sobre a coleta, armazenamento e exclusão das informações dos usuários.
 
 ---
 
