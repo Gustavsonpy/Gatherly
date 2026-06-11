@@ -534,7 +534,7 @@ Analisando o fluxo do sistema, é possível visualizar a ação de criar evento,
 
 <img src="img_readme/Diagrama de sequência Gatherly-Enviar mensagem no chat.png" alt="Diagrama de sequência Gatherly - Enviar mensagem no chat">
 
-O sistema também conta com funcionalidades de avaliação de usuários, permitindo realizar elogios ou critícas para os companheiros do mesmo evento, possibilitando fazer a análise do usuário que irá participar do evento atráves da nota dele, melhorando o ambiente e evitando usuários com pouca avaliação de participar de eventos.
+O sistema também conta com funcionalidades de avaliação de usuários, permitindo realizar elogios ou critícas para os companheiros do mesmo evento, possibilitando fazer a análise do usuário que irá participar do evento através da nota dele, melhorando o ambiente e evitando usuários com pouca avaliação de participar de eventos.
 
 - Essa etapa consiste em buscar o usuário que vai ser avaliado através do histórico de eventos participados do usuário que irá avaliar o outro, com isso basta apenas escolher a opção de avaliar participante e fazer uma avalização sobre ele, como é demonstrado abaixo:
 
@@ -670,7 +670,7 @@ Ao clicar em algum evento de interesse, ele será aberto em tela cheia, mostrand
 
 <img src="img_readme/evento_tela_cheia.png" alt="Mockup do evento em tela cheia - Gatherly">
 
-Voltando para a página de eventos, é possível apertar um botão roxo no menu lateral para criar os eventos, onde levará para a página de criação do evento, pedindo alguns informações necessáras para a criação.
+Voltando para a página de eventos, é possível apertar um botão roxo no menu lateral para criar os eventos, onde levará para a página de criação do evento, pedindo alguns informações necessárias para a criação.
 
 ### Criar evento
 <img src="img_readme/criar_evento_mockup.png" alt="Mockup de criação de eventos - Gatherly">
@@ -696,7 +696,7 @@ Ao acessar os que já estão finalizados, o usuário pode retornar ao evento e d
 ### Participantes
 <img src="img_readme/participantes_evento_mockup.png" alt="Mockup de participantes de um evento - Gatherly">
 
-Os particiapentes aparecem no filtro de "Participantes", mostrando a foto, nome e a avaliação dele. Tendo também 2 botões, um permitindo os participantes do evento denunciar alguma ação ou ato que algum integrante cometeu. O outro botão permite ao usuário avaliar outro participante, sendo positivamente ou negativamente.
+Os participantes aparecem no filtro de "Participantes", mostrando a foto, nome e a avaliação dele. Tendo também 2 botões, um permitindo os participantes do evento denunciar alguma ação ou ato que algum integrante cometeu. O outro botão permite ao usuário avaliar outro participante, sendo positivamente ou negativamente.
 
 ### Denunciar participante
 <img src="img_readme/denunciar_usuario_mockup.png" alt="Mockup de denunciar participante - Gatherly">
@@ -860,8 +860,8 @@ O diagrama de componentes realiza um zoom profundo em um contêiner específico 
 |  id_mensagem | INT    | PK |
 | evento_id | INT | FK |
 | usuario_id | INT | FK |
-| conteudo | VARCHARR(100) | NOT NULL |
-| data_inscricao | DATETIME | NOT NULL |
+| conteudo | VARCHAR(100) | NOT NULL |
+| data_envio | DATETIME | NOT NULL |
 
 ### Avaliacao
 | Campo | Tipo | Restrição        |
@@ -876,12 +876,12 @@ O diagrama de componentes realiza um zoom profundo em um contêiner específico 
 ### Denuncia
 | Campo | Tipo | Restrição        |
 | :------- | :----: | ----------: |
-|  id_mensagem | INT    | PK |
+|  id_denuncia | INT    | PK |
 | autor_id | INT | FK |
 | usuario_alvo_id | INT | FK |
 | evento_alvo_id | INT | FK |
 | motivo | INT | FK |
-| detalhes_adicionais | DATETIME | NULL |
+| detalhes_adicionais | VARCHAR(500) | NULL |
 | data_denuncia | DATETIME | NOT NULL |
 
 ### Motivo
