@@ -997,13 +997,23 @@ Essa abordagem busca atender aos princípios da privacidade e da proteção de d
 
 # 7. Planejamento do Projeto
 
-Defina os principais marcos de desenvolvimento.
+## 7. Cronograma de Desenvolvimento
 
-| Marco | Descrição | Prazo |
-|---|---|---|
-| M1 | Setup do ambiente e prova de conceito | Semana X |
-| M2 | MVP funcional | Semana Y |
-| M3 | Testes e melhorias | Semana Z |
+Os principais marcos do desenvolvimento do Gatherly estão definidos conforme o cronograma abaixo:
+
+| Marco | Descrição                                                                                                         | Prazo                      |
+| ----- | ----------------------------------------------------------------------------------------------------------------- | -------------------------- |
+| M1    | Configuração do ambiente de desenvolvimento, estruturação do projeto e configuração do banco de dados PostgreSQL. | 28/07 a 10/08              |
+| M2    | Implementação das entidades, contexto do banco de dados e migrações com Entity Framework.                         | 11/08 a 17/08              |
+| M3    | Desenvolvimento da autenticação e autorização de usuários (cadastro, login e controle de acesso).                 | 18/08 a 24/08              |
+| M4    | Desenvolvimento das APIs de usuários, perfis e gerenciamento de eventos.                                          | 25/08 a 07/09              |
+| M5    | Implementação da funcionalidade de participação em eventos e gerenciamento de participantes.                      | 08/09 a 14/09              |
+| M6    | Desenvolvimento das telas de autenticação, perfil e listagem de eventos no frontend Angular.                      | 15/09 a 28/09              |
+| M7    | Desenvolvimento das telas de criação, edição, participação e histórico de eventos.                                | 29/09 a 12/10              |
+| M8    | Integração completa entre frontend, backend e banco de dados, consolidando o MVP funcional.                       | 13/10 a 26/10              |
+| M9    | Testes funcionais, correção de bugs e implementação de melhorias de usabilidade, desempenho e segurança.          | 27/10 a 16/11              |
+| M10   | Elaboração da documentação final, preparação da apresentação e entrega do projeto.                                | 17/11 a início de dezembro |
+
 
 ---
 
@@ -1023,21 +1033,7 @@ Disponível em: <https://unsplash.com/pt-br/fotografias/fotografia-de-foco-selet
 
 ---
 
-# 9. Apêndices
-
-Podem incluir:
-
-- mockups adicionais
-- resultados de pesquisa
-- entrevistas com usuários
-- diagramas complementares
-- links para protótipos ou repositórios
-
-Sempre que possível inclua **imagens, protótipos ou referências visuais**.
-
----
-
-# 10. Parecer do Comitê de Avaliação
+# 09. Parecer do Comitê de Avaliação
 
 (A ser preenchido pelos professores)
 
