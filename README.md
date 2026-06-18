@@ -419,41 +419,25 @@ RNF01 – O sistema deve responder às requisições principais em até 3 segund
 
 RNF02 – O sistema deve possuir disponibilidade mínima de 95%.
 
-RNF03 – O sistema deve armazenar senhas utilizando criptografia.
+RNF03 – O sistema deve armazenar senhas utilizando criptografia e proteger os dados dos usuários conforme boas práticas de segurança e privacidade.
 
-RNF04 – O sistema deve proteger os dados dos usuários conforme as boas práticas de segurança e privacidade.
+RNF04 – O sistema deve ser responsivo e funcionar corretamente em dispositivos móveis e desktops.
 
-RNF05 – O sistema deve ser responsivo e funcionar corretamente em dispositivos móveis e desktops.
+RNF05 – O sistema deve funcionar nos principais navegadores modernos, como Google Chrome, Mozilla Firefox e Microsoft Edge.
 
-RNF06 – O sistema deve funcionar nos principais navegadores modernos, como Google Chrome, Mozilla Firefox e Microsoft Edge.
+RNF06 – O sistema deve suportar aumento gradual de usuários e eventos sem perda significativa de desempenho.
 
-RNF07 – O sistema deve suportar aumento gradual de usuários e eventos sem perda significativa de desempenho.
+RNF07 – A interface deve ser intuitiva e de fácil utilização para usuários iniciantes.
 
-RNF08 – A interface deve ser intuitiva e de fácil utilização para usuários iniciantes.
+RNF08 – O sistema deve garantir a integridade dos dados mesmo em casos de falhas ou interrupções.
 
-RNF09 – O sistema deve garantir integridade dos dados mesmo em casos de falhas ou interrupções.
+RNF09 – O sistema deve realizar backup periódico das informações armazenadas e possibilitar recuperação após falhas críticas.
 
-RNF10 – O sistema deve possuir código organizado e documentado para facilitar manutenção e evolução.
+RNF10 – O sistema deve registrar ações importantes do sistema, incluindo atividades administrativas.
 
-RNF11 – O sistema deve realizar backup periódico das informações armazenadas.
+RNF11 – O chat entre participantes deve suportar atualização de mensagens em tempo real.
 
-RNF12 – O sistema deve registrar ações importantes, como criação de eventos, denúncias e exclusões.
-
-RNF13 – O sistema deve conseguir retornar ao funcionamento em tempo adequado após falhas críticas.
-
-RNF14 – O sistema deve seguir princípios básicos de acessibilidade digital.
-
-RNF15 – O sistema deve ser desenvolvido utilizando arquitetura web cliente-servidor.
-
-RNF16 – O sistema deve utilizar um banco de dados relacional para armazenamento das informações.
-
-RNF17 – O chat entre participantes deve suportar atualização de mensagens em tempo real.
-
-RNF18 – O sistema deve suportar múltiplos usuários simultaneamente.
-
-RNF19 – O sistema deve manter histórico das ações realizadas pelos administradores.
-
-RNF20 – O sistema deve permitir futuras adaptações para múltiplos idiomas.
+RNF12 – O sistema deve ser desenvolvido utilizando arquitetura web cliente-servidor com banco de dados relacional.
 
 ---
 
@@ -997,7 +981,7 @@ Essa abordagem busca atender aos princípios da privacidade e da proteção de d
 
 # 7. Planejamento do Projeto
 
-## 7. Cronograma de Desenvolvimento
+## 7.1 Cronograma de Desenvolvimento
 
 Os principais marcos do desenvolvimento do Gatherly estão definidos conforme o cronograma abaixo:
 
