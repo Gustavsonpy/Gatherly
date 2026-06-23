@@ -301,23 +301,23 @@ Participante.
 
 ---
 
-### Caso de Uso: Conversar no Chat do Evento
+### Caso de Uso: Comentar no Evento
 
 #### Objetivo
-Permitir a interação entre participantes inscritos em um evento.
+Permitir que participantes deixem comentários em um evento.
 
 #### Atores
 Participante.
 
 #### Fluxo Principal
 1. O participante acessa o evento inscrito;
-2. O sistema libera acesso ao chat;
-3. O participante envia mensagens;
-4. O sistema distribui as mensagens em tempo real para os demais participantes.
+2. O sistema exibe a seção de comentários;
+3. O participante publica um comentário;
+4. O sistema registra e exibe o comentário para os demais usuários.
 
 <br>
 <br>
-<img src="img_readme/conversar_no_char_caso_de_uso.png" alt="Conversar no chat caso de uso">
+<img src="img_readme/comentar_diagrama_caso_de_uso.png" alt="Conversar no chat caso de uso">
 
 ---
 
@@ -391,7 +391,7 @@ RF12 – O sistema deve impedir novas participações quando o limite máximo de
 
 RF13 – O sistema deve permitir que o organizador visualize a lista de participantes do evento.
 
-RF14 – O sistema deve disponibilizar um chat para comunicação entre participantes de um mesmo evento.
+RF14 - O sistema deve permitir que participantes publiquem comentários em eventos.
 
 RF15 – O sistema deve enviar notificações relacionadas a eventos, como confirmação de participação, cancelamentos e alterações.
 
@@ -435,9 +435,7 @@ RNF09 – O sistema deve realizar backup periódico das informações armazenada
 
 RNF10 – O sistema deve registrar ações importantes do sistema, incluindo atividades administrativas.
 
-RNF11 – O chat entre participantes deve suportar atualização de mensagens em tempo real.
-
-RNF12 – O sistema deve ser desenvolvido utilizando arquitetura web cliente-servidor com banco de dados relacional.
+RNF11 – O sistema deve ser desenvolvido utilizando arquitetura web cliente-servidor com banco de dados relacional.
 
 ---
 
@@ -447,7 +445,7 @@ RNF12 – O sistema deve ser desenvolvido utilizando arquitetura web cliente-ser
 | Código | Regra de Negócio |
 |---|---|
 | RN01 | Apenas usuários autenticados podem criar, editar ou participar de eventos. |
-| RN02 | O usuário só poderá acessar o chat de um evento caso esteja confirmado como participante. |
+| RN02 | O usuário só poderá publicar comentários em um evento caso esteja confirmado como participante. |
 | RN03 | Eventos podem possuir limite máximo de participantes definido pelo organizador. |
 | RN04 | Quando o limite de participantes for atingido, novas inscrições no evento devem ser bloqueadas. |
 | RN05 | O organizador do evento poderá editar ou cancelar o evento antes da sua realização. |
@@ -488,7 +486,7 @@ Estão fora do escopo do projeto:
 - Sistema de autenticação biométrica
 - Painel administrativo avançado para análise de métricas em tempo real
 
-O projeto será limitado às funcionalidades essenciais de interação social entre usuários, gerenciamento básico de eventos, chat entre participantes e mecanismos simples de denúncia e moderação.
+O projeto será limitado às funcionalidades essenciais de interação social entre usuários, gerenciamento básico de eventos, comentários em eventos e mecanismos simples de denúncia e moderação.
 
 ---
 
@@ -502,7 +500,7 @@ Nesta seção, será mostrado os principais fluxos do sistema "Gatherly" atravé
 
 - A imagem abaixo, demonstra uma visão geral das ações possíveis do sistema
 
-<img src="img_readme/Diagrama de sequência Gatherly-Geral.png" alt="Diagrama de sequência Gatherly - Geral">
+<img src="img_readme/diagrama_de_sequencia_geral_corrigido_com_comentario.png" alt="Diagrama de sequência Gatherly - Geral">
 
 Analisando o fluxo do sistema, é possível visualizar a ação de criar evento, onde é uma das mais importantes do sistema, permitindo que contenha eventos para serem participados por outros usuários.
 
@@ -514,9 +512,9 @@ Analisando o fluxo do sistema, é possível visualizar a ação de criar evento,
 
 <img src="img_readme/Diagrama de sequência Gatherly-Participar de evento.png" alt="Diagrama de sequência Gatherly - Participar de evento">
 
-- Uma vez dentro de um evento, é possível se comunicar com participantes através de chat, melhorando o ambiente social. É possível verificar através da imagem abaixo:
+- Uma vez dentro de um evento, é possível visualizar e publicar comentários relacionados ao evento, facilitando a comunicação entre os participantes. É possível verificar através da imagem abaixo:
 
-<img src="img_readme/Diagrama de sequência Gatherly-Enviar mensagem no chat.png" alt="Diagrama de sequência Gatherly - Enviar mensagem no chat">
+<img src="img_readme/cometario_atualizado_sequencia.png" alt="Diagrama de sequência Gatherly - Enviar mensagem no chat">
 
 O sistema também conta com funcionalidades de avaliação de usuários, permitindo realizar elogios ou critícas para os companheiros do mesmo evento, possibilitando fazer a análise do usuário que irá participar do evento através da nota dele, melhorando o ambiente e evitando usuários com pouca avaliação de participar de eventos.
 
@@ -616,7 +614,7 @@ Caso o usuário tente enviar denúncia sem informações obrigatórias.
 
 ## 4.1 Fluxo de Navegação
 
-<img src="img_readme/fluxo_diagrama.png" alt="Diagrama de fluxo visual - Gatherly">
+<img src="img_readme/comentario_fluxo_navegacao.jpg" alt="Diagrama de fluxo visual - Gatherly">
 
 ---
 
@@ -650,9 +648,9 @@ No lado direito da tela, são apresentadas informações complementares para aux
 
 A imagem acima mostra a tela que mostra todos os eventos criados e ainda não iniciados, permitindo ao usuário escolher um para participar. Nela também consta uma barra de pesquisa para procurar o nome de um evento em específico, caso seja necessário.
 
-Ao clicar em algum evento de interesse, ele será aberto em tela cheia, mostrando mais informações, como a localização e chat para conversas.
+Ao clicar em algum evento de interesse, ele será aberto em tela cheia, mostrando mais informações, como a localização e a área de comentários do evento.
 
-<img src="img_readme/evento_tela_cheia.png" alt="Mockup do evento em tela cheia - Gatherly">
+<img src="img_readme/evento_tela_cheia_corrigido_comentario.png" alt="Mockup do evento em tela cheia - Gatherly">
 
 Voltando para a página de eventos, é possível apertar um botão roxo no menu lateral para criar os eventos, onde levará para a página de criação do evento, pedindo alguns informações necessárias para a criação.
 
@@ -678,7 +676,7 @@ Nele também é possível filtrar entre eventos que ele participou e os que ele 
 Ao acessar os que já estão finalizados, o usuário pode retornar ao evento e denunciar ou avaliar um usuário, através do filtro, dentro de um evento em específico.
 
 ### Participantes
-<img src="img_readme/participantes_evento_mockup.png" alt="Mockup de participantes de um evento - Gatherly">
+<img src="img_readme/corrigido_foto_reptido.png" alt="Mockup de participantes de um evento - Gatherly">
 
 Os participantes aparecem no filtro de "Participantes", mostrando a foto, nome e a avaliação dele. Tendo também 2 botões, um permitindo os participantes do evento denunciar alguma ação ou ato que algum integrante cometeu. O outro botão permite ao usuário avaliar outro participante, sendo positivamente ou negativamente.
 
@@ -736,13 +734,13 @@ Após autenticado, o sistema apresenta a lista de eventos disponíveis.
 
 O usuário seleciona um evento para visualizar mais detalhes.
 
-<img src="img_readme/evento_tela_cheia.png" alt="Tela de evento em tela cheia - Gatherly">
+<img src="img_readme/evento_tela_cheia_corrigido_comentario.png" alt="Tela de evento em tela cheia - Gatherly">
 
 ### Passo 5 - Participação no evento
 
 O usuário clica no botão “Participar do evento”, se tiver vaga ele vai ser cadastrado, aparecendo a informação no canto inferior direito da página. Além do aviso o botão de participar do evento é desabilitado, visto que o usuário logado acabou de se inscrever no evento.
 
-<img src="img_readme/confirmacao_de_participacao_de_evento.png" alt="Tela confirmação de evento - Gatherly">
+<img src="img_readme/confirmacao_de_participacao_de_evento_corrigido_comentarios.png" alt="Tela confirmação de evento - Gatherly">
 
 ### Passo 6 - Evento concluído
 
@@ -750,7 +748,7 @@ Após o evento ser concluído, é possível o participante seguir para a página
 
 <img src="img_readme/historico_mockup.png" alt="Tela histórico - Gatherly">
 
-<img src="img_readme/participantes_evento_mockup.png" alt="Tela de confirmação de evento - Gatherly">
+<img src="img_readme/corrigido_foto_reptido.png" alt="Tela de confirmação de evento - Gatherly">
 
 ### Passo 7 - Avaliação ou denúncia
 
@@ -771,15 +769,18 @@ O usuário pode avaliar participantes ou denunciar comportamentos inadequados.
 
 O diagrama de contexto representa a visão mais macro e abstrata do ecossistema do projeto, tendo como objetivo principal estabelecer as fronteiras do sistema e identificar como ele se posiciona em relação ao ambiente externo e aos seus usuários. Neste nível, o software é tratado como uma "caixa preta" centralizada, ocultando complexidades técnicas e focando exclusivamente nas jornadas e fluxos de valor do negócio. Para o Gatherly, o diagrama evidencia a interação de três atores essenciais com a plataforma: o Participante, que busca e confirma presença em programações locais; o Organizador, que cria e gerencia os eventos informais; e o Administrador, responsável pela moderação de usuários e análise de denúncias.
 
-<img src="img_readme/nivel_1_c4.png" alt="Nivel 1 do modelo C4 - Gatherly">
+<img src="img_readme/nivel_1_corrigido.png" alt="Nivel 1 do modelo C4 - Gatherly">
 
 ---
 
 ## 2. Nível 2: Diagrama de Containers
 
-O diagrama de contêineres avança para o primeiro nível de detalhamento técnico do modelo C4, abrindo a caixa preta do sistema para ilustrar como a aplicação é dividida em unidades físicas de execução e armazenamento que podem ser implantadas de forma independente. Este nível descreve os limites de software, as tecnologias escolhidas para cada bloco e os protocolos de rede utilizados para a comunicação interna e externa da arquitetura cliente-servidor. No contexto do Gatherly, as personas de participante e organizador são tecnicamente unificadas em um único ator denominado Usuário Autenticado, refletindo a realidade física de que ambos interagem com a mesma aplicação cliente. O diagrama expõe a divisão do sistema em quatro grandes contêineres: a aplicação Web responsiva desenvolvida em Angular, a API Application responsável pelo processamento do back-end, o Realtime Chat Service baseado em WebSockets para a troca de mensagens instantâneas entre os confirmados nos eventos, e o Banco de Dados Relacional encarregado da persistência segura das informações. Trata-se de um mapa de infraestrutura de alto valor para engenheiros de software, desenvolvedores e administradores de sistemas, pois define o ambiente onde o ecossistema de software irá rodar.
+No nível 2, os atores "Organizador", "Participante" e "Administrador" acessam a aplicação por meio de uma interface Web integrada com o framework Angular. Essa aplicação se comunica com uma API desenvolvida em ASP.NET Core, responsável pelas regras de negócio, autenticação, gerenciamento de eventos, participações, comentários, avaliações e denúncias. Os dados são persistidos em um banco de dados relacional PostgreSQL.
 
-<img src="img_readme/nivel_2_c4.png" alt="Nivel 2 do modelo C4 - Gatherly">
+A comunicação entre os usuários e a aplicação ocorre via HTTPS, enquanto a integração entre a interface e a API utiliza requisições REST com troca de dados em formato JSON. Este diagrama fornece uma visão geral da arquitetura do sistema e dos principais componentes que o compõem.
+
+
+<img src="img_readme/nivel_2_corrigido.png" alt="Nivel 2 do modelo C4 - Gatherly">
 
 ---
 
@@ -787,14 +788,14 @@ O diagrama de contêineres avança para o primeiro nível de detalhamento técni
 
 O diagrama de componentes realiza um zoom profundo em um contêiner específico do sistema, para decompor sua estrutura interna em blocos de código logicamente acoplados e com responsabilidades bem delimitadas. Este nível detalha como os padrões arquiteturais de código e os requisitos não funcionais são estruturados para atender às regras de negócio estabelecidas na especificação do produto. No Gatherly, o diagrama demonstra uma arquitetura organizada em camadas bem definidas e baseada no padrão MVC. O fluxo se inicia nos componentes controladores de interface, como o AuthController, EventController, UserController e AdminController, que recebem e validam as requisições HTTP REST enviadas pelo front-end. Essas requisições são delegadas para a camada de serviços de negócio, composta pelo Auth Service, Event Service, Evaluation & Moderation Service e Notification Service, onde residem os algoritmos e regras críticas, como o controle de limite de vagas e o fluxo de denúncias de má conduta. Por fim, as operações de persistência e consulta são isoladas pela camada de acesso a dados (Data Access Layer), que se comunica diretamente com o banco de dados externo. Este nível funciona como o manual técnico definitivo para a equipe de desenvolvimento, mapeando com precisão a estrutura de diretórios e o fluxo de dependências que devem ser implementados no código-fonte.
 
-<img src="img_readme/nivel_3_c4.png" alt="Nivel 3 do modelo C4 - Gatherly">
+<img src="img_readme/nivel_3_corrigido.png" alt="Nivel 3 do modelo C4 - Gatherly">
 
 ---
 
 ## 5.2 Modelo de Dados
 
 ### DER
-<img src="img_readme/DER_Gatherly.png" alt="DER - Gatherly">
+<img src="img_readme/DER_CORRIGIDO.png" alt="DER - Gatherly">
 
 ### Esquema relacional
 
@@ -838,14 +839,14 @@ O diagrama de componentes realiza um zoom profundo em um contêiner específico 
 | evento_id | INT | FK |
 | data_inscricao | DATETIME | NOT NULL |
 
-### Mensagem
+### Comentario
 | Campo | Tipo | Restrição        |
 | :------- | :----: | ----------: |
-|  id_mensagem | INT    | PK |
+|  id_comentario | INT    | PK |
 | evento_id | INT | FK |
 | usuario_id | INT | FK |
 | conteudo | VARCHAR(100) | NOT NULL |
-| data_envio | DATETIME | NOT NULL |
+| data_criacao | DATETIME | NOT NULL |
 
 ### Avaliacao
 | Campo | Tipo | Restrição        |
@@ -879,7 +880,7 @@ O diagrama de componentes realiza um zoom profundo em um contêiner específico 
 ## 5.3 Principais Componentes
 
 ### Interface Web (Frontend)
-A interface web é responsável pela interação do usuário com o sistema. Por meio dela, os usuários conseguem realizar cadastro, login, visualizar eventos, criar eventos, participar de eventos, utilizar o chat e acessar funcionalidades relacionadas ao perfil. Esse componente foi desenvolvido para oferecer uma navegação intuitiva e facilitar a utilização da plataforma.
+A interface web é responsável pela interação do usuário com o sistema. Por meio dela, os usuários conseguem realizar cadastro, login, visualizar eventos, criar eventos, participar de eventos, publicar comentários e acessar funcionalidades relacionadas ao perfil. Esse componente foi desenvolvido para oferecer uma navegação intuitiva e facilitar a utilização da plataforma.
 
 ### API Backend
 A API Backend é responsável pelo processamento das regras de negócio e pela comunicação entre o frontend e o banco de dados. Ela gerencia funcionalidades como autenticação de usuários, gerenciamento de eventos, controle de participantes, avaliações, denúncias e demais operações do sistema, garantindo o funcionamento correto da aplicação.
@@ -890,8 +891,8 @@ O sistema de autenticação é responsável pelo controle de acesso e segurança
 ### Módulo de Gerenciamento de Eventos
 O módulo de gerenciamento de eventos é responsável pelas funcionalidades relacionadas aos eventos da plataforma. Por meio dele, os usuários podem criar, editar, cancelar e visualizar eventos, além de gerenciar participantes e acompanhar informações relacionadas às atividades cadastradas.
 
-### Módulo de Chat
-O módulo de chat permite a comunicação entre os participantes dos eventos. Esse componente possibilita a troca de mensagens em tempo real, promovendo maior interação social entre os usuários e facilitando a comunicação durante a participação nos eventos.
+### Módulo de Comentários
+O módulo de comentários permite que participantes publiquem observações, avisos e interações relacionadas ao evento, facilitando a comunicação e organização entre os envolvidos.
 
 ### Camada de Persistência
 A camada de persistência é responsável pelo armazenamento e gerenciamento das informações do sistema no banco de dados. Esse componente garante o salvamento e recuperação de dados relacionados a usuários, eventos, mensagens, avaliações e denúncias, mantendo a integridade das informações da aplicação.
@@ -1034,8 +1035,5 @@ Observações:
 Observações:
 
 ---
-
-**Avaliador 3:** __________________________  
-**Status:** [ ] Aprovado  [ ] Ajustar
 
 Observações:
