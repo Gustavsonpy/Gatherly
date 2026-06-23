@@ -895,7 +895,7 @@ O módulo de gerenciamento de eventos é responsável pelas funcionalidades rela
 O módulo de comentários permite que participantes publiquem observações, avisos e interações relacionadas ao evento, facilitando a comunicação e organização entre os envolvidos.
 
 ### Camada de Persistência
-A camada de persistência é responsável pelo armazenamento e gerenciamento das informações do sistema no banco de dados. Esse componente garante o salvamento e recuperação de dados relacionados a usuários, eventos, mensagens, avaliações e denúncias, mantendo a integridade das informações da aplicação.
+A camada de persistência é responsável pelo armazenamento e gerenciamento das informações do sistema no banco de dados. Esse componente garante o salvamento e recuperação de dados relacionados a usuários, eventos, comentários, avaliações e denúncias, mantendo a integridade das informações da aplicação.
 
 ---
 
@@ -1020,12 +1020,15 @@ Disponível em: <https://unsplash.com/pt-br/fotografias/fotografia-de-foco-selet
 
 # 09. Parecer do Comitê de Avaliação
 
-(A ser preenchido pelos professores)
-
 **Avaliador 1:** __________________________  
 **Status:** [ ] Aprovado  [ ] Ajustar
 
 Observações:
+
+<br>
+<br>
+<br>
+<br>
 
 ---
 
@@ -1034,6 +1037,7 @@ Observações:
 
 Observações:
 
----
-
-Observações:
+<br>
+<br>
+<br>
+<br>
