@@ -1,0 +1,164 @@
+name: CI/CD
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+env:
+  DOTNET_VERSION: "8.0.x"
+  NODE_VERSION: "20.x"
+  # Adjust these paths to match your repo layout
+  BACKEND_PROJECT_PATH: "./backend/YourApi.csproj"
+  BACKEND_DIR: "./backend"
+  FRONTEND_DIR: "./frontend"
+
+jobs:
+  # ----------------------------------------------------------------
+  # BACKEND: build + test the ASP.NET Core API
+  # ----------------------------------------------------------------
+  backend:
+    name: Backend (.NET) - Build & Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Cache NuGet packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
+
+      - name: Restore dependencies
+        run: dotnet restore ${{ env.BACKEND_PROJECT_PATH }}
+
+      - name: Build
+        run: dotnet build ${{ env.BACKEND_PROJECT_PATH }} --no-restore --configuration Release
+
+      - name: Run tests
+        run: dotnet test ${{ env.BACKEND_DIR }} --no-build --configuration Release --logger "trx;LogFileName=test-results.trx" --results-directory ./TestResults
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-test-results
+          path: ./TestResults
+
+      - name: Publish
+        if: github.ref == 'refs/heads/main'
+        run: dotnet publish ${{ env.BACKEND_PROJECT_PATH }} --no-build --configuration Release --output ./publish/backend
+
+      - name: Upload backend artifact
+        if: github.ref == 'refs/heads/main'
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-publish
+          path: ./publish/backend
+
+  # ----------------------------------------------------------------
+  # FRONTEND: lint + test + build the Angular app
+  # ----------------------------------------------------------------
+  frontend:
+    name: Frontend (Angular) - Build & Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "npm"
+          cache-dependency-path: ${{ env.FRONTEND_DIR }}/package-lock.json
+
+      - name: Install dependencies
+        working-directory: ${{ env.FRONTEND_DIR }}
+        run: npm ci
+
+      - name: Lint
+        working-directory: ${{ env.FRONTEND_DIR }}
+        run: npm run lint --if-present
+
+      - name: Run unit tests (headless)
+        working-directory: ${{ env.FRONTEND_DIR }}
+        run: npm run test -- --watch=false --browsers=ChromeHeadless --no-progress
+
+      - name: Build (production)
+        working-directory: ${{ env.FRONTEND_DIR }}
+        run: npm run build -- --configuration production
+
+      - name: Upload frontend artifact
+        if: github.ref == 'refs/heads/main'
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-dist
+          path: ${{ env.FRONTEND_DIR }}/dist
+
+  # ----------------------------------------------------------------
+  # DOCKER (optional): build & push images once tests pass
+  # Remove this job if you're not using containers.
+  # ----------------------------------------------------------------
+  docker:
+    name: Build & Push Docker Images
+    needs: [backend, frontend]
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build & push backend image
+        uses: docker/build-push-action@v6
+        with:
+          context: ${{ env.BACKEND_DIR }}
+          push: true
+          tags: ghcr.io/${{ github.repository }}/backend:latest,ghcr.io/${{ github.repository }}/backend:${{ github.sha }}
+
+      - name: Build & push frontend image
+        uses: docker/build-push-action@v6
+        with:
+          context: ${{ env.FRONTEND_DIR }}
+          push: true
+          tags: ghcr.io/${{ github.repository }}/frontend:latest,ghcr.io/${{ github.repository }}/frontend:${{ github.sha }}
+
+  # ----------------------------------------------------------------
+  # DEPLOY (placeholder): wire this up to your actual host
+  # e.g. Azure Web App, AWS ECS, a VPS via SSH, Kubernetes, etc.
+  # ----------------------------------------------------------------
+  deploy:
+    name: Deploy to Production
+    needs: [docker]
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      - name: Deploy
+        run: |
+          echo "Add your deployment steps here."
+          echo "Common options:"
+          echo " - azure/webapps-deploy@v3 for Azure App Service"
+          echo " - aws-actions/amazon-ecs-deploy-task-definition for AWS ECS"
+          echo " - appleboy/ssh-action for a plain VPS"
+          echo " - a kubectl apply step for Kubernetes"
