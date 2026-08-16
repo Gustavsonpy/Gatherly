@@ -1,4 +1,3 @@
-using System.Collections;
 using API.Common;
 using API.DTO;
 using API.DTO.User;

@@ -1,5 +1,5 @@
 using API.Controllers;
-using API.data;
+using API.Data;
 using API.Interfaces;
 using API.Repositories;
 using API.Services;

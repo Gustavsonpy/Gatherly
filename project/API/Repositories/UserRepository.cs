@@ -1,4 +1,4 @@
-using API.data;
+using API.Data;
 using API.Interfaces;
 using API.Models;
 using Microsoft.EntityFrameworkCore;
@@ -16,7 +16,7 @@ namespace API.Repositories
 
         public async Task<User> AddAsync(User User)
         {
-            await _context.User.AddAsync(User);
+            await _context.Users.AddAsync(User);
 
             await _context.SaveChangesAsync();
 
@@ -36,14 +36,14 @@ namespace API.Repositories
 
         public async Task<List<User>> GetAllAsync()
         {
-            return await _context.User
+            return await _context.Users
                     .OrderBy(u => u.Name)
                     .ToListAsync();
         }
 
         public async Task<User?> GetByEmail(string email)
         {
-            return await _context.User.FirstOrDefaultAsync(x => x.Email == email);
+            return await _context.Users.FirstOrDefaultAsync(x => x.Email == email);
         }
 
         public Task<User?> GetByIdAsync(int id)
