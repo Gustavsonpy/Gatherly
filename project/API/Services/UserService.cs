@@ -39,7 +39,8 @@ namespace API.Services
                 Email = userDTO.Email,
                 Birthday = userDTO.Birthday,
                 HashPassword = BCrypt.Net.BCrypt.HashPassword(userDTO.Password),
-                RegisterDate = DateTime.UtcNow
+                RegisterDate = DateTime.UtcNow,
+                IsSuspended = false
             };
 
             var created = await _userRepository.AddAsync(newUser);

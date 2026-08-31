@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using API.DTO.Event;
 using API.Interfaces.Event;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -23,6 +24,7 @@ namespace API.Controllers
             _logger = logger;
         }
 
+        [Authorize]
         [HttpPost("create")]
         public async Task<IActionResult> Create(EventDTO dto)
         {
