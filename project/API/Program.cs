@@ -1,7 +1,8 @@
 using System.Text;
-using API.Controllers;
 using API.Data;
 using API.Interfaces;
+using API.Interfaces.Category;
+using API.Interfaces.Event;
 using API.Repositories;
 using API.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -26,6 +27,12 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
+
+builder.Services.AddScoped<IEventRepository, EventRepository>();
+builder.Services.AddScoped<IEventService, EventService>();
+
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
 
 builder.Services.AddAuthentication(options =>
     {

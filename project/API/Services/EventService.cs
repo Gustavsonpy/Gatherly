@@ -29,11 +29,8 @@ namespace API.Services
             if(existedEvent is not null)
                 errors.Add("Already exists an event with this title");
 
-
             if(errors.Any())
                 return Result<EventDTO>.Failure(errors);
-
-            
 
             var newEvent = new Event
             {
