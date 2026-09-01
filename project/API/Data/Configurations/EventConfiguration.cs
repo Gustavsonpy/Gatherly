@@ -20,10 +20,6 @@ namespace API.Data.Configurations
                 .IsRequired()
                 .HasMaxLength(200);
 
-            builder.Property(e => e.Category) // Ver se tem que ser outra tabela
-                .IsRequired()
-                .HasMaxLength(200);
-
             builder.Property(e => e.Description)
                 .IsRequired()
                 .HasMaxLength(200);
@@ -43,8 +39,7 @@ namespace API.Data.Configurations
                 .IsRequired()
                 .HasMaxLength(200);
             
-            builder.Property(e => e.Level) // Ver se tem que ser outra tabela 
-                .IsRequired()
+            builder.Property(e => e.Level) // Ver se tem que ser outra tabela
                 .HasMaxLength(200);
 
             builder.Property(e => e.UrlImage)
@@ -60,6 +55,12 @@ namespace API.Data.Configurations
                 .HasForeignKey(e => e.UserId);
 
             builder.HasIndex(e => e.UserId);
+
+            builder.HasOne(e => e.Category)
+                .WithMany(c => c.Events)
+                .HasForeignKey(e => e.CategoryId);
+
+            builder.HasIndex(e => e.CategoryId);
         }
     }
 }

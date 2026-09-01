@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using API.DTO.Event;
 using API.Interfaces.Event;
@@ -26,14 +27,19 @@ namespace API.Controllers
 
         [Authorize]
         [HttpPost("create")]
-        public async Task<IActionResult> Create(EventDTO dto)
+        public async Task<IActionResult> Create(CreateEventDTO dto)
         {
-            var result = await _eventService.CreateAsync(dto);
+            var userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (userIdClaim is null || !Guid.TryParse(userIdClaim, out var userId))
+                return Unauthorized();
+
+            var result = await _eventService.CreateAsync(dto, userId);
 
             if(!result.IsSuccess)
                 return BadRequest(new { errors = result.Errors });
 
-            return Ok(dto);
+            return Ok(result.Value);
         }
 
         [HttpGet]

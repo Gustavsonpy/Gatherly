@@ -20,11 +20,11 @@ namespace API.Services
             _logger = logger;
         }
 
-        public async Task<Result<EventDTO>> CreateAsync(EventDTO eventDTO)
+        public async Task<Result<EventDTO>> CreateAsync(CreateEventDTO createEventDTO, Guid userId)
         {
             var errors = new List<string>();
 
-            var existedEvent = await _eventRepository.GetByTitle(eventDTO.Title);
+            var existedEvent = await _eventRepository.GetByTitle(createEventDTO.Title);
 
             if(existedEvent is not null)
                 errors.Add("Already exists an event with this title");
@@ -34,14 +34,16 @@ namespace API.Services
 
             var newEvent = new Event
             {
-                Title = eventDTO.Title,
-                Category = eventDTO.Category,
-                Description = eventDTO.Description,
-                DateTime = eventDTO.DateTime,
-                Localization = eventDTO.Localization,
-                MaxCapacity = eventDTO.MaxCapacity,
-                Level = eventDTO.Level,
-                UrlImage = eventDTO.UrlImage
+                Title = createEventDTO.Title,
+                Description = createEventDTO.Description,
+                DateTime = createEventDTO.DateTime,
+                Localization = createEventDTO.Localization,
+                MaxCapacity = createEventDTO.MaxCapacity,
+                City = createEventDTO.City,
+                Level = createEventDTO.Level,
+                UrlImage = createEventDTO.UrlImage,
+                UserId = userId,
+                CategoryId = createEventDTO.CategoryId
             };
 
             var created = await _eventRepository.AddAsync(newEvent);
@@ -50,7 +52,7 @@ namespace API.Services
             {
                 Id = created.Id,
                 Title = created.Title,
-                Category = created.Category,
+                CategoryId = created.CategoryId,
                 Description = created.Description,
                 DateTime = created.DateTime,
                 Localization = created.Localization,
@@ -79,7 +81,7 @@ namespace API.Services
             {
                 Id = e.Id,
                 Title = e.Title,
-                Category = e.Category,
+                CategoryId = e.CategoryId,
                 Description = e.Description,
                 DateTime = e.DateTime,
                 Localization = e.Localization,

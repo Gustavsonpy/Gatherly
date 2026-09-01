@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using UserModel = API.Models.User;
+using CategoryModel = API.Models.Category;
 
 namespace API.DTO.Event
 {
@@ -10,7 +11,6 @@ namespace API.DTO.Event
     {
         public Guid Id { get; set; } = Guid.NewGuid();
         public string Title { get; set; }
-        public string Category { get; set; }
         public string Description { get; set; }
         public DateTime DateTime { get; set; }
         public string Localization { get; set; }
@@ -22,5 +22,8 @@ namespace API.DTO.Event
 
         public Guid UserId { get; set; }
         public UserModel User { get; set; }
+
+        public Guid CategoryId { get; set; }
+        public CategoryModel Category { get; set; }
     }
 }
