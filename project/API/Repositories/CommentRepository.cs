@@ -39,9 +39,9 @@ namespace API.Repositories
                     .ToListAsync();
         }
 
-        public Task<Comment?> GetByIdAsync(int id)
+        public async Task<Comment?> GetByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            return await _context.Comments.FindAsync(id);
         }
 
         public async Task<List<Comment?>> GetByText(string text)

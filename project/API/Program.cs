@@ -2,6 +2,7 @@ using System.Text;
 using API.Data;
 using API.Interfaces;
 using API.Interfaces.Category;
+using API.Interfaces.Comment;
 using API.Interfaces.Event;
 using API.Repositories;
 using API.Services;
@@ -33,6 +34,12 @@ builder.Services.AddScoped<IEventService, EventService>();
 
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
+
+builder.Services.AddScoped<ICommentRepository, CommentRepository>();
+builder.Services.AddScoped<ICommentService, CommentService>();
+
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 
 builder.Services.AddAuthentication(options =>
     {
