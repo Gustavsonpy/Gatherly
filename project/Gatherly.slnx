@@ -1,0 +1,4 @@
+<Solution>
+  <Folder Name="/Tests/" />
+  <Project Path="API/API.csproj" />
+</Solution>

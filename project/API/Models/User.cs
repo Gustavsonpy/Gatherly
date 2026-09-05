@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
 namespace API.Models
 {
     public class User
@@ -18,5 +13,7 @@ namespace API.Models
         public bool IsSuspended { get; set; }
         public bool IsAdmin { get; set; }
         public DateTime RegisterDate { get; set; }
+
+        public ICollection<Event> Events { get; set; } = new List<Event>();
     }
 }

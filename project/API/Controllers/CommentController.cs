@@ -1,25 +1,26 @@
-using API.DTO;
-using API.Interfaces;
+using API.DTO.Comment;
+using API.Interfaces.Comment;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
     [ApiController]
-    [Route("api/user")]
-    public class UserController : ControllerBase
+    [Route("api/comment")]
+    public class CommentController : ControllerBase
     {
-        private readonly IUserService _userService;
+        private readonly ICommentService _commentService;
 
-        public UserController(IUserService userService)
+        public CommentController(ICommentService commentService)
         {
-            _userService = userService;
+            _commentService = commentService;
         }
 
+        [Authorize]
         [HttpPost("create")]
-        public async Task<IActionResult> Create(CreateUserDTO dto)
+        public async Task<IActionResult> Create(CreateCommentDTO dto)
         {
-            var result = await _userService.CreateAsync(dto);
+            var result = await _commentService.createAsync(dto);
 
             if(!result.IsSuccess)
                 return BadRequest(new { errors = result.Errors });
@@ -30,7 +31,7 @@ namespace API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var result = await _userService.GetAllAsync();
+            var result = await _commentService.GetAllAsync();
 
             if(!result.IsSuccess)
                 return BadRequest(new { errors = result.Errors });
