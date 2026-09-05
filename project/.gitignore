@@ -1,1 +1,15 @@
 .env
+
+# Build outputs (.NET) — cobre API/, Tests/API.Tests/, etc.
+**/bin/
+**/obj/
+
+# IDE (Visual Studio / Rider) aberto a partir da raiz
+.vs/
+.idea/
+*.user
+*.suo
+
+# Sistema
+.DS_Store
+Thumbs.db
