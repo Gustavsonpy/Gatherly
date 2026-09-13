@@ -1,0 +1,40 @@
+<main class="flex min-h-dvh justify-center items-center bg-[#7C3AED]">
+  <div id="form-container" class="flex justify-center items-center rounded-2xl w-3/5 h-150 bg-[white]">
+      <section id="form-content" class="flex flex-col justify-center gap-10 w-[90%] h-[90%]">
+        <div id="logo" class="flex items-center">
+          <img src="images/logos/logo_gatherly.png" class="w-20 h-20" alt="Logo Gatherly">
+          <h1 class="font-bold">Gatherly</h1>
+        </div>
+        <h1 class="w-full flex justify-center items-center font-bold text-4xl">Fazer login</h1>
+        <div id="form-inputs">
+          <div id="email-input" class="flex flex-col">
+            <generic-input
+              id="email-input"
+              type="email"
+              label="E-mail"
+              [control]="form.controls.email"
+              errorMessage="E-mail inválido"
+              placeholder="exemplo@email.com"
+            />
+          </div>
+          <div id="password-input" class="flex flex-col">
+            <generic-input
+              id="password-input"
+              type="password"
+              label="Senha"
+              [control]="form.controls.password"
+              errorMessage="Senha inválida"
+              placeholder="Mínimo 6 caracteres"
+            />
+          </div>
+        </div>
+        <div id="util-links" class="flex justify-between w-full">
+          <a href="#" class="text-[#5B21B6] underline">Esqueci a senha</a>
+          <a href="#" class="text-[#5B21B6] underline">Ainda não possui uma conta?</a>
+        </div>
+          <purple-button type="submit" [disabled]="loading()">
+            {{ loading() ? 'Entrando' : 'Fazer login' }}
+          </purple-button>
+      </section>
+  </div>
+</main>
