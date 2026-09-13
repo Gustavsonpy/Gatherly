@@ -26,7 +26,7 @@ export class Login {
     }),
     password: new FormControl('', {
       nonNullable: true,
-      validators: [Validators.email, Validators.minLength(6)]
+      validators: [Validators.required, Validators.minLength(6)]
     }),
   });
 

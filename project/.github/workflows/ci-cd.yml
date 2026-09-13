@@ -7,11 +7,12 @@ on:
     branches: [main, develop]
 
 env:
-  DOTNET_VERSION: "8.0.x"
+  DOTNET_VERSION: "9.0.x"
   NODE_VERSION: "20.x"
-  # Adjust these paths to match your repo layout
-  BACKEND_PROJECT_PATH: "./backend/YourApi.csproj"
-  BACKEND_DIR: "./backend"
+  SOLUTION_PATH: "./Gatherly.slnx"
+  BACKEND_PROJECT_PATH: "./API/API.csproj"
+  BACKEND_DIR: "./API"
+  TEST_PROJECT_PATH: "./Tests/API.Tests"
   FRONTEND_DIR: "./frontend"
 
 jobs:
@@ -40,13 +41,13 @@ jobs:
             ${{ runner.os }}-nuget-
 
       - name: Restore dependencies
-        run: dotnet restore ${{ env.BACKEND_PROJECT_PATH }}
+        run: dotnet restore ${{ env.SOLUTION_PATH }}
 
       - name: Build
-        run: dotnet build ${{ env.BACKEND_PROJECT_PATH }} --no-restore --configuration Release
+        run: dotnet build ${{ env.SOLUTION_PATH }} --no-restore --configuration Release
 
       - name: Run tests
-        run: dotnet test ${{ env.BACKEND_DIR }} --no-build --configuration Release --logger "trx;LogFileName=test-results.trx" --results-directory ./TestResults
+        run: dotnet test ${{ env.TEST_PROJECT_PATH }} --no-build --configuration Release --logger "trx;LogFileName=test-results.trx" --results-directory ./TestResults
 
       - name: Upload test results
         if: always()
@@ -108,57 +109,31 @@ jobs:
           path: ${{ env.FRONTEND_DIR }}/dist
 
   # ----------------------------------------------------------------
-  # DOCKER (optional): build & push images once tests pass
-  # Remove this job if you're not using containers.
+  # DOCKER: valida que as imagens de produção (backend + frontend)
+  # realmente buildam a partir dos Dockerfiles usados no docker-compose
   # ----------------------------------------------------------------
-  docker:
-    name: Build & Push Docker Images
-    needs: [backend, frontend]
-    if: github.ref == 'refs/heads/main'
+  docker-build:
+    name: Docker - Validate images
     runs-on: ubuntu-latest
+    needs: [backend, frontend]
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Log in to GitHub Container Registry
-        uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
-      - name: Build & push backend image
+      - name: Build backend image
         uses: docker/build-push-action@v6
         with:
           context: ${{ env.BACKEND_DIR }}
-          push: true
-          tags: ghcr.io/${{ github.repository }}/backend:latest,ghcr.io/${{ github.repository }}/backend:${{ github.sha }}
+          push: false
+          tags: gatherly-api:ci
 
-      - name: Build & push frontend image
+      - name: Build frontend image
         uses: docker/build-push-action@v6
         with:
           context: ${{ env.FRONTEND_DIR }}
-          push: true
-          tags: ghcr.io/${{ github.repository }}/frontend:latest,ghcr.io/${{ github.repository }}/frontend:${{ github.sha }}
-
-  # ----------------------------------------------------------------
-  # DEPLOY (placeholder): wire this up to your actual host
-  # e.g. Azure Web App, AWS ECS, a VPS via SSH, Kubernetes, etc.
-  # ----------------------------------------------------------------
-  deploy:
-    name: Deploy to Production
-    needs: [docker]
-    if: github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
-    environment: production
-
-    steps:
-      - name: Deploy
-        run: |
-          echo "Add your deployment steps here."
-          echo "Common options:"
-          echo " - azure/webapps-deploy@v3 for Azure App Service"
-          echo " - aws-actions/amazon-ecs-deploy-task-definition for AWS ECS"
-          echo " - appleboy/ssh-action for a plain VPS"
-          echo " - a kubectl apply step for Kubernetes"
+          push: false
+          tags: gatherly-frontend:ci
