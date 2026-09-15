@@ -16,9 +16,12 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
         [placeholder]="placeholder()"
         class="border border-[#5B21B6] rounded-md p-2 text-[12px]"
       />
-      @if (control().invalid && control().touched) {
-        <p class="text-red-500">{{ errorMessage() }}</p>
-      }
+      <p
+        class="text-[12px] text-red-500"
+        [class.invisible]="!(control().invalid && control().touched)"
+      >
+        {{ errorMessage() }}
+      </p>
     </div>
   `
 })
@@ -27,7 +30,7 @@ export class GenericInput {
   label = input.required<string>();
   control = input.required<FormControl<string>>();
   errorMessage = input<string>("Campo inválido");
-  type = input<'text' | 'email' | 'password'>('text');
+  type = input<'text' | 'email' | 'password' | 'date'>('text');
   autoComplete = input<string>('off');
   placeholder = input<string>("");
 }

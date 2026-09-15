@@ -1,0 +1,65 @@
+<main class="flex min-h-dvh justify-center items-center bg-[#7C3AED]">
+  <div id="form-container" class="flex justify-center items-center rounded-2xl w-3/5 h-200 bg-[white]">
+      <section id="form-content" class="flex flex-col justify-center w-full h-full ml-10 mr-10">
+        <div id="logo" class="flex items-center">
+          <img src="images/logos/logo_gatherly.png" class="w-20 h-20" alt="Logo Gatherly">
+          <h1 class="font-bold">Gatherly</h1>
+        </div>
+        <h1 class="w-full flex justify-center items-center font-bold text-4xl">Criar sua conta</h1>
+        <form [formGroup]="form" (ngSubmit)="submit()" class="flex flex-col gap-8" novalidate>
+          <div id="form-inputs" class="flex flex-col gap-3">
+            <generic-input
+                id="name-input"
+                type="text"
+                label="Nome completo"
+                [control]="form.controls.name"
+                errorMessage="Nome muito grande"
+                placeholder="Fulano da Silva Santos"
+              />
+            <generic-input
+                id="email-input"
+                type="email"
+                label="E-mail"
+                [control]="form.controls.email"
+                errorMessage="E-mail inválido"
+                placeholder="exemplo@email.com"
+              />
+            <generic-input
+                id="password-input"
+                type="password"
+                label="Senha"
+                [control]="form.controls.password"
+                errorMessage="Senha inválida"
+                placeholder="Mínimo 6 caracteres"
+              />
+              <generic-input
+                id="confirm-password-input"
+                type="password"
+                label="Confirmar senha"
+                [control]="form.controls.confirm_password"
+                errorMessage="As senhas precisam ser iguais"
+                placeholder="Mínimo 6 caracteres"
+              />
+              <generic-input
+                id="date-input"
+                type="date"
+                label="Data de nascimento"
+                [control]="form.controls.birthDate"
+                errorMessage=""
+                placeholder="dd/mm/yyyy"
+              />
+          </div>
+
+          <div id="terms-container" class="flex gap-3">
+            <input type="checkbox" id="accept-terms">
+            <p>Eu aceito os <span class="text-[#7C3AED]">Termos de uso</span> e a <span class="text-[#7C3AED]">Política de privacidade</span></p>
+          </div>
+          
+          <purple-button type="submit" [disabled]="loading()">
+            {{ loading() ? 'Cadastrando' : 'Criar conta' }}
+          </purple-button>
+          <p>Já tem uma conta? <a class="text-[#7C3AED] font-bold" href="/login">Entrar</a></p>
+        </form>
+      </section>
+  </div>
+</main>
