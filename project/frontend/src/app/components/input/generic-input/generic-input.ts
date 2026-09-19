@@ -20,7 +20,7 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
         class="text-[12px] text-red-500"
         [class.invisible]="!(control().invalid && control().touched)"
       >
-        {{ errorMessage() }}
+        {{ control().errors?.['backend'] ?? errorMessage() }}
       </p>
     </div>
   `

@@ -3,7 +3,9 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { Router } from '@angular/router';
 import { PurpleButton } from '../../components/buttons/purple-button';
 import { GenericInput } from '../../components/input/generic-input/generic-input';
-import { extractUserErrorMessage, UserService } from '../../core/user/user.service';
+import { UserService } from '../../core/user/user.service';
+import { applyFieldErrors } from '../../core/forms/field-errors.util';
+import { passwordsMatchValidator } from '../../core/forms/validator';
 
 interface RegisterForm {
   name: FormControl<string>,
@@ -21,28 +23,30 @@ interface RegisterForm {
 })
 
 export class Register {
-  readonly form = new FormGroup<RegisterForm>({
-    name: new FormControl('', {
-      nonNullable: true,
-      validators: [Validators.required, Validators.maxLength(100)]
-    }),
-    email: new FormControl('', {
-      nonNullable: true,
-      validators: [Validators.required, Validators.maxLength(100)]
-    }),
-    password: new FormControl('', {
-      nonNullable: true,
-      validators: [Validators.required, Validators.minLength(6)]
-    }),
-    confirm_password: new FormControl('', {
-      nonNullable: true,
-      validators: [Validators.required, Validators.minLength(6)]
-    }),
-    birthDate: new FormControl('', {
-      nonNullable: true,
-      validators: [Validators.required]
-    }),
-  })
+    readonly form = new FormGroup<RegisterForm>({
+      name: new FormControl('', {
+        nonNullable: true,
+        validators: [Validators.required, Validators.maxLength(100)]
+      }),
+      email: new FormControl('', {
+        nonNullable: true,
+        validators: [Validators.required, Validators.maxLength(100)]
+      }),
+      password: new FormControl('', {
+        nonNullable: true,
+        validators: [Validators.required, Validators.minLength(6)]
+      }),
+      confirm_password: new FormControl('', {
+        nonNullable: true,
+        validators: [Validators.required, Validators.minLength(6)]
+      }),
+      birthDate: new FormControl('', {
+        nonNullable: true,
+        validators: [Validators.required]
+      }),
+    },
+    { validators: passwordsMatchValidator }
+  )
   
   readonly loading = signal(false);
   readonly errorMessage = signal<string | null>(null);
@@ -62,9 +66,8 @@ export class Register {
     this.user_service.create({name, email, password, birthday: birthDate}).subscribe({
       next: () => this.router.navigate(['/login']),
       error: (err) => {
-        this.errorMessage.set(extractUserErrorMessage(err));
-        console.log(extractUserErrorMessage(err));
-        console.log(`Date: ${birthDate}`);
+        const generalMessage = applyFieldErrors(this.form, err);
+        this.errorMessage.set(generalMessage);
         this.loading.set(false);
       } 
     })

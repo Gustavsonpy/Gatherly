@@ -1,3 +1,4 @@
+using System.Globalization;
 using API.Common;
 using API.DTO;
 using API.DTO.User;
@@ -19,25 +20,27 @@ namespace API.Services
 
         public async Task<Result<UserDTO>> CreateAsync(CreateUserDTO userDTO)
         {
-            var errors = new List<string>();
+            var fieldErrors = new Dictionary<string, List<string>>();
 
             var existedUser = await _userRepository.GetByEmail(userDTO.Email);
 
             if(existedUser is not null)
-                errors.Add("Already exists a user with this e-mail");
+                fieldErrors["email"] = new List<string> { "Já existe uma conta com esse e-mail." };
 
-            if(userDTO.Password.Length < 8)
-                errors.Add("Password must be 8 characters or longer");
+            if(userDTO.Password.Length < 6)
+                fieldErrors["password"] = new List<string> { "A senha precisa ter 6 caracteres ou mais." };
 
+            if (userDTO.Birthday.Date > DateTime.Today)
+                fieldErrors["birthDate"] = new List<string> { "A data não pode ultrapassar o dia de hoje" };
 
-            if(errors.Any())
-                return Result<UserDTO>.Failure(errors);
+            if(fieldErrors.Any())
+                return Result<UserDTO>.Failure(fieldErrors);
 
             var newUser = new User
             {
                 Name = userDTO.Name,
                 Email = userDTO.Email,
-                Birthday = userDTO.Birthday,
+                Birthday = DateTime.SpecifyKind(userDTO.Birthday, DateTimeKind.Utc),
                 HashPassword = BCrypt.Net.BCrypt.HashPassword(userDTO.Password),
                 RegisterDate = DateTime.UtcNow,
                 IsSuspended = false
