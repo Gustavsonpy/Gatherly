@@ -30,7 +30,7 @@ export class Register {
       }),
       email: new FormControl('', {
         nonNullable: true,
-        validators: [Validators.required, Validators.maxLength(100)]
+        validators: [Validators.required, Validators.maxLength(100), Validators.email]
       }),
       password: new FormControl('', {
         nonNullable: true,
