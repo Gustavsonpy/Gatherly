@@ -49,7 +49,6 @@ export class Login {
     this.authService.login(email, password).subscribe({
       next: () => this.router.navigate(['/events']),
       error: () => {
-        console.log("Error");
         this.errorMessage.set('E-mail ou senha inválidos.');
         this.loading.set(false);
       },

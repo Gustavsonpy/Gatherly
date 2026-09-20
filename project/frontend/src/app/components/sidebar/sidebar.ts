@@ -15,8 +15,6 @@ export class Sidebar {
     const nameSeparated: string[] = completeName.split(" ");
     const nameLength = nameSeparated.length;
 
-    console.log(nameLength);
-
     return nameSeparated[0] + " " + nameSeparated[nameLength-1];
   }
 
