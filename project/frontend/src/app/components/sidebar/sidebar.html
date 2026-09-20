@@ -1,0 +1,40 @@
+<main class="flex flex-col justify-between items-center w-50 min-h-dvh">
+    <section class="flex items-center">
+        <img src="images/logos/logo_gatherly.png" class="w-15 h-15" alt="Logo Gatherly">
+        <h1>Gatherly</h1>
+    </section>
+    <section id="mid-container" class="flex flex-col gap-10">
+        <div class="flex flex-col">
+            <ul class="flex flex-col gap-5">
+                <a href="#" class="flex gap-5">
+                    <img src="icons/home.svg" alt="Home icon">
+                    <li>Home</li>
+                </a>
+                <a href="#" class="flex gap-5">
+                    <img src="icons/evento.svg" alt="Evento icon">
+                    <li>Eventos</li>
+                </a>
+                <a href="#" class="flex gap-5">
+                    <img src="icons/user.svg" alt="Meus eventos icon">
+                    <li>Meus eventos</li>
+                </a>
+                <a href="#" class="flex gap-5">
+                    <img src="icons/historico.svg" alt="Histórico icon">
+                    <li>Histórico</li>
+                </a>
+                <a href="#" class="flex gap-5">
+                    <img src="icons/configuracao.svg" alt="Configuraçao icon">
+                    <li>Configurações</li>
+                </a>
+            </ul>
+        </div>
+        <purple-button>Criar evento</purple-button>
+    </section>
+        <section id="bottom-part" class="flex flex-col gap-5">
+            <p>{{ username() }}</p>
+            <div id="view-mode" class="flex items-center justify-center gap-3">
+                <img src="icons/lua.svg" alt="modo escuro icon">
+                <span>Modo escuro</span>
+            </div>
+        </section>
+</main>

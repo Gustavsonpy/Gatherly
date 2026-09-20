@@ -9,6 +9,31 @@ interface LoginResponse {
   token: string;
 }
 
+export interface CurrentUser {
+  id: string;
+  email: string;
+  name: string;
+}
+
+const NAME_IDENTIFIER_CLAIM = 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier';
+const EMAIL_CLAIM = 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress';
+
+function decodeUserFromToken(token: string): CurrentUser | null {
+  try {
+    const payloadBase64 = token.split('.')[1];
+    const payloadJson = atob(payloadBase64.replace(/-/g, '+').replace(/_/g, '/'));
+    const payload = JSON.parse(payloadJson);
+
+    return {
+      id: payload[NAME_IDENTIFIER_CLAIM],
+      email: payload[EMAIL_CLAIM],
+      name: payload['name'],
+    };
+  } catch {
+    return null;
+  }
+}
+
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private readonly tokenSignal = signal<string | null>(
@@ -16,6 +41,11 @@ export class AuthService {
   );
 
   readonly isAuthenticated = computed(() => !!this.tokenSignal());
+
+  readonly currentUser = computed<CurrentUser | null>(() => {
+    const token = this.tokenSignal();
+    return token ? decodeUserFromToken(token) : null;
+  });
 
   constructor(private readonly http: HttpClient) {}
 
