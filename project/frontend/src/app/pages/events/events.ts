@@ -2,11 +2,12 @@ import { Component } from '@angular/core';
 import { AuthService } from '../../core/auth/auth.service';
 import { Router } from '@angular/router';
 import { Sidebar } from '../../components/sidebar/sidebar';
+import { CardEvent } from '../../components/card-event/card-event';
 
 @Component({
   selector: 'app-events',
   standalone: true,
-  imports: [Sidebar],
+  imports: [Sidebar, CardEvent],
   templateUrl: 'events.html',
 })
 export class Events {
