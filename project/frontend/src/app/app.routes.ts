@@ -9,6 +9,11 @@ export const routes: Routes = [
       import('./features/auth/login/login').then((m) => m.Login),
   },
   {
+    path: 'register',
+    loadComponent: () =>
+      import('./pages/register/register').then((r) => r.Register),
+  },
+  {
     path: 'events',
     canActivate: [authGuard],
     loadComponent: () =>

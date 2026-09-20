@@ -22,9 +22,9 @@ namespace API.Controllers
             var result = await _userService.CreateAsync(dto);
 
             if(!result.IsSuccess)
-                return BadRequest(new { errors = result.Errors });
+                return BadRequest(new { errors = result.Errors, fieldErrors = result.FieldErrors });
 
-            return Ok(dto);
+            return Ok(result.Value);
         }
         
         [HttpGet]

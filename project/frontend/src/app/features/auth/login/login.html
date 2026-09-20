@@ -25,13 +25,10 @@
                 placeholder="Mínimo 6 caracteres"
               />
           </div>
-          @if (errorMessage()) {
-            <p class="text-red-600 text-sm">{{ errorMessage() }}</p>
-          }
 
           <div id="util-links" class="flex justify-between w-full">
             <a href="#" class="text-[#5B21B6] underline">Esqueci a senha</a>
-            <a href="#" class="text-[#5B21B6] underline">Ainda não possui uma conta?</a>
+            <a href="/register" class="text-[#5B21B6] underline">Ainda não possui uma conta?</a>
           </div>
           <purple-button type="submit" [disabled]="loading()">
             {{ loading() ? 'Entrando' : 'Fazer login' }}
