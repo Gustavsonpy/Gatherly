@@ -73,17 +73,19 @@ namespace API.Services
             throw new NotImplementedException();
         }
 
-        public async Task<Result<List<EventDTO>>> GetAllAsync()
+        public async Task<Result<List<ReturnEventDTO>>> GetAllAsync()
         {
             var events = await _eventRepository.GetAllAsync();
 
-            var dtos = events.Select(e => new EventDTO
+            var dtos = events.Select(e => new ReturnEventDTO
             {
                 Id = e.Id,
                 Title = e.Title,
                 CategoryId = e.CategoryId,
                 Description = e.Description,
                 DateTime = e.DateTime,
+                Date = e.DateTime.ToString("yyyy-MM-dd"),
+                Time = e.DateTime.ToString("HH:mm"),
                 Localization = e.Localization,
                 MaxCapacity = e.MaxCapacity,
                 City = e.City,
@@ -94,12 +96,14 @@ namespace API.Services
                 User = e.User
             }).ToList();
 
-            return Result<List<EventDTO>>.Success(dtos);
+            return Result<List<ReturnEventDTO>>.Success(dtos);
         }
 
         public Task<Result<EventDTO>> UpdateTitleAsync(string title)
         {
             throw new NotImplementedException();
         }
+
+        
     }
 }

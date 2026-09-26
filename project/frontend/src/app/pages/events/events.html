@@ -1,4 +1,23 @@
 <main class="flex min-h-dvh bg-white">
-    <app-sidebar/>
-    <card-event/>
+    <app-sidebar />
+
+    <section class="flex-1 p-6 overflow-hidden">
+        <h1 class="text-xl font-semibold mb-4">
+            Eventos perto de você
+        </h1>
+
+        <div class="flex gap-6 overflow-x-auto snap-x snap-mandatory pb-4">
+            @for (event of events(); track event.id) {
+                <div class="shrink-0 snap-start">
+                    <card-event
+                        [img]="event.urlImage"
+                        [title]="event.title"
+                        [time]="event.time"
+                        [localization]="event.localization"
+                        [description]="event.description"
+                    />
+                </div>
+            }
+        </div>
+    </section>
 </main>
