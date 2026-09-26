@@ -26,7 +26,6 @@ export class Events implements OnInit{
     this.eventService.getEvents().subscribe({
       next: (data) => {
         this.events.set(data);
-        console.log(`Events: ${this.events}`);
         this.loading.set(false);
       },
       error: (error) => {
