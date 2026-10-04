@@ -13,3 +13,15 @@ export interface EventModel{
     userId: string;
     categoryId: string;
 }
+
+export interface CreateEventModel {
+    title: string;
+    description: string;
+    dateTime: string;
+    localization: string;
+    maxCapacity: number;
+    city: string;
+    level: string | null;
+    urlImage: string;
+    categoryId: string;
+}

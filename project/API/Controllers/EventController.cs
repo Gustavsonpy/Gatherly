@@ -19,6 +19,9 @@ namespace API.Controllers
         private readonly IEventService _eventService;
         private readonly ILogger<EventController> _logger;
 
+        private static readonly string[] AllowedExtensions = { ".jpg", ".jpeg", ".png", ".webp" }; 
+        private const long MaxImageSize = 5 * 1024 * 1024;
+
         public EventController(IEventService eventService, ILogger<EventController> logger)
         {
             _eventService = eventService;
@@ -51,6 +54,38 @@ namespace API.Controllers
                 return BadRequest(new { errors = result.Errors });
 
             return Ok(result.Value);
+        }
+
+        [Authorize]
+        [HttpPost("upload-image")]
+        [RequestSizeLimit(MaxImageSize)]
+        public async Task<IActionResult> UploadImage(IFormFile file, [FromServices] IWebHostEnvironment env)
+        {
+            if (file is null || file.Length == 0)
+                return BadRequest(new { errors = new[] { "Nenhum arquivo enviado" } });
+
+            if (file.Length > MaxImageSize)
+                return BadRequest(new { errors = new[] { "A imagem deve ter no máximo 5 MB" } });
+
+            var extension = Path.GetExtension(file.FileName).ToLowerInvariant();
+
+            if (!AllowedExtensions.Contains(extension) || !file.ContentType.StartsWith("image/"))
+                return BadRequest(new { errors = new[] { "Formato de imagem inválido" } });
+
+            var folder = Path.Combine(env.WebRootPath, "uploads", "events");
+            Directory.CreateDirectory(folder);
+
+            var fileName = $"{Guid.NewGuid()}{extension}";
+            var fullPath = Path.Combine(folder, fileName);
+
+            await using (var stream = new FileStream(fullPath, FileMode.Create))
+            {
+                await file.CopyToAsync(stream);
+            }
+
+            var url = $"{Request.Scheme}://{Request.Host}/uploads/events/{fileName}";
+
+            return Ok(new { url });
         }
     }
 }

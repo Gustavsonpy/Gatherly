@@ -1,6 +1,6 @@
 <main class="border border-[#7C3AED] rounded-xl w-75 h-75">
     <div id="top-content" class="h-[40%] overflow-hidden rounded-t-xl relative">
-        <img src="{{ img() }}" alt="">
+        <img src="{{ img() }}" alt="" class="w-full h-full object-cover">
         <div class="absolute flex flex-col justify-center items-center top-2 right-2 bg-[#EDE9FE] rounded-lg shadow w-10 h-10">
             <span class="block text-[10px]">{{ date() | date:'dd' }}</span>
             <span class="block text-[10px] text-[#7C3AED]">{{ (date() | date:'MMM')?.replace('.', '') }}</span>
@@ -19,7 +19,7 @@
                 <span class="text-[12px]">{{ time() }}</span>
             </div>
         </div>
-        <span class="text-[12px] h-12 truncate">{{ description() }}</span>
+        <span class="text-[12px] h-12 line-clamp-2">{{ description() }}</span>
         <button class="border border-black">Participar</button>
     </div>
 </main>
