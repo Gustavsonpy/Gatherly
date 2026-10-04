@@ -2,7 +2,7 @@ import { Component, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../../core/auth/auth.service';
 import { Router } from '@angular/router';
-import { PurpleButton } from '../../../components/buttons/purple-button';
+import { GenericButton } from '../../../components/buttons/generic-button';
 import { GenericInput } from '../../../components/input/generic-input/generic-input';
 
 interface LoginForm {
@@ -13,7 +13,7 @@ interface LoginForm {
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [ReactiveFormsModule, PurpleButton, GenericInput],
+  imports: [ReactiveFormsModule, GenericButton, GenericInput],
   templateUrl: './login.html',
   styleUrl: './login.css',
 })
@@ -49,7 +49,6 @@ export class Login {
     this.authService.login(email, password).subscribe({
       next: () => this.router.navigate(['/events']),
       error: () => {
-        console.log("Error");
         this.errorMessage.set('E-mail ou senha inválidos.');
         this.loading.set(false);
       },

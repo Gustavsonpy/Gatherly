@@ -1,0 +1,195 @@
+<main class="flex min-h-dvh bg-[#F5F5F7]">
+    <app-sidebar />
+    <section id="content" class="flex flex-1 flex-col p-6">
+        <div id="title-container" class="flex flex-col">
+            <h2 class="font-bold">Criar evento</h2>
+            <span class="text-[12px] text-gray-400">
+                Preencha os detalhes para criar o seu evento
+            </span>
+        </div>
+
+        <div id="form-container" class="flex grow w-full justify-center items-start">
+            <form
+                id="form-inputs"
+                [formGroup]="form"
+                (ngSubmit)="submit()"
+                class="border border-[#5B21B6] rounded-xl w-[70%] max-w-4xl p-5">
+
+                <generic-input
+                    id="event-name"
+                    label="Nome do evento"
+                    [control]="form.controls.eventName"
+                />
+
+                <div id="categories-container" class="flex flex-col w-full mb-4.5">
+                    <h2>Categoria</h2>
+                    <div id="categories" class="flex flex-wrap w-full gap-5">
+                        @if (loading()) {
+                            <span class="text-xs text-gray-400">Carregando...</span>
+                        } @else {
+                            @for (category of categories(); track category.id) {
+                                <div
+                                    (click)="selectCategory(category)"
+                                    [ngClass]="{
+                                      'text-white bg-[#5B21B6]': categoryValue()?.id === category.id,
+                                      'text-[#5B21B6] bg-white': categoryValue()?.id !== category.id
+                                    }"
+                                    class="flex justify-center items-center text-xs border border-[#5B21B6]
+                                        rounded-sm px-2 py-1 whitespace-nowrap cursor-pointer">{{ category.name }}
+                                </div>
+                            } @empty {
+                                <div id="not-found-categories" class="w-full flex justify-center items-center">
+                                    <span class="text-xs text-gray-400">Nenhuma categoria encontrada</span>
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+
+                <div id="description-container" class="flex flex-col h-[15%] mb-4.5">
+                    <h2>Descrição</h2>
+                    <textarea
+                        name="description"
+                        [formControl]="form.controls.description"
+                        id="description"
+                        class="border border-[#5B21B6] rounded-sm w-full h-full p-2 text-[12px]">
+                    </textarea>
+                </div>
+
+                <div id="date-time-container" class="flex w-full gap-4">
+                    <generic-input
+                        class="flex-1 min-w-0"
+                        id="date-input"
+                        label="Data"
+                        [control]="form.controls.date"
+                        type="date"
+                    />
+                    <generic-input
+                        class="flex-1 min-w-0"
+                        id="time-input"
+                        label="Horário"
+                        [control]="form.controls.time"
+                        type="time"
+                    />
+                </div>
+
+                <div id="localization-container" class="relative">
+                    <generic-input
+                        id="localization-input"
+                        label="Local"
+                        placeholder="Digite o local e escolha uma sugestão"
+                        [control]="form.controls.localization"
+                    />
+
+                    @if (suggestions().length) {
+                        <ul class="absolute z-10 w-full max-h-48 overflow-auto bg-white
+                                   border border-[#5B21B6] rounded-sm shadow -mt-3">
+                            @for (s of suggestions(); track s.id) {
+                                <li
+                                    (click)="selectPlace(s)"
+                                    class="px-2 py-1.5 text-xs cursor-pointer hover:bg-[#EDE9FE]">
+                                    {{ s.label }}
+                                </li>
+                            }
+                        </ul>
+                    }
+
+                    @if (placeSelected()) {
+                        <span class="block text-xs text-gray-400 mb-2">
+                            Cidade: {{ form.controls.city.value }}
+                        </span>
+                    } @else if (showCityInput()) {
+                        <generic-input
+                            id="city-input"
+                            label="Cidade"
+                            placeholder="Não achou o local na lista? Informe a cidade"
+                            [control]="form.controls.city"
+                        />
+                    }
+                </div>
+
+                <div id="spot-level-container" class="flex gap-3">
+                    <generic-input
+                        class="flex-1 min-w-0"
+                        id="spot-input"
+                        label="Vagas"
+                        [control]="form.controls.spots"
+                        type="number"
+                    />
+                    <div id="level-container" class="flex flex-col flex-3 min-w-0">
+                        <label for="select-level">Nível</label>
+                        <select
+                            id="select-level"
+                            [formControl]="form.controls.level"
+                            class="border border-[#5B21B6] rounded-sm h-9 w-full p-2 text-[12px]"
+                        >
+                            <option value="">Selecione um nível</option>
+                            <option value="Iniciante">Iniciante</option>
+                            <option value="Intermediário">Intermediário</option>
+                            <option value="Avançado">Avançado</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="flex flex-col w-full mb-4.5">
+                    <label for="event-image" class="text-sm mb-2">
+                        Imagem do evento <span class="text-red-500">*</span>
+                    </label>
+
+                    <label
+                        for="event-image"
+                        class="flex flex-col items-center justify-center
+                            w-full aspect-video
+                            bg-[#EDE9FE]
+                            border border-dashed border-[#8B5CF6]
+                            rounded-md
+                            cursor-pointer
+                            hover:bg-[#DDD6FE]
+                            transition-colors"
+                    >
+                        @if (imagePreview()) {
+                            <img
+                                [src]="imagePreview()"
+                                alt="Preview da imagem do evento"
+                                class="w-full h-full object-cover"
+                            />
+                        } @else {
+                            <img src="icons/picture.svg" alt="Caricatura logo">
+
+                            <span class="text-xs text-[#5B21B6] mt-2">
+                                Clique aqui para adicionar uma imagem
+                            </span>
+                        }
+                    </label>
+
+                    <input
+                        id="event-image"
+                        type="file"
+                        accept="image/*"
+                        (change)="onImageSelected($event)"
+                        class="hidden"
+                    />
+                </div>
+
+                @if (errorMessage()) {
+                    <span class="block text-xs text-red-500 mb-3">{{ errorMessage() }}</span>
+                }
+
+                <div id="button-container" class="flex gap-3">
+                    <generic-button
+                        variant="secondary"
+                        class="flex-1"
+                        (clicked)="cancel()"
+                    >Cancelar</generic-button>
+
+                    <!-- Sem (click): o (ngSubmit) do form já chama submit() -->
+                    <generic-button
+                        type="submit"
+                        class="flex-1"
+                        [disabled]="submitting()"
+                    >{{ submitting() ? 'Criando...' : 'Criar' }}</generic-button>
+                </div>
+            </form>
+        </div>
+    </section>
+</main>
