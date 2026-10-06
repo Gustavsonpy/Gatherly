@@ -8,7 +8,7 @@ namespace API.Interfaces
 {
     public interface IUserRepository
     {
-        Task<User?> GetByIdAsync(int id);
+        Task<User?> GetByIdAsync(Guid id);
         Task<User?> GetByEmail(string email);
         Task<List<User>> GetAllAsync();
         Task<IEnumerable<User>> GetActiveUsersAsync();

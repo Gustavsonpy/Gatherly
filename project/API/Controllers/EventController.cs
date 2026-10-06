@@ -57,6 +57,18 @@ namespace API.Controllers
         }
 
         [Authorize]
+        [HttpGet("my-city")]
+        public async Task<IActionResult> GetMyCityEvents()
+        {
+            var result = await _eventService.GetMyCityEventsAsync();
+
+            if (!result.IsSuccess)
+                return BadRequest(new { errors = result.Errors });
+
+            return Ok(result.Value);
+        }
+
+        [Authorize]
         [HttpPost("upload-image")]
         [RequestSizeLimit(MaxImageSize)]
         public async Task<IActionResult> UploadImage(IFormFile file, [FromServices] IWebHostEnvironment env)

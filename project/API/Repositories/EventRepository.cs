@@ -46,6 +46,14 @@ namespace API.Repositories
             return await _context.Events.FirstOrDefaultAsync(x => x.Title == title);
         }
 
+        public async Task<List<EventModel>> GetByCityAsync(string city)
+        {
+            return await _context.Events
+                .Where(e => e.City == city)
+                .OrderBy(e => e.Title)
+                .ToListAsync();
+        }
+
         public Task UpdateAsync(EventModel informal_event)
         {
             throw new NotImplementedException();

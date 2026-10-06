@@ -66,9 +66,25 @@ namespace API.Services
 
         }
 
-        public Task<Result<UserDTO?>> GetByIdAsync(int id)
+        public async Task<Result<UserPublicDTO?>> GetByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var user = await _userRepository.GetByIdAsync(id);
+
+            if (user is null)
+            {
+                return Result<UserPublicDTO?>.Failure("Usuário não encontrado");
+            }
+
+            var dto = new UserPublicDTO
+            {
+                Id = user.Id,
+                Name = user.Name,
+                Description = user.Description,
+                City = user.City,
+                UrlPhoto = user.UrlPhoto
+            };
+
+            return Result<UserPublicDTO?>.Success(dto);
         }
 
         public async Task<Result<List<UserPublicDTO>>> GetAllAsync()

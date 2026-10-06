@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Authentication;
 using System.Threading.Tasks;
 using API.Common;
 using API.DTO.Event;
+using API.Interfaces;
 using API.Interfaces.Event;
 using API.Models;
 
@@ -12,11 +14,15 @@ namespace API.Services
     public class EventService : IEventService
     {
         private readonly IEventRepository _eventRepository;
+        private readonly IUserRepository _userRepository;
+        private readonly ICurrentUserService _currentUserService;
         private readonly ILogger<EventService> _logger;
 
-        public EventService(IEventRepository eventRepository, ILogger<EventService> logger)
+        public EventService(IEventRepository eventRepository, IUserRepository userRepository, ICurrentUserService currentUserService, ILogger<EventService> logger)
         {
             _eventRepository = eventRepository;
+            _userRepository = userRepository;
+            _currentUserService = currentUserService;
             _logger = logger;
         }
 
@@ -104,6 +110,40 @@ namespace API.Services
             throw new NotImplementedException();
         }
 
-        
+        public async Task<Result<List<EventDTO>>> GetMyCityEventsAsync()
+        {
+            var userId = _currentUserService.UserId;
+
+            if (userId == Guid.Empty)
+                return Result<List<EventDTO>>.Failure("Usuário não autenticado.");
+
+            var user = await _userRepository.GetByIdAsync(userId);
+
+            if (user is null)
+                return Result<List<EventDTO>>.Failure("Usuário não encontrado.");
+
+            if (string.IsNullOrWhiteSpace(user.City))
+                return Result<List<EventDTO>>.Failure("Usuário não possui cidade cadastrada.");
+
+            var events = await _eventRepository.GetByCityAsync(user.City);
+
+            var eventDTOs = events.Select(e => new EventDTO
+            {
+                Id = e.Id,
+                Title = e.Title,
+                Description = e.Description,
+                DateTime = e.DateTime,
+                Localization = e.Localization,
+                MaxCapacity = e.MaxCapacity,
+                City = e.City,
+                Level = e.Level,
+                UrlImage = e.UrlImage,
+                RegisterDate = e.RegisterDate,
+                UserId = e.UserId,
+                CategoryId = e.CategoryId
+            }).ToList();
+
+            return Result<List<EventDTO>>.Success(eventDTOs);
+        }
     }
 }

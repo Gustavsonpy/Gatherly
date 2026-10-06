@@ -46,9 +46,9 @@ namespace API.Repositories
             return await _context.Users.FirstOrDefaultAsync(x => x.Email == email);
         }
 
-        public Task<User?> GetByIdAsync(int id)
+        public async Task<User?> GetByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            return await _context.Users.FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public Task UpdateAsync(User user)

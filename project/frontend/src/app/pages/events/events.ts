@@ -20,12 +20,24 @@ export class Events implements OnInit{
   ) {}
 
   events = signal<EventModel[]>([]);
+  cityEvents = signal<EventModel[]>([]);
   loading = signal(true);
 
   ngOnInit(): void {
     this.eventService.getEvents().subscribe({
       next: (data) => {
         this.events.set(data);
+        this.loading.set(false);
+      },
+      error: (error) => {
+        console.error(error);
+        this.loading.set(false);
+      }
+    })
+
+    this.eventService.getEventsByCity().subscribe({
+      next: (data) => {
+        this.cityEvents.set(data);
         this.loading.set(false);
       },
       error: (error) => {
