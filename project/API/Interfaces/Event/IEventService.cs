@@ -11,7 +11,7 @@ namespace API.Interfaces.Event
     {
         Task<Result<EventDTO>> CreateAsync(CreateEventDTO eventDTO, Guid userId);
         Task<Result<EventDTO?>> GetByIdAsync(int id);
-        Task<Result<List<EventDTO>>> GetMyCityEventsAsync();
+        Task<Result<List<ReturnEventDTO>>> GetMyCityEventsAsync();
         Task<Result<List<ReturnEventDTO>>> GetAllAsync();
         Task<Result<EventDTO>> UpdateTitleAsync(string title);
     }

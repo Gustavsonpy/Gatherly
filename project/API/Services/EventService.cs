@@ -110,29 +110,31 @@ namespace API.Services
             throw new NotImplementedException();
         }
 
-        public async Task<Result<List<EventDTO>>> GetMyCityEventsAsync()
+        public async Task<Result<List<ReturnEventDTO>>> GetMyCityEventsAsync()
         {
             var userId = _currentUserService.UserId;
 
             if (userId == Guid.Empty)
-                return Result<List<EventDTO>>.Failure("Usuário não autenticado.");
+                return Result<List<ReturnEventDTO>>.Failure("Usuário não autenticado.");
 
             var user = await _userRepository.GetByIdAsync(userId);
 
             if (user is null)
-                return Result<List<EventDTO>>.Failure("Usuário não encontrado.");
+                return Result<List<ReturnEventDTO>>.Failure("Usuário não encontrado.");
 
             if (string.IsNullOrWhiteSpace(user.City))
-                return Result<List<EventDTO>>.Failure("Usuário não possui cidade cadastrada.");
+                return Result<List<ReturnEventDTO>>.Failure("Usuário não possui cidade cadastrada.");
 
             var events = await _eventRepository.GetByCityAsync(user.City);
 
-            var eventDTOs = events.Select(e => new EventDTO
+            var eventDTOs = events.Select(e => new ReturnEventDTO
             {
                 Id = e.Id,
                 Title = e.Title,
                 Description = e.Description,
                 DateTime = e.DateTime,
+                Date = e.DateTime.ToString("yyyy-MM-dd"),
+                Time = e.DateTime.ToString("HH:mm"),
                 Localization = e.Localization,
                 MaxCapacity = e.MaxCapacity,
                 City = e.City,
@@ -143,7 +145,7 @@ namespace API.Services
                 CategoryId = e.CategoryId
             }).ToList();
 
-            return Result<List<EventDTO>>.Success(eventDTOs);
+            return Result<List<ReturnEventDTO>>.Success(eventDTOs);
         }
     }
 }
