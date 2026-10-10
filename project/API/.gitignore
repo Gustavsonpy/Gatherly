@@ -484,4 +484,4 @@ $RECYCLE.BIN/
 appsettings.Development.json
 appsettings.Local.json
 
-API/wwwroot/uploads/*
+wwwroot/uploads/
