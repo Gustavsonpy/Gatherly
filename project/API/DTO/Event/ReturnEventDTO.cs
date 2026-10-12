@@ -22,6 +22,6 @@ namespace API.DTO.Event
         public UserModel User { get; set; }
 
         public Guid CategoryId { get; set; }
-        public CategoryModel Category { get; set; }
+        public string? CategoryName { get; set; }
     }
 }

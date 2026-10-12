@@ -32,4 +32,8 @@ export class EventService {
             event
         );
     }
+
+    getEventById(id: string): Observable<EventModel> {
+        return this.http.get<EventModel>(`${this.apiUrl}/${id}`);
+    }
 }

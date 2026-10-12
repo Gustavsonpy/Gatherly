@@ -24,8 +24,8 @@ export class GenericButton {
     'rounded-md border text-sm p-2 w-full cursor-pointer transition-colors disabled:opacity-50 disabled:cursor-not-allowed';
 
   private readonly variants = {
-    primary: 'bg-[#7C3AED] border-[#7C3AED] text-white hover:bg-[#6D28D9]',
-    secondary: 'bg-white border-[#5B21B6] text-[#5B21B6] hover:bg-[#EDE9FE]',
+    primary: 'bg-primary border-primary text-white hover:bg-primary-hover',
+    secondary: 'bg-white border-primary-dark text-primary-dark hover:bg-primary-light',
   };
 
   classes = computed(() => `${this.base} ${this.variants[this.variant()]}`);

@@ -1,4 +1,4 @@
-<main class="flex min-h-dvh justify-center items-center bg-[#7C3AED]">
+<main class="flex min-h-dvh justify-center items-center bg-primary">
   <div id="form-container" class="flex justify-center items-center rounded-2xl w-3/5 h-150 bg-[white]">
       <section id="form-content" class="flex flex-col justify-center gap-10 w-[90%] h-[90%]">
         <div id="logo" class="flex items-center">
@@ -26,8 +26,8 @@
           </div>
 
           <div id="util-links" class="flex justify-between w-full">
-            <a href="#" class="text-[#5B21B6] underline">Esqueci a senha</a>
-            <a href="/register" class="text-[#5B21B6] underline">Ainda não possui uma conta?</a>
+            <a href="#" class="text-primary-dark underline">Esqueci a senha</a>
+            <a href="/register" class="text-primary-dark underline">Ainda não possui uma conta?</a>
           </div>
           <generic-button type="submit" [disabled]="loading()">
             {{ loading() ? 'Entrando' : 'Fazer login' }}

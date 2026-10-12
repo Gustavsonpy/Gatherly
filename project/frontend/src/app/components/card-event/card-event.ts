@@ -1,5 +1,6 @@
 import { DatePipe } from '@angular/common';
-import { Component, input } from '@angular/core';
+import { Component, inject, input } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'card-event',
@@ -7,12 +8,18 @@ import { Component, input } from '@angular/core';
   templateUrl: './card-event.html',
   styleUrl: './card-event.css',
 })
-
 export class CardEvent {
+  private router = inject(Router);
+
+  id = input<string>('');
   img = input<string>('');
   title = input<string>('');
   time = input<string>('');
   date = input<string>('');
   localization = input<string>('');
   description = input<string>('');
+
+  goToEvent(): void {
+    this.router.navigate(['/events', this.id()]);
+  }
 }
