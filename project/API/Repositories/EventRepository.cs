@@ -32,13 +32,16 @@ namespace API.Repositories
         public async Task<List<EventModel>> GetAllAsync()
         {
             return await _context.Events
+                    .Include(e => e.Category)
                     .OrderBy(e => e.Title)
                     .ToListAsync();
         }
 
-        public Task<EventModel?> GetByIdAsync(int id)
+        public async Task<EventModel?> GetByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            return await _context.Events
+                .Include(e => e.Category)
+                .FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task<EventModel?> GetByTitle(string title)
@@ -50,6 +53,7 @@ namespace API.Repositories
         {
             return await _context.Events
                 .Where(e => e.City == city)
+                .Include(e => e.Category)
                 .OrderBy(e => e.Title)
                 .ToListAsync();
         }

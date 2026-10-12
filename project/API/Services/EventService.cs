@@ -74,9 +74,34 @@ namespace API.Services
             return Result<EventDTO>.Success(resultDto);
         }
 
-        public Task<Result<EventDTO?>> GetByIdAsync(int id)
+        public async Task<Result<ReturnEventDTO?>> GetByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var eventId = await _eventRepository.GetByIdAsync(id);
+
+            if (eventId is null)
+                return Result<ReturnEventDTO?>.Failure("Evento não encontrado.");
+
+            var dto =  new ReturnEventDTO
+            {
+                Id = eventId.Id,
+                Title = eventId.Title,
+                CategoryId = eventId.CategoryId,
+                CategoryName = eventId.Category?.Name,
+                Description = eventId.Description,
+                DateTime = eventId.DateTime,
+                Date = eventId.DateTime.ToString("yyyy-MM-dd"),
+                Time = eventId.DateTime.ToString("HH:mm"),
+                Localization = eventId.Localization,
+                MaxCapacity = eventId.MaxCapacity,
+                City = eventId.City,
+                Level = eventId.Level,
+                UrlImage = eventId.UrlImage,
+                RegisterDate = eventId.RegisterDate,
+                UserId = eventId.UserId,
+                User = eventId.User
+            };
+
+            return Result<ReturnEventDTO?>.Success(dto);
         }
 
         public async Task<Result<List<ReturnEventDTO>>> GetAllAsync()
@@ -88,6 +113,7 @@ namespace API.Services
                 Id = e.Id,
                 Title = e.Title,
                 CategoryId = e.CategoryId,
+                CategoryName = e.Category?.Name,
                 Description = e.Description,
                 DateTime = e.DateTime,
                 Date = e.DateTime.ToString("yyyy-MM-dd"),
@@ -142,7 +168,8 @@ namespace API.Services
                 UrlImage = e.UrlImage,
                 RegisterDate = e.RegisterDate,
                 UserId = e.UserId,
-                CategoryId = e.CategoryId
+                CategoryId = e.CategoryId,
+                CategoryName = e.Category?.Name,
             }).ToList();
 
             return Result<List<ReturnEventDTO>>.Success(eventDTOs);

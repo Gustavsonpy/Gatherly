@@ -1,3 +1,12 @@
 /* You can add global styles to this file, and also import other style files */
 
 @import 'tailwindcss';
+
+@theme {
+  --color-primary: #7C3AED;        /* roxo principal */
+  --color-primary-dark: #5B21B6;   /* bordas, textos, títulos */
+  --color-primary-hover: #6D28D9;  /* hover do botão */
+  --color-primary-light: #EDE9FE;  /* fundos claros */
+  --color-primary-lighter: #DDD6FE;/* hover de fundos claros */
+  --color-primary-accent: #8B5CF6; /* destaque (borda do upload) */
+}

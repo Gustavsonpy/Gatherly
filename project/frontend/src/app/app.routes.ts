@@ -24,5 +24,11 @@ export const routes: Routes = [
     loadComponent: () => 
       import('./pages/events/newEvent').then((n) => n.NewEvent),
   },
+  {
+    path: 'events/:id',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./pages/events/event-detail').then((m) => m.EventDetail),
+  },
   { path: '**', redirectTo: 'login' },
 ];

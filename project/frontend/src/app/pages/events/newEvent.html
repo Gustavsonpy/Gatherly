@@ -13,7 +13,7 @@
                 id="form-inputs"
                 [formGroup]="form"
                 (ngSubmit)="submit()"
-                class="border border-[#5B21B6] rounded-xl w-[70%] max-w-4xl p-5">
+                class="border border-primary-dark rounded-xl w-[70%] max-w-4xl p-5">
 
                 <generic-input
                     id="event-name"
@@ -32,9 +32,9 @@
                                     (click)="selectCategory(category)"
                                     [ngClass]="{
                                       'text-white bg-[#5B21B6]': categoryValue()?.id === category.id,
-                                      'text-[#5B21B6] bg-white': categoryValue()?.id !== category.id
+                                      'text-primary-dark bg-white': categoryValue()?.id !== category.id
                                     }"
-                                    class="flex justify-center items-center text-xs border border-[#5B21B6]
+                                    class="flex justify-center items-center text-xs border border-primary-dark
                                         rounded-sm px-2 py-1 whitespace-nowrap cursor-pointer">{{ category.name }}
                                 </div>
                             } @empty {
@@ -52,7 +52,7 @@
                         name="description"
                         [formControl]="form.controls.description"
                         id="description"
-                        class="border border-[#5B21B6] rounded-sm w-full h-full p-2 text-[12px]">
+                        class="border border-primary-dark rounded-sm w-full h-full p-2 text-[12px]">
                     </textarea>
                 </div>
 
@@ -83,11 +83,11 @@
 
                     @if (suggestions().length) {
                         <ul class="absolute z-10 w-full max-h-48 overflow-auto bg-white
-                                   border border-[#5B21B6] rounded-sm shadow -mt-3">
+                                   border border-primary-dark rounded-sm shadow -mt-3">
                             @for (s of suggestions(); track s.id) {
                                 <li
                                     (click)="selectPlace(s)"
-                                    class="px-2 py-1.5 text-xs cursor-pointer hover:bg-[#EDE9FE]">
+                                    class="px-2 py-1.5 text-xs cursor-pointer hover:bg-primary-light">
                                     {{ s.label }}
                                 </li>
                             }
@@ -121,7 +121,7 @@
                         <select
                             id="select-level"
                             [formControl]="form.controls.level"
-                            class="border border-[#5B21B6] rounded-sm h-9 w-full p-2 text-[12px]"
+                            class="border border-primary-dark rounded-sm h-9 w-full p-2 text-[12px]"
                         >
                             <option value="">Selecione um nível</option>
                             <option value="Iniciante">Iniciante</option>
@@ -140,11 +140,11 @@
                         for="event-image"
                         class="flex flex-col items-center justify-center
                             w-full aspect-video
-                            bg-[#EDE9FE]
-                            border border-dashed border-[#8B5CF6]
+                            bg-primary-light
+                            border border-dashed border-primary-accent
                             rounded-md
                             cursor-pointer
-                            hover:bg-[#DDD6FE]
+                          hover:bg-primary-lighter
                             transition-colors"
                     >
                         @if (imagePreview()) {
@@ -156,7 +156,7 @@
                         } @else {
                             <img src="icons/picture.svg" alt="Caricatura logo">
 
-                            <span class="text-xs text-[#5B21B6] mt-2">
+                            <span class="text-xs text-primary-dark mt-2">
                                 Clique aqui para adicionar uma imagem
                             </span>
                         }

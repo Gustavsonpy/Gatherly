@@ -11,6 +11,7 @@
                 @for (event of events(); track event.id) {
                     <div class="shrink-0 snap-start">
                         <card-event
+                            [id]="event.id"
                             [img]="event.urlImage"
                             [title]="event.title"
                             [time]="event.time"
@@ -31,6 +32,7 @@
                 @for (event of cityEvents(); track event.id) {
                     <div class="shrink-0 snap-start">
                         <card-event
+                            [id]="event.id"
                             [img]="event.urlImage"
                             [title]="event.title"
                             [time]="event.time"

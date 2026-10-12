@@ -12,6 +12,7 @@ export interface EventModel{
     registerDate: string;
     userId: string;
     categoryId: string;
+    categoryName: string;
 }
 
 export interface CreateEventModel {
