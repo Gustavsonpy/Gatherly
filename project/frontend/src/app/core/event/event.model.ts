@@ -13,6 +13,8 @@ export interface EventModel{
     userId: string;
     categoryId: string;
     categoryName: string;
+    participantsCount: number;
+    isParticipating: boolean;
 }
 
 export interface CreateEventModel {
@@ -25,4 +27,10 @@ export interface CreateEventModel {
     level: string | null;
     urlImage: string;
     categoryId: string;
+}
+
+export interface ParticipantModel {
+    id: string;
+    name: string;
+    urlPhoto: string | null;
 }

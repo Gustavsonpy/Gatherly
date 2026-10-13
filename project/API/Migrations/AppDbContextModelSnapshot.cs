@@ -130,6 +130,33 @@ namespace API.Migrations
                     b.ToTable("Events", (string)null);
                 });
 
+            modelBuilder.Entity("API.Models.EventParticipant", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("EventId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("RegisterDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("now() at time zone 'utc'");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EventId");
+
+                    b.HasIndex("UserId", "EventId")
+                        .IsUnique();
+
+                    b.ToTable("EventParticipants", (string)null);
+                });
+
             modelBuilder.Entity("API.Models.User", b =>
                 {
                     b.Property<Guid>("Id")
@@ -226,13 +253,39 @@ namespace API.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("API.Models.EventParticipant", b =>
+                {
+                    b.HasOne("API.Models.Event", "Event")
+                        .WithMany("Participants")
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("API.Models.User", "User")
+                        .WithMany("EventParticipantions")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Event");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("API.Models.Category", b =>
                 {
                     b.Navigation("Events");
                 });
 
+            modelBuilder.Entity("API.Models.Event", b =>
+                {
+                    b.Navigation("Participants");
+                });
+
             modelBuilder.Entity("API.Models.User", b =>
                 {
+                    b.Navigation("EventParticipantions");
+
                     b.Navigation("Events");
                 });
 #pragma warning restore 612, 618

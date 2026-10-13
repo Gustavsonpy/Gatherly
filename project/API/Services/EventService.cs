@@ -7,6 +7,7 @@ using API.Common;
 using API.DTO.Event;
 using API.Interfaces;
 using API.Interfaces.Event;
+using API.Interfaces.Participant;
 using API.Models;
 
 namespace API.Services
@@ -16,12 +17,19 @@ namespace API.Services
         private readonly IEventRepository _eventRepository;
         private readonly IUserRepository _userRepository;
         private readonly ICurrentUserService _currentUserService;
+        private readonly IEventParticipantRepository _participantRepository;
         private readonly ILogger<EventService> _logger;
 
-        public EventService(IEventRepository eventRepository, IUserRepository userRepository, ICurrentUserService currentUserService, ILogger<EventService> logger)
+        public EventService(
+            IEventRepository eventRepository,
+            IUserRepository userRepository,
+            IEventParticipantRepository participantRepository,
+            ICurrentUserService currentUserService, ILogger<EventService> logger
+            )
         {
             _eventRepository = eventRepository;
             _userRepository = userRepository;
+            _participantRepository = participantRepository;
             _currentUserService = currentUserService;
             _logger = logger;
         }
@@ -77,6 +85,7 @@ namespace API.Services
         public async Task<Result<ReturnEventDTO?>> GetByIdAsync(Guid id)
         {
             var eventId = await _eventRepository.GetByIdAsync(id);
+            var userId = _currentUserService.UserId;
 
             if (eventId is null)
                 return Result<ReturnEventDTO?>.Failure("Evento não encontrado.");
@@ -98,7 +107,10 @@ namespace API.Services
                 UrlImage = eventId.UrlImage,
                 RegisterDate = eventId.RegisterDate,
                 UserId = eventId.UserId,
-                User = eventId.User
+                User = eventId.User,
+                ParticipantsCount = await _participantRepository.CountByEventAsync(id),
+                IsParticipating = userId != Guid.Empty
+                    && await _participantRepository.ExistsAsync(id, userId)
             };
 
             return Result<ReturnEventDTO?>.Success(dto);
@@ -173,6 +185,70 @@ namespace API.Services
             }).ToList();
 
             return Result<List<ReturnEventDTO>>.Success(eventDTOs);
+        }
+
+        public async Task<Result<bool>> JoinAsync(Guid eventId)
+        {
+            var userId = _currentUserService.UserId;
+
+            if (userId == Guid.Empty)
+                return Result<bool>.Failure("Usuário não autenticado.");
+
+            var ev = await _eventRepository.GetByIdAsync(eventId);
+
+            if (ev is null)
+                return Result<bool>.Failure("Evento não encontrado.");
+
+            if (ev.UserId == userId)
+                return Result<bool>.Failure("Você é o organizador deste evento.");
+
+            if (ev.DateTime < DateTime.UtcNow)
+                return Result<bool>.Failure("Este evento já aconteceu.");
+
+            if (await _participantRepository.ExistsAsync(eventId, userId))
+                return Result<bool>.Failure("Você já participa deste evento.");
+
+            var count = await _participantRepository.CountByEventAsync(eventId);
+
+            if (count >= ev.MaxCapacity)
+                return Result<bool>.Failure("Evento lotado.");
+
+            await _participantRepository.AddAsync(new EventParticipant
+            {
+                EventId = eventId,
+                UserId = userId,
+                RegisterDate = DateTime.UtcNow
+            });
+
+            return Result<bool>.Success(true);
+        }
+
+        public async Task<Result<bool>> LeaveAsync(Guid eventId)
+        {
+            var userId = _currentUserService.UserId;
+
+            if (userId == Guid.Empty)
+                return Result<bool>.Failure("Usuário não autenticado.");
+
+            var removed = await _participantRepository.RemoveAsync(eventId, userId);
+
+            return removed
+                ? Result<bool>.Success(true)
+                : Result<bool>.Failure("Você não participa deste evento.");
+        }
+
+        public async Task<Result<List<ParticipantDTO>>> GetParticipantsAsync(Guid eventId)
+        {
+            var users = await _participantRepository.GetUsersByEventAsync(eventId);
+
+            var dtos = users.Select(u => new ParticipantDTO
+            {
+                Id = u.Id,
+                Name = u.Name,
+                UrlPhoto = u.UrlPhoto
+            }).ToList();
+
+            return Result<List<ParticipantDTO>>.Success(dtos);
         }
     }
 }
