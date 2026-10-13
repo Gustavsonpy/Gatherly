@@ -23,5 +23,7 @@ namespace API.Models
 
         public Guid CategoryId { get; set; }
         public Category Category { get; set; }
+
+        public ICollection<EventParticipant> Participants { get; set; } = new List<EventParticipant>();
     }
 }
