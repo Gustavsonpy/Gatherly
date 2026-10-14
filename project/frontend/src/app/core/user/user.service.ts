@@ -26,4 +26,8 @@ export class UserService {
   create(dto: CreateUserDTO): Observable<UserDTO> {
     return this.http.post<UserDTO>(`${this.baseUrl}/create`, dto);
   }
+
+  getUserById(id: string): Observable<UserDTO> {
+    return this.http.get<UserDTO>(`${this.baseUrl}/${id}`);
+  } 
 }

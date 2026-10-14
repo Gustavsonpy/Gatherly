@@ -69,10 +69,11 @@
 
         <div id="organizer-container" class="flex items-center px-4 py-4">
           <div id="organizer" class="flex items-center gap-3">
-            <img src="images/default_profile_pic.jpg" alt="" class="rounded-full bg-black w-10 h-10 object-cover">
+            <img [src]="e.creatorPhoto ?? 'images/default_profile_pic.jpg'" alt=""
+                class="rounded-full bg-black w-10 h-10 object-cover">
             <div id="organizer-info" class="flex flex-col justify-center text-[12px]">
               <span class="text-gray-400">Organizado por</span>
-              <span>Stiphen Yurc</span>
+              <span>{{ e.creatorName }}</span>
             </div>
           </div>
         </div>

@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Authentication;
-using System.Threading.Tasks;
 using API.Common;
 using API.DTO.Event;
 using API.Interfaces;
@@ -90,7 +85,7 @@ namespace API.Services
             if (eventId is null)
                 return Result<ReturnEventDTO?>.Failure("Evento não encontrado.");
 
-            var dto =  new ReturnEventDTO
+            var dto = new ReturnEventDTO
             {
                 Id = eventId.Id,
                 Title = eventId.Title,
@@ -107,7 +102,8 @@ namespace API.Services
                 UrlImage = eventId.UrlImage,
                 RegisterDate = eventId.RegisterDate,
                 UserId = eventId.UserId,
-                User = eventId.User,
+                CreatorName = eventId.User?.Name,
+                CreatorPhoto = eventId.User?.UrlPhoto,
                 ParticipantsCount = await _participantRepository.CountByEventAsync(id),
                 IsParticipating = userId != Guid.Empty
                     && await _participantRepository.ExistsAsync(id, userId)
@@ -137,7 +133,6 @@ namespace API.Services
                 UrlImage = e.UrlImage,
                 RegisterDate = e.RegisterDate,
                 UserId = e.UserId,
-                User = e.User
             }).ToList();
 
             return Result<List<ReturnEventDTO>>.Success(dtos);

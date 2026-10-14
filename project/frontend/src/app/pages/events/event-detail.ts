@@ -4,11 +4,10 @@ import { DatePipe } from '@angular/common';
 import { EventService } from '../../core/event/event.service';
 import { EventModel, ParticipantModel } from '../../core/event/event.model';
 import { Sidebar } from '../../components/sidebar/sidebar';
-import { GenericButton } from '../../components/buttons/generic-button';
 
 @Component({
   selector: 'app-event-detail',
-  imports: [DatePipe, Sidebar, GenericButton],
+  imports: [Sidebar],
   templateUrl: './event-detail.html',
 })
 export class EventDetail implements OnInit {
