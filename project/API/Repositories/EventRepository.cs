@@ -41,6 +41,7 @@ namespace API.Repositories
         {
             return await _context.Events
                 .Include(e => e.Category)
+                .Include(e => e.User)
                 .FirstOrDefaultAsync(x => x.Id == id);
         }
 

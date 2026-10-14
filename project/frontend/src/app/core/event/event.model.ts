@@ -15,6 +15,8 @@ export interface EventModel{
     categoryName: string;
     participantsCount: number;
     isParticipating: boolean;
+    creatorName: string | null;
+    creatorPhoto: string | null;
 }
 
 export interface CreateEventModel {

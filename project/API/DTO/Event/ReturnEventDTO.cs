@@ -21,7 +21,8 @@ namespace API.DTO.Event
         public bool IsParticipating { get; set; }
 
         public Guid UserId { get; set; }
-        public UserModel User { get; set; }
+        public string? CreatorName { get; set; }
+        public string? CreatorPhoto { get; set; }
 
         public Guid CategoryId { get; set; }
         public string? CategoryName { get; set; }
