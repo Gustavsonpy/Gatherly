@@ -14,7 +14,7 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
         [formControl]="control()"
         [autocomplete]="autoComplete()"
         [placeholder]="placeholder()"
-        class="border border-[#5B21B6] rounded-md p-2 text-[12px]"
+        class="border border-[#5B21B6] rounded-md p-2 text-[12px] w-full"
       />
       <p
         class="text-[12px] text-red-500"
@@ -28,9 +28,9 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 export class GenericInput {
   id = input.required<string>();
   label = input.required<string>();
-  control = input.required<FormControl<string>>();
+  control = input.required<FormControl<string | number>>();
   errorMessage = input<string>("Campo inválido");
-  type = input<'text' | 'email' | 'password' | 'date'>('text');
+  type = input<'text' | 'email' | 'password' | 'date' | 'time' | 'number'>('text');
   autoComplete = input<string>('off');
   placeholder = input<string>("");
 }

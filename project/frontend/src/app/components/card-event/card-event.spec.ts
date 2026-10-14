@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { OrangeButtonTs } from './orange-button.js';
+import { CardEvent } from './card-event';
 
-describe('OrangeButtonTs', () => {
-  let component: OrangeButtonTs;
-  let fixture: ComponentFixture<OrangeButtonTs>;
+describe('CardEvent', () => {
+  let component: CardEvent;
+  let fixture: ComponentFixture<CardEvent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [OrangeButtonTs],
+      imports: [CardEvent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(OrangeButtonTs);
+    fixture = TestBed.createComponent(CardEvent);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

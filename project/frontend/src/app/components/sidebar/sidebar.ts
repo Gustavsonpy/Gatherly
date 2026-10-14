@@ -1,10 +1,10 @@
 import { Component, computed } from '@angular/core';
-import { PurpleButton } from '../buttons/purple-button';
+import { GenericButton } from '../buttons/generic-button';
 import { AuthService } from '../../core/auth/auth.service';
 
 @Component({
   selector: 'app-sidebar',
-  imports: [PurpleButton],
+  imports: [GenericButton],
   templateUrl: './sidebar.html',
   styleUrl: './sidebar.css',
 })

@@ -37,5 +37,16 @@ namespace API.Controllers
 
             return Ok(result.Value);
         }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(Guid id)
+        {
+            var result = await _userService.GetByIdAsync(id);
+
+            if(!result.IsSuccess)
+                return BadRequest(new { errors = result.Errors });
+
+            return Ok(result.Value);
+        }
     }
 }

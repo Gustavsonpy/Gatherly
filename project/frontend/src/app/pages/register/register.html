@@ -55,9 +55,9 @@
             <p>Eu aceito os <span class="text-[#7C3AED]">Termos de uso</span> e a <span class="text-[#7C3AED]">Política de privacidade</span></p>
           </div>
           
-          <purple-button type="submit" [disabled]="loading()">
+          <generic-button type="submit" [disabled]="loading()">
             {{ loading() ? 'Cadastrando' : 'Criar conta' }}
-          </purple-button>
+          </generic-button>
           <p>Já tem uma conta? <a class="text-[#7C3AED] font-bold" href="/login">Entrar</a></p>
         </form>
       </section>

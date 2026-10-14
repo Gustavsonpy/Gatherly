@@ -483,3 +483,5 @@ $RECYCLE.BIN/
 
 appsettings.Development.json
 appsettings.Local.json
+
+wwwroot/uploads/

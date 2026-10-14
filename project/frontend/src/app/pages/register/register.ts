@@ -1,7 +1,7 @@
 import { Component, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { PurpleButton } from '../../components/buttons/purple-button';
+import { GenericButton   } from '../../components/buttons/generic-button';
 import { GenericInput } from '../../components/input/generic-input/generic-input';
 import { UserService } from '../../core/user/user.service';
 import { applyFieldErrors } from '../../core/forms/field-errors.util';
@@ -17,7 +17,7 @@ interface RegisterForm {
 
 @Component({
   selector: 'app-register',
-  imports: [ReactiveFormsModule, PurpleButton, GenericInput],
+  imports: [ReactiveFormsModule, GenericButton, GenericInput],
   templateUrl: './register.html',
   styleUrl: './register.css',
 })
