@@ -1,9 +1,9 @@
-<main class="flex flex-col justify-between items-center w-50 min-h-dvh">
+<aside class="flex flex-col justify-between items-center w-64 h-dvh sticky top-0 bg-white border-r border-gray-200">
     <section class="flex items-center">
         <img src="images/logos/logo_gatherly.png" class="w-15 h-15" alt="Logo Gatherly">
         <h1>Gatherly</h1>
     </section>
-    <section id="mid-container" class="flex flex-col gap-10">
+    <section id="mid-container" class="flex flex-col gap-10 w-[70%]">
         <div class="flex flex-col">
             <ul class="flex flex-col gap-5">
                 <a href="#" class="flex gap-5">
@@ -30,11 +30,11 @@
         </div>
         <a href="/newEvent"><generic-button>Criar evento</generic-button></a>
     </section>
-        <section id="bottom-part" class="flex flex-col gap-5">
-            <p>{{ username() }}</p>
-            <div id="view-mode" class="flex items-center justify-center gap-3">
-                <img src="icons/lua.svg" alt="modo escuro icon">
-                <span>Modo escuro</span>
-            </div>
-        </section>
-</main>
+    <section id="bottom-part" class="flex flex-col gap-5">
+        <p>{{ username() }}</p>
+        <div id="view-mode" class="flex items-center justify-center gap-3">
+            <img src="icons/lua.svg" alt="modo escuro icon">
+            <span>Modo escuro</span>
+        </div>
+    </section>
+</aside>
