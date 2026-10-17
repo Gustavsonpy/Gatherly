@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using API.Data;
+using API.DTO.Comment;
 using API.Interfaces.Comment;
 using API.Models;
 using Microsoft.EntityFrameworkCore;
@@ -35,7 +36,8 @@ namespace API.Repositories
         public async Task<List<Comment>> GetAllAsync()
         {
             return await _context.Comments
-                    .OrderBy(c => c.Text)
+                    .Include(c => c.User)
+                    .OrderBy(c => c.RegisterDate)
                     .ToListAsync();
         }
 
@@ -48,6 +50,13 @@ namespace API.Repositories
         {
             return await _context.Comments.ToListAsync();
         }
+
+        public async Task<List<Comment>> GetCommentsByEventAsync(Guid eventID) =>
+            await _context.Comments
+                .Where(c => c.EventId == eventID)
+                .Include(c => c.User)
+                .OrderBy(c => c.RegisterDate)
+                .ToListAsync();
 
         public Task UpdateAsync(Comment informal_event)
         {
