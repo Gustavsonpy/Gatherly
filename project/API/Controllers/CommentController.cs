@@ -25,13 +25,24 @@ namespace API.Controllers
             if(!result.IsSuccess)
                 return BadRequest(new { errors = result.Errors });
 
-            return Ok(dto);
+            return Ok(result.Value);
         }
         
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
             var result = await _commentService.GetAllAsync();
+
+            if(!result.IsSuccess)
+                return BadRequest(new { errors = result.Errors });
+
+            return Ok(result.Value);
+        }
+
+        [HttpGet("{eventId}")]
+        public async Task<IActionResult> GetCommentByEvent(Guid eventId)
+        {
+            var result = await _commentService.getCommentsByEvent(eventId);
 
             if(!result.IsSuccess)
                 return BadRequest(new { errors = result.Errors });
