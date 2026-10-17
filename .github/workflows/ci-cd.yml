@@ -8,7 +8,7 @@ on:
 
 env:
   DOTNET_VERSION: "9.0.x"
-  NODE_VERSION: "20.x"
+  NODE_VERSION: "22.x"
   SOLUTION_PATH: "./project/Gatherly.slnx"
   BACKEND_PROJECT_PATH: "./project/API/API.csproj"
   BACKEND_DIR: "./project/API"
@@ -93,9 +93,9 @@ jobs:
         working-directory: ${{ env.FRONTEND_DIR }}
         run: npm run lint --if-present
 
-      - name: Run unit tests (headless)
+      - name: Run unit tests (Vitest + jsdom)
         working-directory: ${{ env.FRONTEND_DIR }}
-        run: npm run test -- --watch=false --browsers=ChromeHeadless --no-progress
+        run: npm run test -- --watch=false
 
       - name: Build (production)
         working-directory: ${{ env.FRONTEND_DIR }}
