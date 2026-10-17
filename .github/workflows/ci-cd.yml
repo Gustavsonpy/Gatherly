@@ -9,7 +9,6 @@ on:
 env:
   DOTNET_VERSION: "9.0.x"
   NODE_VERSION: "20.x"
-  SOLUTION_PATH: "./Gatherly.slnx"
   SOLUTION_PATH: "./project/Gatherly.slnx"
   BACKEND_PROJECT_PATH: "./project/API/API.csproj"
   BACKEND_DIR: "./project/API"
