@@ -9,11 +9,11 @@ on:
 env:
   DOTNET_VERSION: "9.0.x"
   NODE_VERSION: "20.x"
-  SOLUTION_PATH: "./Gatherly.slnx"
-  BACKEND_PROJECT_PATH: "./API/API.csproj"
-  BACKEND_DIR: "./API"
-  TEST_PROJECT_PATH: "./Tests/API.Tests"
-  FRONTEND_DIR: "./frontend"
+  SOLUTION_PATH: ./project/Gatherly.slnx
+  BACKEND_PROJECT_PATH: ./project/API/API.csproj
+  BACKEND_DIR: ./project/API
+  TEST_PROJECT_PATH: ./project/Tests/API.Tests
+  FRONTEND_DIR: ./project/frontend
 
 jobs:
   # ----------------------------------------------------------------
