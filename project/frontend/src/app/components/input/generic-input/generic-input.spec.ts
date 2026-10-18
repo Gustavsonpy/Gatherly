@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { GenericInputTs } from './generic-input';
+import { GenericInput } from './generic-input';
 
-describe('GenericInputTs', () => {
-  let component: GenericInputTs;
-  let fixture: ComponentFixture<GenericInputTs>;
+describe('GenericInput', () => {
+  let component: GenericInput;
+  let fixture: ComponentFixture<GenericInput>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [GenericInputTs],
+      imports: [GenericInput],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(GenericInputTs);
+    fixture = TestBed.createComponent(GenericInput);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });
