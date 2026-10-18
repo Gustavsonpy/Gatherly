@@ -8,7 +8,7 @@ on:
 
 env:
   DOTNET_VERSION: "9.0.x"
-  NODE_VERSION: "22.x"
+  NODE_VERSION: "22.x" 
   SOLUTION_PATH: "./project/Gatherly.slnx"
   BACKEND_PROJECT_PATH: "./project/API/API.csproj"
   BACKEND_DIR: "./project/API"
