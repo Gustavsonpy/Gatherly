@@ -2,6 +2,7 @@ using API.Data;
 using API.Interfaces.Participant;
 using API.Models;
 using Microsoft.EntityFrameworkCore;
+using static API.Interfaces.Participant.IEventParticipantRepository;
 
 namespace API.Repositories
 {
@@ -27,10 +28,37 @@ namespace API.Repositories
                 .Select(p => p.User)
                 .ToListAsync();
 
-        public async Task AddAsync(EventParticipant participant)
+        public async Task<JoinEventStatus> JoinAsync(Guid eventId, Guid userId)
         {
-            await _context.EventParticipants.AddAsync(participant);
+            await using var tx = await _context.Database.BeginTransactionAsync();
+
+            var ev = await _context.Events
+                .FromSqlInterpolated($@"SELECT * FROM ""Events"" WHERE ""Id"" = {eventId} FOR UPDATE")
+                .AsNoTracking()
+                .SingleOrDefaultAsync();
+
+            if (ev is null)
+                return JoinEventStatus.EventNotFound;
+
+            if (await _context.EventParticipants.AnyAsync(p => p.EventId == eventId && p.UserId == userId))
+                return JoinEventStatus.AlreadyJoined;
+
+            var count = await _context.EventParticipants.CountAsync(p => p.EventId == eventId);
+
+            if (count >= ev.MaxCapacity)
+                return JoinEventStatus.Full;
+
+            _context.EventParticipants.Add(new EventParticipant
+            {
+                EventId = eventId,
+                UserId = userId,
+                RegisterDate = DateTime.UtcNow
+            });
+
             await _context.SaveChangesAsync();
+            await tx.CommitAsync();
+
+            return JoinEventStatus.Joined;
         }
 
         public async Task<bool> RemoveAsync(Guid eventId, Guid userId)

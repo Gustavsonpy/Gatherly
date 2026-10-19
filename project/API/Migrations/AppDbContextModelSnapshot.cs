@@ -262,7 +262,7 @@ namespace API.Migrations
                         .IsRequired();
 
                     b.HasOne("API.Models.User", "User")
-                        .WithMany("EventParticipantions")
+                        .WithMany("EventParticipations")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -284,7 +284,7 @@ namespace API.Migrations
 
             modelBuilder.Entity("API.Models.User", b =>
                 {
-                    b.Navigation("EventParticipantions");
+                    b.Navigation("EventParticipations");
 
                     b.Navigation("Events");
                 });

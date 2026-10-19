@@ -17,7 +17,7 @@ namespace API.Data.Configurations
                 .HasDefaultValueSql("now() at time zone 'utc'");
 
             builder.HasOne(p => p.User)
-                .WithMany(u => u.EventParticipantions)
+                .WithMany(u => u.EventParticipations)
                 .HasForeignKey(p => p.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
 

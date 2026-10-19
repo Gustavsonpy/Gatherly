@@ -4,6 +4,7 @@ using API.Interfaces;
 using API.Interfaces.Event;
 using API.Interfaces.Participant;
 using API.Models;
+using static API.Interfaces.Participant.IEventParticipantRepository;
 
 namespace API.Services
 {
@@ -52,7 +53,15 @@ namespace API.Services
                 Level = createEventDTO.Level,
                 UrlImage = createEventDTO.UrlImage,
                 UserId = userId,
-                CategoryId = createEventDTO.CategoryId
+                CategoryId = createEventDTO.CategoryId,
+                Participants =
+                {
+                    new EventParticipant
+                    {
+                        UserId = userId,
+                        RegisterDate = DateTime.UtcNow
+                    }
+                }
             };
 
             var created = await _eventRepository.AddAsync(newEvent);
@@ -194,9 +203,6 @@ namespace API.Services
             if (ev is null)
                 return Result<bool>.Failure("Evento não encontrado.");
 
-            if (ev.UserId == userId)
-                return Result<bool>.Failure("Você é o organizador deste evento.");
-
             if (ev.DateTime < DateTime.UtcNow)
                 return Result<bool>.Failure("Este evento já aconteceu.");
 
@@ -208,14 +214,15 @@ namespace API.Services
             if (count >= ev.MaxCapacity)
                 return Result<bool>.Failure("Evento lotado.");
 
-            await _participantRepository.AddAsync(new EventParticipant
-            {
-                EventId = eventId,
-                UserId = userId,
-                RegisterDate = DateTime.UtcNow
-            });
+            var status = await _participantRepository.JoinAsync(eventId, userId);
 
-            return Result<bool>.Success(true);
+            return status switch
+            {
+                JoinEventStatus.Joined        => Result<bool>.Success(true),
+                JoinEventStatus.AlreadyJoined => Result<bool>.Failure("Você já participa deste evento."),
+                JoinEventStatus.Full          => Result<bool>.Failure("Evento lotado."),
+                _                             => Result<bool>.Failure("Evento não encontrado.")
+            };
         }
 
         public async Task<Result<bool>> LeaveAsync(Guid eventId)
@@ -224,6 +231,14 @@ namespace API.Services
 
             if (userId == Guid.Empty)
                 return Result<bool>.Failure("Usuário não autenticado.");
+
+            var ev = await _eventRepository.GetByIdAsync(eventId);
+
+            if (ev is null)
+                return Result<bool>.Failure("Evento não encontrado.");
+
+            if (ev.UserId == userId)
+                return Result<bool>.Failure("O organizador não pode sair do próprio evento.");
 
             var removed = await _participantRepository.RemoveAsync(eventId, userId);
 

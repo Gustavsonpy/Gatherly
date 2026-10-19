@@ -52,17 +52,22 @@
             </div>
           </div>
 
-          <!-- Desabilitado quando o usuário já participa -->
-          <button
-            id="join-button"
-            (click)="join()"
-            [disabled]="joined()"
-            class="flex justify-center items-center gap-2 rounded-md text-sm py-2 px-8 min-w-[220px] cursor-pointer transition-colors
-                   bg-primary-accent text-white
-                   disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed">
-            <img src="icons/people-sm.svg" alt="">
-            <span>Participar do evento</span>
-          </button>
+          <div id="join-container" class="flex flex-col items-end gap-2">
+            <button
+              id="join-button"
+              (click)="join()"
+              [disabled]="joined() || joining()"
+              class="flex justify-center items-center gap-2 rounded-md text-sm py-2 px-8 min-w-[220px] cursor-pointer transition-colors
+                     bg-primary-accent text-white
+                     disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed">
+              <img src="icons/people-sm.svg" alt="">
+              <span>Participar do evento</span>
+            </button>
+
+            @if (joinError(); as msg) {
+              <span class="text-xs text-red-500" role="alert">{{ msg }}</span>
+            }
+          </div>
         </div>
 
         <hr class="border-gray-200 mx-4">
@@ -191,6 +196,10 @@
                 </div>
               }
             </div>
+
+            @if (participantsError(); as msg) {
+              <span class="text-xs text-red-500" role="alert">{{ msg }}</span>
+            }
           </div>
 
           <!-- Informações importantes -->
@@ -222,6 +231,8 @@
       </section>
     </section>
   </main>
+} @else if (loadError(); as msg) {
+  <p class="p-6 text-red-500" role="alert">{{ msg }}</p>
 } @else {
   <p class="p-6">Carregando...</p>
 }
