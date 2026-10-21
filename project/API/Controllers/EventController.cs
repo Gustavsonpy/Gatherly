@@ -56,6 +56,17 @@ namespace API.Controllers
             return Ok(result.Value);
         }
 
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetEventById(Guid id)
+        {
+            var result = await _eventService.GetByIdAsync(id);
+
+            if(!result.IsSuccess)
+                return BadRequest(new { errors = result.Errors });
+
+            return Ok(result.Value);
+        }
+
         [Authorize]
         [HttpGet("my-city")]
         public async Task<IActionResult> GetMyCityEvents()
@@ -98,6 +109,41 @@ namespace API.Controllers
             var url = $"{Request.Scheme}://{Request.Host}/uploads/events/{fileName}";
 
             return Ok(new { url });
+        }
+
+        [Authorize]
+        [HttpPost("{id:guid}/join")]
+        public async Task<IActionResult> Join(Guid id)
+        {
+            var result = await _eventService.JoinAsync(id);
+
+            if (!result.IsSuccess)
+                return BadRequest(new { errors = result.Errors });
+
+            return NoContent();
+        }
+
+        [Authorize]
+        [HttpDelete("{id:guid}/join")]
+        public async Task<IActionResult> Leave(Guid id)
+        {
+            var result = await _eventService.LeaveAsync(id);
+
+            if (!result.IsSuccess)
+                return BadRequest(new { errors = result.Errors });
+
+            return NoContent();
+        }
+
+        [HttpGet("{id:guid}/participants")]
+        public async Task<IActionResult> GetParticipants(Guid id)
+        {
+            var result = await _eventService.GetParticipantsAsync(id);
+
+            if (!result.IsSuccess)
+                return BadRequest(new { errors = result.Errors });
+
+            return Ok(result.Value);
         }
     }
 }

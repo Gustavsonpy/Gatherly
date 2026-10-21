@@ -14,7 +14,7 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
         [formControl]="control()"
         [autocomplete]="autoComplete()"
         [placeholder]="placeholder()"
-        class="border border-[#5B21B6] rounded-md p-2 text-[12px] w-full"
+        class="border border-primary-dark rounded-md p-2 text-[12px] w-full"
       />
       <p
         class="text-[12px] text-red-500"

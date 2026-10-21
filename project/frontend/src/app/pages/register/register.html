@@ -1,4 +1,4 @@
-<main class="flex min-h-dvh justify-center items-center bg-[#7C3AED]">
+<main class="flex min-h-dvh justify-center items-center bg-primary">
   <div id="form-container" class="flex justify-center items-center rounded-2xl w-3/5 h-200 bg-[white]">
       <section id="form-content" class="flex flex-col justify-center w-full h-full ml-10 mr-10">
         <div id="logo" class="flex items-center">
@@ -52,13 +52,13 @@
 
           <div id="terms-container" class="flex gap-3">
             <input type="checkbox" id="accept-terms">
-            <p>Eu aceito os <span class="text-[#7C3AED]">Termos de uso</span> e a <span class="text-[#7C3AED]">Política de privacidade</span></p>
+            <p>Eu aceito os <span class="text-primary">Termos de uso</span> e a <span class="text-primary">Política de privacidade</span></p>
           </div>
           
           <generic-button type="submit" [disabled]="loading()">
             {{ loading() ? 'Cadastrando' : 'Criar conta' }}
           </generic-button>
-          <p>Já tem uma conta? <a class="text-[#7C3AED] font-bold" href="/login">Entrar</a></p>
+          <p>Já tem uma conta? <a class="text-primary font-bold" href="/login">Entrar</a></p>
         </form>
       </section>
   </div>

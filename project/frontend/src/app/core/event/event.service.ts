@@ -1,7 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
 import { Observable } from "rxjs";
-import { CreateEventModel, EventModel } from "./event.model";
+import { CreateEventModel, EventModel, ParticipantModel } from "./event.model";
 
 @Injectable({providedIn: 'root'})
 export class EventService {
@@ -31,5 +31,21 @@ export class EventService {
             `${this.apiUrl}/create`,
             event
         );
+    }
+
+    getEventById(id: string): Observable<EventModel> {
+        return this.http.get<EventModel>(`${this.apiUrl}/${id}`);
+    }
+
+    joinEvent(id: string): Observable<void> {
+        return this.http.post<void>(`${this.apiUrl}/${id}/join`, {});
+    }
+
+    leaveEvent(id: string): Observable<void> {
+        return this.http.delete<void>(`${this.apiUrl}/${id}/join`);
+    }
+
+    getParticipants(id: string): Observable<ParticipantModel[]> {
+        return this.http.get<ParticipantModel[]>(`${this.apiUrl}/${id}/participants`);
     }
 }

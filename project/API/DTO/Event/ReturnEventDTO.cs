@@ -17,11 +17,14 @@ namespace API.DTO.Event
         public string Level { get; set; }
         public string UrlImage { get; set; }
         public DateTime RegisterDate { get; set; }
+        public int ParticipantsCount { get; set; }
+        public bool IsParticipating { get; set; }
 
         public Guid UserId { get; set; }
-        public UserModel User { get; set; }
+        public string? CreatorName { get; set; }
+        public string? CreatorPhoto { get; set; }
 
         public Guid CategoryId { get; set; }
-        public CategoryModel Category { get; set; }
+        public string? CategoryName { get; set; }
     }
 }

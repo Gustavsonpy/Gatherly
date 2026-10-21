@@ -15,5 +15,6 @@ namespace API.Models
         public DateTime RegisterDate { get; set; }
 
         public ICollection<Event> Events { get; set; } = new List<Event>();
+        public ICollection<EventParticipant> EventParticipations { get; set; } = new List<EventParticipant>();
     }
 }

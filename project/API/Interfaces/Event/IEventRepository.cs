@@ -8,7 +8,7 @@ namespace API.Interfaces.Event
 {
     public interface IEventRepository
     {
-        Task<EventModel?> GetByIdAsync(int id);
+        Task<EventModel?> GetByIdAsync(Guid id);
         Task<EventModel?> GetByTitle(string title);
         Task<List<EventModel>> GetByCityAsync(string city);
         Task<List<EventModel>> GetAllAsync();

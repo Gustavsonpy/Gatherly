@@ -1,0 +1,238 @@
+@if (event(); as e) {
+  <main class="flex min-h-dvh bg-white">
+    <app-sidebar />
+
+    <section id="content-container" class="flex flex-col gap-6 w-full p-6">
+
+      <!-- Voltar -->
+      <a routerLink="/eventos" class="flex items-center gap-2 text-[12px] text-gray-700 w-fit">
+        <img src="icons/arrow-left-sm.svg" alt="">
+        <span>Voltar para eventos</span>
+      </a>
+
+      <!-- ===================== TOPO ===================== -->
+      <section id="top-container" class="w-full border border-primary rounded-md overflow-hidden">
+
+        <div id="banner-container" class="relative h-60">
+          <img [src]="e.urlImage" alt="" class="w-full h-full object-cover">
+          <div class="absolute inset-0 bg-linear-to-t from-black/60 to-transparent"></div>
+          <div id="name-category-event" class="absolute bottom-0 left-0 flex flex-col gap-2 p-4 text-white">
+            <span class="text-2xl font-bold">{{ e.title }}</span>
+            <div
+              id="event-category"
+              class="flex w-fit items-center gap-1 text-[10px] bg-black/40 rounded-sm px-2 py-1 whitespace-nowrap">
+              <img src="icons/category-sm.svg" alt="">
+              <span>{{ e.categoryName }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div id="middle-banner-container" class="flex items-center justify-between px-4 py-4">
+          <div id="important-info-container" class="flex items-center gap-10">
+            <div id="date-time" class="flex gap-2">
+              <img src="icons/calendar-md.svg" alt="Calendar icon">
+              <div class="flex flex-col text-[12px]">
+                <span>Qui, 23 de Mai</span>
+                <span class="text-gray-400">{{ e.time }}</span>
+              </div>
+            </div>
+            <div id="localization" class="flex gap-2">
+              <img src="icons/localization-md.svg" alt="Localization icon">
+              <div class="flex flex-col text-[12px]">
+                <span>{{ e.localization }}</span>
+                <span class="text-gray-400">{{ e.city }}</span>
+              </div>
+            </div>
+            <div id="vacancies" class="flex gap-2">
+              <img src="icons/people-md.svg" alt="People icon">
+              <div class="flex flex-col text-[12px]">
+                <span>{{ participantsCount() }}/{{ e.maxCapacity }}</span>
+                <span class="text-gray-400">Vagas</span>
+              </div>
+            </div>
+          </div>
+
+          <div id="join-container" class="flex flex-col items-end gap-2">
+            <button
+              id="join-button"
+              (click)="join()"
+              [disabled]="joined() || joining()"
+              class="flex justify-center items-center gap-2 rounded-md text-sm py-2 px-8 min-w-[220px] cursor-pointer transition-colors
+                     bg-primary-accent text-white
+                     disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed">
+              <img src="icons/people-sm.svg" alt="">
+              <span>Participar do evento</span>
+            </button>
+
+            @if (joinError(); as msg) {
+              <span class="text-xs text-red-500" role="alert">{{ msg }}</span>
+            }
+          </div>
+        </div>
+
+        <hr class="border-gray-200 mx-4">
+
+        <div id="organizer-container" class="flex items-center px-4 py-4">
+          <div id="organizer" class="flex items-center gap-3">
+            <img [src]="e.creatorPhoto ?? 'images/default_profile_pic.jpg'" alt=""
+                class="rounded-full bg-black w-10 h-10 object-cover">
+            <div id="organizer-info" class="flex flex-col justify-center text-[12px]">
+              <span class="text-gray-400">Organizado por</span>
+              <span>{{ e.creatorName }}</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================== PARTE DE BAIXO (2 colunas) ===================== -->
+      <section id="bottom-container" class="grid grid-cols-[1fr_280px] gap-6 flex-1">
+
+        <!-- ---------- Coluna esquerda ---------- -->
+        <div id="left-container" class="flex flex-col gap-4">
+
+          <!-- Abas -->
+          <ul id="info-options" class="flex gap-7 p-3 border border-primary-dark rounded-md list-none text-[12px]">
+            <li class="flex items-center gap-2 cursor-pointer text-primary-accent">
+              <img src="icons/info-sm-black.svg" alt="">
+              <span>Sobre</span>
+            </li>
+            <li class="flex items-center gap-2 cursor-pointer">
+              <img src="icons/people-sm.svg" alt="">
+              <span>Participantes</span>
+            </li>
+            <li class="flex items-center gap-2 cursor-pointer">
+              <img src="icons/chat-sm.svg" alt="">
+              <span>Chat</span>
+            </li>
+          </ul>
+
+          <!-- Sobre o evento -->
+          <div id="about-event" class="flex flex-col gap-5 p-4 border border-primary-dark rounded-md">
+            <h1 class="font-bold">Sobre o evento</h1>
+            <span class="text-[12px] leading-relaxed">
+              {{ e.description }}
+            </span>
+          </div>
+
+          <!-- Local -->
+          <div id="localization-event" class="flex flex-col gap-5 p-4 border border-primary-dark rounded-md">
+            <h1 class="font-bold text-[12px]">Local</h1>
+            <div id="localization-img-text" class="flex gap-5">
+              <img
+                src="https://media.wired.com/photos/5932303458b0d64bb35d023b/3:2/w_2560%2Cc_limit/street-view-spyglass.png"
+                alt=""
+                class="w-40 h-24 rounded-md object-cover">
+              <div id="localization-info" class="text-[11px] flex flex-col justify-center gap-2">
+                <span>ADE - Associação Desportiva Esportiva</span>
+                <span class="text-gray-400">R. Rui Barbosa, 925</span>
+                <span class="text-gray-400">Costa e Silva, Joinville - SC</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Comentários -->
+          <div id="commentary-event" class="flex flex-col gap-4 p-4 border border-primary-dark rounded-md">
+            <div class="flex justify-between items-center">
+              <h1 class="font-bold text-[12px]">Comentários</h1>
+              <a href="#" class="text-[11px] font-bold text-primary-accent">Acessar comentários</a>
+            </div>
+
+            <div id="comments" class="flex flex-col gap-3">
+              <div class="user-comment flex gap-3 w-full items-center">
+                <img src="images/default_profile_pic.jpg" alt="" class="rounded-full bg-black w-8 h-8 object-cover">
+                <div class="comment-info flex flex-col flex-1 text-[11px]">
+                  <span>Fulano Viver</span>
+                  <span class="text-gray-400">Olá, pessoal, convidem seus amigos para essa partida!</span>
+                </div>
+                <span class="text-[10px] text-gray-400">19:00</span>
+              </div>
+
+              <hr class="border-gray-200">
+
+              <div class="user-comment flex gap-3 w-full items-center">
+                <img src="images/default_profile_pic.jpg" alt="" class="rounded-full bg-black w-8 h-8 object-cover">
+                <div class="comment-info flex flex-col flex-1 text-[11px]">
+                  <span class="flex items-center gap-2">
+                    Sthpen Yurc
+                    <span class="px-1.5 py-0.5 rounded-sm bg-primary/10 text-primary-accent text-[8px]">Anfitrião</span>
+                  </span>
+                  <span class="text-gray-400">Isso, aí! Vamos fechar essa partida!</span>
+                </div>
+                <span class="text-[10px] text-gray-400">19:10</span>
+              </div>
+
+              <hr class="border-gray-200">
+
+              <div class="user-comment flex gap-3 w-full items-center">
+                <img src="images/default_profile_pic.jpg" alt="" class="rounded-full bg-black w-8 h-8 object-cover">
+                <div class="comment-info flex flex-col flex-1 text-[11px]">
+                  <span>Fulano Viver</span>
+                  <span class="text-gray-400">Vai ser divertido!</span>
+                </div>
+                <span class="text-[10px] text-gray-400">19:11</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ---------- Coluna direita ---------- -->
+        <aside id="right-container" class="flex flex-col gap-4">
+
+          <!-- Participantes -->
+          <div id="participants-card" class="flex flex-col gap-4 p-4 rounded-md bg-gray-50">
+            <div class="flex justify-between items-center">
+              <h2 class="text-[12px] font-bold">Participantes ({{ participantsCount() }})</h2>
+              <a href="#" class="text-[10px] text-primary-accent">Ver todos</a>
+            </div>
+
+            <div class="flex items-center -space-x-2">
+              @for (p of participants().slice(0, 5); track p.id) {
+                <img [src]="p.urlPhoto ?? 'images/default_profile_pic.jpg'" [alt]="p.name"
+                    class="w-11 h-11 rounded-full object-cover bg-black border-2 border-gray-50">
+              }
+              @if (participantsCount() > 5) {
+                <div class="flex items-center justify-center w-11 h-11 rounded-full bg-primary/10 text-primary-accent text-[11px] border-2 border-gray-50">
+                  +{{ participantsCount() - 5 }}
+                </div>
+              }
+            </div>
+
+            @if (participantsError(); as msg) {
+              <span class="text-xs text-red-500" role="alert">{{ msg }}</span>
+            }
+          </div>
+
+          <!-- Informações importantes -->
+          <div id="important-info-card" class="flex flex-col gap-4 p-4 rounded-md bg-gray-50">
+            <h2 class="text-[12px] font-bold">Informações importantes</h2>
+
+            <ul class="flex flex-col gap-3 text-[11px] text-gray-400">
+              <li class="flex items-center gap-2">
+                <img src="icons/clock-sm.svg" alt="">
+                <span>Chegue com 15 min de antecedência</span>
+              </li>
+              <li class="flex items-center gap-2">
+                <img src="icons/smile-sm.svg" alt="">
+                <span>Respeito acima de tudo!</span>
+              </li>
+              <li class="flex items-center gap-2">
+                <img src="icons/chat-sm.svg" alt="">
+                <span>Combinados no chat do evento</span>
+              </li>
+              <li class="flex items-center gap-2">
+                <img src="icons/help-sm.svg" alt="">
+                <span>Qualquer dúvida, fale com o anfitrião</span>
+              </li>
+            </ul>
+          </div>
+
+        </aside>
+
+      </section>
+    </section>
+  </main>
+} @else if (loadError(); as msg) {
+  <p class="p-6 text-red-500" role="alert">{{ msg }}</p>
+} @else {
+  <p class="p-6">Carregando...</p>
+}
