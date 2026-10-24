@@ -83,12 +83,9 @@ namespace API.Services
             throw new NotImplementedException();
         }
 
-        public async Task<Result<List<CommentDTO>>> getCommentsByEvent(Guid eventId)
+        public async Task<Result<List<CommentDTO>>> GetCommentsByEvent(Guid eventId)
         {
             var comments = await _commentRepository.GetCommentsByEventAsync(eventId);
-
-            if (comments is null)
-                return Result<List<CommentDTO>>.Failure("Comentários desse evento não encontrado!");
 
             var dtos = comments.Select(c => new CommentDTO
             {

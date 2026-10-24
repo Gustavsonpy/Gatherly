@@ -32,7 +32,7 @@
             <div id="date-time" class="flex gap-2">
               <img src="icons/calendar-md.svg" alt="Calendar icon">
               <div class="flex flex-col text-[12px]">
-                <span>Qui, 23 de Mai</span>
+                <span><p>{{ e.date | date: 'EEE, d \'de\' MMM' : '' : 'pt' | titlecase }}</p></span>
                 <span class="text-gray-400">{{ e.time }}</span>
               </div>
             </div>

@@ -42,7 +42,7 @@ namespace API.Controllers
         [HttpGet("{eventId}")]
         public async Task<IActionResult> GetCommentByEvent(Guid eventId)
         {
-            var result = await _commentService.getCommentsByEvent(eventId);
+            var result = await _commentService.GetCommentsByEvent(eventId);
 
             if(!result.IsSuccess)
                 return BadRequest(new { errors = result.Errors });

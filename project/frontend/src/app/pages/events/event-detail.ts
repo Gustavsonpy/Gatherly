@@ -1,6 +1,6 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { DatePipe } from '@angular/common';
+import { DatePipe, TitleCasePipe } from '@angular/common';
 import { EventService } from '../../core/event/event.service';
 import { EventModel, ParticipantModel } from '../../core/event/event.model';
 import { Sidebar } from '../../components/sidebar/sidebar';
@@ -12,7 +12,7 @@ import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-event-detail',
-  imports: [Sidebar, CommentSender, DatePipe],
+  imports: [Sidebar, CommentSender, DatePipe, TitleCasePipe],
   templateUrl: './event-detail.html',
 })
 export class EventDetail implements OnInit {
