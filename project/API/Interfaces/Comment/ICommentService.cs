@@ -9,5 +9,6 @@ namespace API.Interfaces.Comment
         Task<Result<CommentDTO?>> GetByIdAsync(int id);
         Task<Result<List<CommentDTO>>> GetAllAsync();
         Task<Result<CommentDTO>> UpdateCommentAsync(string text);
+        Task<Result<List<CommentDTO>>> GetCommentsByEvent(Guid eventId);
     }
 }

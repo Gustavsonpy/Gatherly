@@ -10,9 +10,9 @@ namespace API.DTO.Comment
         public DateTime RegisterDate { get; set; }
 
         public Guid EventId { get; set; }
-        public EventModel Event { get; set; }
 
         public Guid UserId { get; set; }
-        public UserModel User { get; set; }
+        public string CommentUserName { get; set; }
+        public string? UserPhoto { get; set; }
     }
 }

@@ -1,17 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormControl } from '@angular/forms';
+import { GenericInput } from './generic-input';
 
-import { GenericInputTs } from './generic-input';
-
-describe('GenericInputTs', () => {
-  let component: GenericInputTs;
-  let fixture: ComponentFixture<GenericInputTs>;
+describe('GenericInput', () => {
+  let component: GenericInput;
+  let fixture: ComponentFixture<GenericInput>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [GenericInputTs],
+      imports: [GenericInput],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(GenericInputTs);
+    fixture = TestBed.createComponent(GenericInput);
+    fixture.componentRef.setInput('id', 'email');
+    fixture.componentRef.setInput('label', 'E-mail');
+    fixture.componentRef.setInput('control', new FormControl(''));
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

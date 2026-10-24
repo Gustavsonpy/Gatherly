@@ -1,20 +1,24 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { DatePipe } from '@angular/common';
+import { DatePipe, TitleCasePipe } from '@angular/common';
 import { EventService } from '../../core/event/event.service';
 import { EventModel, ParticipantModel } from '../../core/event/event.model';
 import { Sidebar } from '../../components/sidebar/sidebar';
-import { finalize } from 'rxjs';
+import { CommentService } from '../../core/comments/comment.service';
+import { CommentModel } from '../../core/comments/comment.model';
+import { CommentSender } from '../../components/comment/comment-sender';
 import { getErrorMessage } from '../../core/utils/http-error';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-event-detail',
-  imports: [Sidebar],
+  imports: [Sidebar, CommentSender, DatePipe, TitleCasePipe],
   templateUrl: './event-detail.html',
 })
 export class EventDetail implements OnInit {
   private route = inject(ActivatedRoute);
   private eventService = inject(EventService);
+  private commentService = inject(CommentService)
 
   event = signal<EventModel | null>(null);
   participants = signal<ParticipantModel[]>([]);
@@ -25,6 +29,7 @@ export class EventDetail implements OnInit {
   participantsError = signal<string | null>(null);
   joinError = signal<string | null>(null);
   joining = signal(false);
+  comments = signal<CommentModel[]>([]);
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id')!;
@@ -40,6 +45,7 @@ export class EventDetail implements OnInit {
     });
 
     this.loadParticipants(id);
+    this.loadComments(id);
   }
 
   private loadParticipants(id: string): void {
@@ -51,6 +57,13 @@ export class EventDetail implements OnInit {
         this.participantsError.set(
           getErrorMessage(err, 'Não foi possível carregar os participantes.'),
         ),
+    });
+  }
+
+  private loadComments(eventId: string): void {
+    this.commentService.getCommentsByEvent(eventId).subscribe({
+      next: (list) => this.comments.set(list),
+      error: (err) => console.error(err),
     });
   }
 
@@ -75,5 +88,9 @@ export class EventDetail implements OnInit {
         error: (err) =>
           this.joinError.set(getErrorMessage(err, 'Não foi possível participar do evento.')),
       });
+  }
+
+  onCommentCreated(comment: CommentModel): void {
+    this.comments.update((list) => [...list, comment]);
   }
 }
