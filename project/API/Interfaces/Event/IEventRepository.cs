@@ -12,6 +12,7 @@ namespace API.Interfaces.Event
         Task<EventModel?> GetByTitle(string title);
         Task<List<EventModel>> GetByCityAsync(string city);
         Task<List<EventModel>> GetAllAsync();
+        Task<List<EventModel>> GetByUserAsync(Guid userId);
         Task<EventModel> AddAsync(EventModel informal_event);
         Task UpdateAsync(EventModel informal_event);
         Task DeleteAsync(int id);

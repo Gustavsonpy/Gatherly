@@ -1,0 +1,43 @@
+<main class="flex min-h-dvh bg-gray-50">
+    <app-sidebar />
+
+    <section class="flex-1 min-w-0 p-8 w-full flex flex-col gap-6">
+        <header>
+            <h1 class="text-xl font-semibold">Meus eventos</h1>
+            <p class="text-xs text-gray-500 mt-1">Gerencie e organize os eventos que você criou ou está participando</p>
+        </header>
+
+        <div id="tabOptions" class="flex justify-between px-8 max-w-[50%] h-10 border border-gray-200 rounded-lg bg-white">
+            @for(tab of tabs; track tab.id) {
+                <button 
+                    id="options" 
+                    class="flex justify-center items-center gap-2 cursor-pointer" 
+                    [class]="tab.id === activeTab() ? 'border-b border-primary text-primary' : 'border-b border-b-transparent'"
+                    (click)="setActiveTab(tab.id)"
+                    >
+                    <img [src]="tab.icon" alt="" class="w-3 h-3 s">
+                    {{ tab.label }}
+                </button>
+            }
+        </div>
+
+        <div id="events-filter">
+            <h1 class="text-xl font-semibold">Próximos eventos</h1>
+
+            @if (loading()) {
+                <p class="text-sm text-gray-500 mt-6">Carregando seus eventos...</p>
+            } @else if (failed()) {
+                <p class="text-sm text-red-600 mt-6">Não foi possível carregar seus eventos. Atualize a página para tentar de novo.</p>
+            } @else if (visibleEvents().length === 0) {
+                <p class="text-sm text-gray-500 mt-6">Nenhum evento nesta aba.</p>
+            } @else {
+                <div class="flex flex-col gap-3 mt-6">
+                    @for (event of visibleEvents(); track event.id) {
+                        <event-row [event]="event"></event-row>
+                    }
+                </div>
+            }
+        </div>
+    </section>
+        
+</main>

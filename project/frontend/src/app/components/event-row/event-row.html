@@ -1,0 +1,50 @@
+<div id="event-row" class="flex w-full h-40 border border-gray-300 rounded-lg p-2 gap-3 bg-white">
+    <div id="image-event-row" class="relative shrink-0 w-[20%] h-full rounded-md overflow-hidden">
+        <img [src]="event().urlImage" alt="" class="w-full h-full object-cover">
+        <div class="absolute inset-0 bg-linear-to-t from-black/60 to-transparent"></div>
+        <div id="name-category-event" class="absolute bottom-0 left-0 flex flex-col gap-2 p-4 text-white">
+            <div
+              id="event-category"
+              class="flex w-fit items-center gap-1 text-[10px] bg-black/40 rounded-sm px-2 py-1 whitespace-nowrap">
+                <img src="icons/category-sm.svg" alt="" class="w-3 h-3">
+                <span>{{ event().categoryName }}</span>
+            </div>
+        </div>
+    </div>
+    <div id="event-details" class="flex flex-col flex-1 min-w-0 justify-between">
+        <h2>{{ event().title }}</h2>
+        <div id="event-informations" class="flex gap-4">
+            <div id="date" class="flex items-center gap-1 min-w-0">
+                <img src="icons/calendar-sm.svg" alt="Calendar icon" class="shrink-0">
+                <span class="text-[12px] truncate">{{ event().dateTimeStart | date: 'EEE, d \'de\' MMM' : '' : 'pt' | titlecase }}</span>
+            </div>
+            <div id="date" class="flex items-center gap-1 min-w-0">
+                <img src="icons/clock.svg" alt="Clock icon" class="shrink-0">
+                <span class="text-[12px] truncate">{{ event().dateTimeStart | date:'HH:mm' }} - {{ event().dateTimeEnd | date:'HH:mm' }}</span>
+            </div>
+            <div id="date" class="flex items-center gap-1 min-w-0">
+                <img src="icons/localization-sm.svg" alt="Calendar icon" class="shrink-0">
+                <span class="text-[12px] truncate">{{ event().localization }}</span>
+            </div>
+        </div>
+        <div class="flex items-center -space-x-2">
+            @for (p of visibleParticipants(); track p.id) {
+                <img [src]="p.urlPhoto ?? 'images/default_profile_pic.jpg'" [alt]="p.name" [title]="p.name"
+                    class="w-8 h-8 shrink-0 rounded-full object-cover bg-gray-200 border-2 border-white">
+            }
+            @if (extraParticipants() > 0) {
+                <span class="flex items-center justify-center w-8 h-8 shrink-0 rounded-full bg-primary-light text-primary text-[10px] font-semibold border-2 border-white">
+                    +{{ extraParticipants() }}
+                </span>
+            }
+        </div>
+    </div>
+    <div id="button-section" class="flex flex-col items-end justify-between shrink-0">
+        <span class="bg-green-100 p-1 rounded-lg w-max">
+            <p class="text-[12px] text-green-700 font-bold">
+                {{ event().participantsCount }} / {{ event().maxCapacity }} vagas
+            </p>
+        </span>
+        <generic-button variant="secondary" class="w-[200px]">Ver detalhes</generic-button>
+    </div>
+</div>

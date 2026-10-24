@@ -45,6 +45,7 @@ namespace API.Controllers
             return Ok(result.Value);
         }
 
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
@@ -56,6 +57,7 @@ namespace API.Controllers
             return Ok(result.Value);
         }
 
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetEventById(Guid id)
         {
@@ -135,10 +137,23 @@ namespace API.Controllers
             return NoContent();
         }
 
+        [Authorize]
         [HttpGet("{id:guid}/participants")]
         public async Task<IActionResult> GetParticipants(Guid id)
         {
             var result = await _eventService.GetParticipantsAsync(id);
+
+            if (!result.IsSuccess)
+                return BadRequest(new { errors = result.Errors });
+
+            return Ok(result.Value);
+        }
+
+        [Authorize]
+        [HttpGet("mine")]
+        public async Task<IActionResult> GetMyEvents()
+        {
+            var result = await _eventService.GetMyEventsAsync();
 
             if (!result.IsSuccess)
                 return BadRequest(new { errors = result.Errors });

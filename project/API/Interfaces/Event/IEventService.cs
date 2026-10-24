@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using API.Common;
 using API.DTO.Event;
 
@@ -13,6 +9,7 @@ namespace API.Interfaces.Event
         Task<Result<ReturnEventDTO?>> GetByIdAsync(Guid id);
         Task<Result<List<ReturnEventDTO>>> GetMyCityEventsAsync();
         Task<Result<List<ReturnEventDTO>>> GetAllAsync();
+        Task<Result<List<ReturnEventDTO>>> GetMyEventsAsync();
         Task<Result<EventDTO>> UpdateTitleAsync(string title);
         Task<Result<bool>> JoinAsync(Guid eventId);
         Task<Result<bool>> LeaveAsync(Guid eventId);

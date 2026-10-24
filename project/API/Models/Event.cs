@@ -10,7 +10,8 @@ namespace API.Models
         public Guid Id { get; set; } = Guid.NewGuid();
         public string Title { get; set; }
         public string Description { get; set; }
-        public DateTime DateTime { get; set; }
+        public DateTime DateTimeStart { get; set; }
+        public DateTime DateTimeEnd { get; set; }
         public string Localization { get; set; }
         public int MaxCapacity { get; set; }
         public string City { get; set; }

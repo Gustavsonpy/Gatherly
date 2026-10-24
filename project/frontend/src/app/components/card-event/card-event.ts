@@ -14,8 +14,8 @@ export class CardEvent {
   id = input<string>('');
   img = input<string>('');
   title = input<string>('');
-  time = input<string>('');
-  date = input<string>('');
+  dateTimeStart = input<string>('');
+  dateTimeEnd = input<string>('');
   localization = input<string>('');
   description = input<string>('');
 

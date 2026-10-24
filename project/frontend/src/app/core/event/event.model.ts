@@ -2,9 +2,8 @@ export interface EventModel{
     id: string;
     title: string;
     description: string;
-    dateTime: string;
-    date: string;
-    time: string;
+    dateTimeStart: string;
+    dateTimeEnd: string;
     localization: string;
     maxCapacity: number;
     city: string;
@@ -22,7 +21,8 @@ export interface EventModel{
 export interface CreateEventModel {
     title: string;
     description: string;
-    dateTime: string;
+    dateTimeStart: string;
+    dateTimeEnd: string;
     localization: string;
     maxCapacity: number;
     city: string;
