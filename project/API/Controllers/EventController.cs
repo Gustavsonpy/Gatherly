@@ -160,5 +160,17 @@ namespace API.Controllers
 
             return Ok(result.Value);
         }
+
+        [Authorize]
+        [HttpPost("{id:guid}/cancel")]
+        public async Task<IActionResult> Cancel(Guid id)
+        {
+            var result = await _eventService.CancelAsync(id);
+
+            if (!result.IsSuccess)
+                return BadRequest(new { errors = result.Errors });
+
+            return NoContent();
+        }
     }
 }

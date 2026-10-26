@@ -15,6 +15,7 @@ namespace API.DTO.Event
         public DateTime RegisterDate { get; set; }
         public int ParticipantsCount { get; set; }
         public bool IsParticipating { get; set; }
+        public string Status { get; set; }
 
         public Guid UserId { get; set; }
         public string? CreatorName { get; set; }

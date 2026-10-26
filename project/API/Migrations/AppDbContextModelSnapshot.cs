@@ -75,6 +75,9 @@ namespace API.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<DateTime?>("CanceledAt")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<Guid>("CategoryId")
                         .HasColumnType("uuid");
 

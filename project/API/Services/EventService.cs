@@ -185,6 +185,9 @@ namespace API.Services
             if (ev is null)
                 return Result<bool>.Failure("Evento não encontrado.");
 
+            if (ev.CanceledAt is not null)
+                return Result<bool>.Failure("Este evento foi cancelado.");
+
             if (ev.DateTimeStart < DateTime.UtcNow && ev.DateTimeEnd > DateTime.UtcNow)
                 return Result<bool>.Failure("Este evento já está em andamento.");
 
@@ -246,6 +249,33 @@ namespace API.Services
             return Result<List<ParticipantDTO>>.Success(dtos);
         }
 
+        public async Task<Result<bool>> CancelAsync(Guid eventId)
+        {
+            var userId = _currentUserService.UserId;
+
+            if (userId == Guid.Empty)
+                return Result<bool>.Failure("Usuário não autenticado.");
+
+            var ev = await _eventRepository.GetByIdAsync(eventId);
+
+            if (ev is null)
+                return Result<bool>.Failure("Evento não encontrado.");
+
+            if (ev.UserId != userId)
+                return Result<bool>.Failure("Apenas o organizador pode cancelar o evento.");
+
+            if (ev.CanceledAt is not null)
+                return Result<bool>.Failure("Este evento já foi cancelado.");
+
+            if (ev.DateTimeStart <= DateTime.UtcNow)
+                return Result<bool>.Failure("Só é possível cancelar eventos que ainda não começaram.");
+
+            ev.CanceledAt = DateTime.UtcNow;
+            await _eventRepository.UpdateAsync(ev);
+
+            return Result<bool>.Success(true);
+        }
+
         private static ReturnEventDTO ToReturnDto(Event e, Guid userId) => new()
         {
             Id = e.Id,
@@ -266,6 +296,10 @@ namespace API.Services
             CreatorPhoto = e.User?.UrlPhoto,
             ParticipantsCount = e.Participants.Count,
             IsParticipating = userId != Guid.Empty && e.Participants.Any(p => p.UserId == userId),
+            Status = e.CanceledAt is not null ? "canceled"
+                : DateTime.UtcNow < e.DateTimeStart ? "upcoming"
+                : DateTime.UtcNow < e.DateTimeEnd ? "ongoing"
+                : "done",
         };
     }
 }

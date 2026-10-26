@@ -18,6 +18,7 @@ namespace API.Models
         public string? Level { get; set; }
         public string UrlImage { get; set; }
         public DateTime RegisterDate { get; set; }
+        public DateTime? CanceledAt { get; set; }
 
         public Guid UserId { get; set; }
         public User User { get; set; }

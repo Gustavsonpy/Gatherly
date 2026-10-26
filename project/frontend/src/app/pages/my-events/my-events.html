@@ -33,7 +33,7 @@
             } @else {
                 <div class="flex flex-col gap-3 mt-6">
                     @for (event of visibleEvents(); track event.id) {
-                        <event-row [event]="event"></event-row>
+                        <event-row [event]="event" [isOrganizer]="isOrganizer(event)" (cancel)="cancelEvent(event)" />
                     }
                 </div>
             }

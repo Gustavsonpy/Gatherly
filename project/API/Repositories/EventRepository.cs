@@ -75,9 +75,10 @@ namespace API.Repositories
                 .ToListAsync();
         }
 
-        public Task UpdateAsync(EventModel informal_event)
+        public async Task UpdateAsync(EventModel informal_event)
         {
-            throw new NotImplementedException();
+            _context.Events.Update(informal_event);
+            await _context.SaveChangesAsync();
         }
     }
 }

@@ -26,28 +26,15 @@ export class MyEvents implements OnInit {
   events = signal<EventModel[]>([]);
   loading = signal(true);
   failed = signal(false);
+  actionError = signal<string | null>(null);
 
   private readonly userId = computed(() => this.authService.currentUser()?.id);
 
-  upcoming = computed(() => {
-    const now = Date.now();
-    return this.events().filter((e) => new Date(e.dateTimeStart).getTime() > now);
-  });
-
-  ongoing = computed(() => {
-    const now = Date.now();
-    return this.events().filter(
-      (e) => new Date(e.dateTimeStart).getTime() <= now && now < new Date(e.dateTimeEnd).getTime(),
-    );
-  });
-
-  visibleEvents = computed(() => {
-    switch (this.activeTab()) {
-      case 'upcoming': return this.upcoming();
-      case 'ongoing': return this.ongoing();
-      default: return [];
-    }
-  });
+  // O id de cada aba é igual ao status que vem do backend,
+  // então basta filtrar por ele.
+  visibleEvents = computed(() =>
+    this.events().filter((e) => e.status === this.activeTab()),
+  );
 
   ngOnInit(): void {
     this.eventService.getMyEvents().subscribe({
@@ -65,6 +52,22 @@ export class MyEvents implements OnInit {
 
   setActiveTab(value: TabId): void {
     this.activeTab.set(value);
+    this.actionError.set(null);
+  }
+
+  cancelEvent(event: EventModel): void {
+    if (!confirm(`Cancelar "${event.title}"? Ninguém mais poderá entrar.`)) return;
+
+    this.actionError.set(null);
+
+    this.eventService.cancelEvent(event.id).subscribe({
+      next: () =>
+        this.events.update((list) =>
+          list.map((e) => (e.id === event.id ? { ...e, status: 'canceled' } : e)),
+        ),
+      error: (err) =>
+        this.actionError.set(err.error?.errors?.[0] ?? 'Não foi possível cancelar o evento.'),
+    });
   }
 
   isOrganizer(e: EventModel): boolean {

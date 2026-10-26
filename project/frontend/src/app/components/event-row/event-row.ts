@@ -1,4 +1,4 @@
-import { Component, OnInit, computed, inject, input, signal } from '@angular/core';
+import { Component, OnInit, computed, inject, input, output, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { EventModel, ParticipantModel } from '../../core/event/event.model';
 import { EventService } from '../../core/event/event.service';
@@ -18,6 +18,7 @@ export class EventRow implements OnInit {
 
   event = input.required<EventModel>();
   isOrganizer = input(false);
+  cancel = output<void>();
 
   participants = signal<ParticipantModel[]>([]);
 
@@ -25,6 +26,7 @@ export class EventRow implements OnInit {
   extraParticipants = computed(() => Math.max(0, this.participants().length - MAX_AVATARS));
 
   isFull = computed(() => this.event().participantsCount >= this.event().maxCapacity);
+  canCancel = computed(() => this.isOrganizer() && (this.event().status === 'upcoming' || this.event().status === 'done'));
 
   ngOnInit(): void {
     this.eventService.getParticipants(this.event().id).subscribe({

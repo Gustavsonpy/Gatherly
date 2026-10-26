@@ -16,6 +16,7 @@ export interface EventModel{
     isParticipating: boolean;
     creatorName: string | null;
     creatorPhoto: string | null;
+    status: 'upcoming' | 'ongoing' | 'done' | 'canceled';
 }
 
 export interface CreateEventModel {
