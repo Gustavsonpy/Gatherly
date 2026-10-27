@@ -48,4 +48,12 @@ export class EventService {
     getParticipants(id: string): Observable<ParticipantModel[]> {
         return this.http.get<ParticipantModel[]>(`${this.apiUrl}/${id}/participants`);
     }
+
+    getMyEvents(): Observable<EventModel[]> {
+        return this.http.get<EventModel[]>(`${this.apiUrl}/mine`);
+    }
+
+    cancelEvent(id: string): Observable<void> {
+        return this.http.post<void>(`${this.apiUrl}/${id}/cancel`, {});
+    }
 }

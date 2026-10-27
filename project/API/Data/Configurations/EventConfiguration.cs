@@ -24,7 +24,10 @@ namespace API.Data.Configurations
                 .IsRequired()
                 .HasMaxLength(200);
 
-            builder.Property(e => e.DateTime)
+            builder.Property(e => e.DateTimeStart)
+                .IsRequired();
+
+            builder.Property(e => e.DateTimeEnd)
                 .IsRequired();
 
             builder.Property(e => e.Localization) // Ver se tem que ser outra tabela

@@ -28,8 +28,9 @@ interface NewEventForm {
     eventName: FormControl<string>;
     category: FormControl<string>;
     description: FormControl<string>;
-    date: FormControl<string>;
-    time: FormControl<string>;
+    dateStart: FormControl<string>;
+    timeStart: FormControl<string>;
+    timeEnd: FormControl<string>;
     localization: FormControl<string>;
     city: FormControl<string>;
     spots: FormControl<number>;
@@ -79,8 +80,9 @@ export class NewEvent implements OnInit {
         eventName: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
         category: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
         description: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
-        date: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
-        time: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+        dateStart: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+        timeStart: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+        timeEnd: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
         localization: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
         city: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
         spots: new FormControl(0, {
@@ -241,6 +243,10 @@ export class NewEvent implements OnInit {
 
         const v = this.form.getRawValue();
 
+        const start = new Date(`${v.dateStart}T${v.timeStart}`);
+        const end = new Date(`${v.dateStart}T${v.timeEnd}`);
+        if (end <= start) end.setDate(end.getDate() + 1);
+
         this.submitting.set(true);
         this.errorMessage.set(null);
 
@@ -251,7 +257,8 @@ export class NewEvent implements OnInit {
                     const payload: CreateEventModel = {
                         title: v.eventName,
                         description: v.description,
-                        dateTime: new Date(`${v.date}T${v.time}`).toISOString(),
+                        dateTimeStart: start.toISOString(),
+                        dateTimeEnd: end.toISOString(),
                         localization: v.localization,
                         maxCapacity: v.spots,
                         city: v.city.trim(),

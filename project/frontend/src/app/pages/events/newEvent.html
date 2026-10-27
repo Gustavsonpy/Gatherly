@@ -13,7 +13,7 @@
                 id="form-inputs"
                 [formGroup]="form"
                 (ngSubmit)="submit()"
-                class="border border-primary-dark rounded-xl w-[70%] max-w-4xl p-5">
+                class="border border-primary-dark rounded-xl w-[70%] max-w-4xl p-5 bg-white">
 
                 <generic-input
                     id="event-name"
@@ -61,14 +61,21 @@
                         class="flex-1 min-w-0"
                         id="date-input"
                         label="Data"
-                        [control]="form.controls.date"
+                        [control]="form.controls.dateStart"
                         type="date"
                     />
                     <generic-input
                         class="flex-1 min-w-0"
                         id="time-input"
                         label="Horário"
-                        [control]="form.controls.time"
+                        [control]="form.controls.timeStart"
+                        type="time"
+                    />
+                    <generic-input
+                        class="flex-1 min-w-0"
+                        id="time-end-input"
+                        label="Horário Fim"
+                        [control]="form.controls.timeEnd"
                         type="time"
                     />
                 </div>

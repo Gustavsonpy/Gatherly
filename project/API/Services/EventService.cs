@@ -37,7 +37,10 @@ namespace API.Services
             var existedEvent = await _eventRepository.GetByTitle(createEventDTO.Title);
 
             if(existedEvent is not null)
-                errors.Add("Already exists an event with this title");
+                errors.Add("Já existe um evento com esse nome");
+
+            if (createEventDTO.DateTimeEnd <= createEventDTO.DateTimeStart)
+                errors.Add("O término deve ser depois do início");
 
             if(errors.Any())
                 return Result<EventDTO>.Failure(errors);
@@ -46,7 +49,8 @@ namespace API.Services
             {
                 Title = createEventDTO.Title,
                 Description = createEventDTO.Description,
-                DateTime = createEventDTO.DateTime,
+                DateTimeStart = createEventDTO.DateTimeStart,
+                DateTimeEnd = createEventDTO.DateTimeEnd,
                 Localization = createEventDTO.Localization,
                 MaxCapacity = createEventDTO.MaxCapacity,
                 City = createEventDTO.City,
@@ -72,7 +76,8 @@ namespace API.Services
                 Title = created.Title,
                 CategoryId = created.CategoryId,
                 Description = created.Description,
-                DateTime = created.DateTime,
+                DateTimeStart = created.DateTimeStart,
+                DateTimeEnd = created.DateTimeEnd,
                 Localization = created.Localization,
                 MaxCapacity = created.MaxCapacity,
                 City = created.City,
@@ -101,9 +106,8 @@ namespace API.Services
                 CategoryId = eventId.CategoryId,
                 CategoryName = eventId.Category?.Name,
                 Description = eventId.Description,
-                DateTime = eventId.DateTime,
-                Date = eventId.DateTime.ToString("yyyy-MM-dd"),
-                Time = eventId.DateTime.ToString("HH:mm"),
+                DateTimeStart = eventId.DateTimeStart,
+                DateTimeEnd = eventId.DateTimeEnd,
                 Localization = eventId.Localization,
                 MaxCapacity = eventId.MaxCapacity,
                 City = eventId.City,
@@ -123,28 +127,24 @@ namespace API.Services
 
         public async Task<Result<List<ReturnEventDTO>>> GetAllAsync()
         {
+            var userId = _currentUserService.UserId;
             var events = await _eventRepository.GetAllAsync();
 
-            var dtos = events.Select(e => new ReturnEventDTO
-            {
-                Id = e.Id,
-                Title = e.Title,
-                CategoryId = e.CategoryId,
-                CategoryName = e.Category?.Name,
-                Description = e.Description,
-                DateTime = e.DateTime,
-                Date = e.DateTime.ToString("yyyy-MM-dd"),
-                Time = e.DateTime.ToString("HH:mm"),
-                Localization = e.Localization,
-                MaxCapacity = e.MaxCapacity,
-                City = e.City,
-                Level = e.Level,
-                UrlImage = e.UrlImage,
-                RegisterDate = e.RegisterDate,
-                UserId = e.UserId,
-            }).ToList();
+            return Result<List<ReturnEventDTO>>.Success(
+                events.Select(e => ToReturnDto(e, userId)).ToList());
+        }
 
-            return Result<List<ReturnEventDTO>>.Success(dtos);
+        public async Task<Result<List<ReturnEventDTO>>> GetMyEventsAsync()
+        {
+            var userId = _currentUserService.UserId;
+
+            if (userId == Guid.Empty)
+                return Result<List<ReturnEventDTO>>.Failure("Usuário não autenticado.");
+
+            var events = await _eventRepository.GetByUserAsync(userId);
+
+            return Result<List<ReturnEventDTO>>.Success(
+                events.Select(e => ToReturnDto(e, userId)).ToList());
         }
 
         public Task<Result<EventDTO>> UpdateTitleAsync(string title)
@@ -169,26 +169,8 @@ namespace API.Services
 
             var events = await _eventRepository.GetByCityAsync(user.City);
 
-            var eventDTOs = events.Select(e => new ReturnEventDTO
-            {
-                Id = e.Id,
-                Title = e.Title,
-                Description = e.Description,
-                DateTime = e.DateTime,
-                Date = e.DateTime.ToString("yyyy-MM-dd"),
-                Time = e.DateTime.ToString("HH:mm"),
-                Localization = e.Localization,
-                MaxCapacity = e.MaxCapacity,
-                City = e.City,
-                Level = e.Level,
-                UrlImage = e.UrlImage,
-                RegisterDate = e.RegisterDate,
-                UserId = e.UserId,
-                CategoryId = e.CategoryId,
-                CategoryName = e.Category?.Name,
-            }).ToList();
-
-            return Result<List<ReturnEventDTO>>.Success(eventDTOs);
+            return Result<List<ReturnEventDTO>>.Success(
+                events.Select(e => ToReturnDto(e, userId)).ToList());
         }
 
         public async Task<Result<bool>> JoinAsync(Guid eventId)
@@ -203,7 +185,13 @@ namespace API.Services
             if (ev is null)
                 return Result<bool>.Failure("Evento não encontrado.");
 
-            if (ev.DateTime < DateTime.UtcNow)
+            if (ev.CanceledAt is not null)
+                return Result<bool>.Failure("Este evento foi cancelado.");
+
+            if (ev.DateTimeStart < DateTime.UtcNow && ev.DateTimeEnd > DateTime.UtcNow)
+                return Result<bool>.Failure("Este evento já está em andamento.");
+
+            if (ev.DateTimeEnd < DateTime.UtcNow)
                 return Result<bool>.Failure("Este evento já aconteceu.");
 
             if (await _participantRepository.ExistsAsync(eventId, userId))
@@ -260,5 +248,58 @@ namespace API.Services
 
             return Result<List<ParticipantDTO>>.Success(dtos);
         }
+
+        public async Task<Result<bool>> CancelAsync(Guid eventId)
+        {
+            var userId = _currentUserService.UserId;
+
+            if (userId == Guid.Empty)
+                return Result<bool>.Failure("Usuário não autenticado.");
+
+            var ev = await _eventRepository.GetByIdAsync(eventId);
+
+            if (ev is null)
+                return Result<bool>.Failure("Evento não encontrado.");
+
+            if (ev.UserId != userId)
+                return Result<bool>.Failure("Apenas o organizador pode cancelar o evento.");
+
+            if (ev.CanceledAt is not null)
+                return Result<bool>.Failure("Este evento já foi cancelado.");
+
+            if (ev.DateTimeStart <= DateTime.UtcNow)
+                return Result<bool>.Failure("Só é possível cancelar eventos que ainda não começaram.");
+
+            ev.CanceledAt = DateTime.UtcNow;
+            await _eventRepository.UpdateAsync(ev);
+
+            return Result<bool>.Success(true);
+        }
+
+        private static ReturnEventDTO ToReturnDto(Event e, Guid userId) => new()
+        {
+            Id = e.Id,
+            Title = e.Title,
+            Description = e.Description,
+            CategoryId = e.CategoryId,
+            CategoryName = e.Category?.Name,
+            DateTimeStart = e.DateTimeStart,
+            DateTimeEnd = e.DateTimeEnd,
+            Localization = e.Localization,
+            MaxCapacity = e.MaxCapacity,
+            City = e.City,
+            Level = e.Level,
+            UrlImage = e.UrlImage,
+            RegisterDate = e.RegisterDate,
+            UserId = e.UserId,
+            CreatorName = e.User?.Name,
+            CreatorPhoto = e.User?.UrlPhoto,
+            ParticipantsCount = e.Participants.Count,
+            IsParticipating = userId != Guid.Empty && e.Participants.Any(p => p.UserId == userId),
+            Status = e.CanceledAt is not null ? "canceled"
+                : DateTime.UtcNow < e.DateTimeStart ? "upcoming"
+                : DateTime.UtcNow < e.DateTimeEnd ? "ongoing"
+                : "done",
+        };
     }
 }

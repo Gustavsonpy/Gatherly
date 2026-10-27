@@ -75,6 +75,9 @@ namespace API.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<DateTime?>("CanceledAt")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<Guid>("CategoryId")
                         .HasColumnType("uuid");
 
@@ -83,7 +86,10 @@ namespace API.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("character varying(200)");
 
-                    b.Property<DateTime>("DateTime")
+                    b.Property<DateTime>("DateTimeEnd")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("DateTimeStart")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Description")

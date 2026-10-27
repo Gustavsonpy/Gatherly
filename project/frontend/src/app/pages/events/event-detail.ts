@@ -30,6 +30,7 @@ export class EventDetail implements OnInit {
   joinError = signal<string | null>(null);
   joining = signal(false);
   comments = signal<CommentModel[]>([]);
+  status = signal('outcoming');
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id')!;
@@ -39,6 +40,8 @@ export class EventDetail implements OnInit {
         this.event.set(data);
         this.participantsCount.set(data.participantsCount);
         this.joined.set(data.isParticipating);
+        this.status.set(data.status);
+        console.log(`Status: ${JSON.stringify(data)}`);
       },
       error: (err) =>
         this.loadError.set(getErrorMessage(err, 'Não foi possível carregar o evento.')),

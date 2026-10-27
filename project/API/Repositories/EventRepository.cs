@@ -33,6 +33,8 @@ namespace API.Repositories
         {
             return await _context.Events
                     .Include(e => e.Category)
+                    .Include(e => e.User)
+                    .Include(e => e.Participants)
                     .OrderBy(e => e.Title)
                     .ToListAsync();
         }
@@ -55,13 +57,28 @@ namespace API.Repositories
             return await _context.Events
                 .Where(e => e.City == city)
                 .Include(e => e.Category)
+                .Include(e => e.User)
+                .Include(e => e.Participants)
                 .OrderBy(e => e.Title)
                 .ToListAsync();
         }
 
-        public Task UpdateAsync(EventModel informal_event)
+        public async Task<List<EventModel>> GetByUserAsync(Guid userId)
         {
-            throw new NotImplementedException();
+            return await _context.Events
+                .Where(e => e.UserId == userId
+                        || e.Participants.Any(p => p.UserId == userId))
+                .Include(e => e.Category)
+                .Include(e => e.User)
+                .Include(e => e.Participants)
+                .OrderBy(e => e.DateTimeStart)
+                .ToListAsync();
+        }
+
+        public async Task UpdateAsync(EventModel informal_event)
+        {
+            _context.Events.Update(informal_event);
+            await _context.SaveChangesAsync();
         }
     }
 }

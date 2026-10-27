@@ -1,6 +1,3 @@
-using UserModel = API.Models.User;
-using CategoryModel = API.Models.Category;
-
 namespace API.DTO.Event
 {
     public class ReturnEventDTO
@@ -8,9 +5,8 @@ namespace API.DTO.Event
         public Guid Id { get; set; } = Guid.NewGuid();
         public string Title { get; set; }
         public string Description { get; set; }
-        public DateTime DateTime { get; set; }
-        public string Date { get; set; }
-        public string Time { get; set; }
+        public DateTime DateTimeStart { get; set; }
+        public DateTime DateTimeEnd { get; set; }
         public string Localization { get; set; }
         public int MaxCapacity { get; set; }
         public string City { get; set; }
@@ -19,6 +15,7 @@ namespace API.DTO.Event
         public DateTime RegisterDate { get; set; }
         public int ParticipantsCount { get; set; }
         public bool IsParticipating { get; set; }
+        public string Status { get; set; }
 
         public Guid UserId { get; set; }
         public string? CreatorName { get; set; }
