@@ -1,10 +1,11 @@
 import { Component, computed } from '@angular/core';
+import { RouterLink, RouterLinkActive } from '@angular/router';
 import { GenericButton } from '../buttons/generic-button';
 import { AuthService } from '../../core/auth/auth.service';
 
 @Component({
   selector: 'app-sidebar',
-  imports: [GenericButton],
+  imports: [GenericButton, RouterLink, RouterLinkActive],
   templateUrl: './sidebar.html',
   styleUrl: './sidebar.css',
 })
