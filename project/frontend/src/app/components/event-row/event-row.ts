@@ -18,6 +18,7 @@ export class EventRow implements OnInit {
 
   event = input.required<EventModel>();
   isOrganizer = input(false);
+  allowCancel = input(true);
   cancel = output<void>();
 
   participants = signal<ParticipantModel[]>([]);
@@ -26,7 +27,7 @@ export class EventRow implements OnInit {
   extraParticipants = computed(() => Math.max(0, this.participants().length - MAX_AVATARS));
 
   isFull = computed(() => this.event().participantsCount >= this.event().maxCapacity);
-  canCancel = computed(() => this.isOrganizer() && (this.event().status === 'upcoming' || this.event().status === 'done'));
+  canCancel = computed(() => this.allowCancel() && this.isOrganizer() && (this.event().status === 'upcoming' || this.event().status === 'done'));
 
   ngOnInit(): void {
     this.eventService.getParticipants(this.event().id).subscribe({
