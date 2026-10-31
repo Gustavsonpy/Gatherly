@@ -31,7 +31,7 @@ export class Homepage implements OnInit {
   actionError = signal<string | null>(null);
 
   query = signal('');
-  selectedCategory = signal<string | null>(null); // nome da categoria; null = todas
+  selectedCategory = signal<string | null>(null);
   slide = signal(0);
 
   categoryTiles = computed(() => [{ id: 'all', name: 'Todos' }, ...this.categories()]);

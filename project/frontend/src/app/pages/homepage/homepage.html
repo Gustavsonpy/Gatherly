@@ -64,7 +64,7 @@
                             <button type="button" (click)="selectCategory(tile)"
                                     class="flex flex-col items-center justify-center gap-2 w-24 h-20 shrink-0 rounded-lg text-[11px] cursor-pointer transition-colors"
                                     [class]="(tile.id === 'all' ? !selectedCategory() : selectedCategory() === tile.name)
-                                        ? 'bg-primary-lighter text-primary-dark font-semibold ring-1 ring-primary'
+                                        ? 'bg-primary-lighter text-primary-dark font-semibold border border-primary'
                                         : 'bg-primary-light text-gray-600 hover:bg-primary-lighter'">
                                 @if (tile.id !== 'all') {
                                     <img [src]="categoryIcon(tile.name)" alt="" class="w-5 h-5">
