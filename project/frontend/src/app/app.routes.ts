@@ -45,5 +45,10 @@ export const routes: Routes = [
     canActivate: [authGuard],
     loadComponent: () => import('./pages/history/history').then((h) => h.HistoryPage),
   },
+  {
+    path: 'settings',
+    canActivate: [authGuard],
+    loadComponent: () => import('./pages/settings/settings').then((s) => s.Settings),
+  },
   { path: '**', redirectTo: 'login' },
 ];
