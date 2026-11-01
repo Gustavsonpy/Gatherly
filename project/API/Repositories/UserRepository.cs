@@ -51,9 +51,11 @@ namespace API.Repositories
             return await _context.Users.FirstOrDefaultAsync(x => x.Id == id);
         }
 
-        public Task UpdateAsync(User user)
+        public async Task UpdateAsync(User user)
         {
-            throw new NotImplementedException();
+            _context.Users.Update(user);
+
+            await _context.SaveChangesAsync();
         }
     }
 }

@@ -1,0 +1,93 @@
+<main class="flex min-h-dvh bg-gray-50">
+    <app-sidebar />
+
+    <section class="flex-1 min-w-0 p-8 w-full flex flex-col gap-6">
+        <header>
+            <h1 class="text-xl font-semibold">Configurações</h1>
+            <p class="text-xs text-gray-500 mt-1">Configure sua conta ou o Gatherly do seu jeito</p>
+        </header>
+        
+        <div id="tabOptions" class="flex justify-between px-8 max-w-[50%] h-10 border border-gray-200 rounded-lg bg-white">
+            @for(tab of tabs; track tab.id) {
+                <button 
+                    id="options" 
+                    class="flex justify-center items-center gap-2 cursor-pointer" 
+                    [class]="tab.id === activeTab() ? 'border-b border-primary text-primary' : 'border-b border-b-transparent'"
+                    (click)="setActiveTab(tab.id)"
+                    >
+                    <img [src]="tab.icon" alt="" class="w-3 h-3 s">
+                    {{ tab.label }}
+                </button>
+            }
+        </div>
+
+        <div id="account-title">
+            <h1 class="text-xl font-semibold">Informações pessoais</h1>
+            <p class="text-xs text-gray-500 mt-1">Atualize seus dados pessoais e como as pessoas te veem no Gatherly</p>
+        </div>
+
+        <div id="essential-account-info" class="flex gap-10">
+            <div id="user-picture" class="flex flex-col gap-5">
+                <span>Foto de perfil</span>
+                <div id="account-profile" class="relative">
+                    <img src="images/default_profile_pic.jpg" alt="" class="rounded-full object-cover w-40 h-40">
+                    <div id="account-profile-miniature" class="flex absolute right-0 bottom-0 bg-white rounded-full justify-center items-center w-10 h-10 border border-gray-200">
+                        <img src="icons/pen.svg" alt="">
+                    </div>
+                </div>
+            </div>
+            <div id="obrigatory-infos" class="w-full">
+                <generic-input
+                    id="completename-input"
+                    type="text"
+                    label="Nome completo"
+                    [control]="form.controls.completeName"
+                    placeholder="Fulano da Costa"
+                />
+                <generic-input
+                    id="email-input"
+                    type="email"
+                    label="E-mail"
+                    [control]="form.controls.email"
+                />
+            </div>
+        </div>
+        <div id="optional-options">
+            <div id="description-container" class="flex flex-col h-40 mb-4.5">
+                <h2>Bio</h2>
+                <textarea
+                    name="biography"
+                    [formControl]="form.controls.biography"
+                    id="biography"
+                    class="border border-primary-dark rounded-sm w-full h-40 p-2 text-[12px]">
+                </textarea>
+            </div>
+            <div id="birthdate-city" class="flex w-full justify-between gap-4">
+                <generic-input
+                    id="birthdate-input"
+                    type="date"
+                    label="Data de nascimento"
+                    [control]="form.controls.birthDate"
+                    class="w-full"
+                />
+                <generic-input
+                    id="city-input"
+                    type="text"
+                    label="Cidade"
+                    [control]="form.controls.city"
+                    class="w-full"
+                />
+            </div>
+        </div>
+        <div id="buttondasd" class="flex w-full justify-end">
+            <generic-button
+                class="w-[15%]"
+                [disabled]="loading() || form.invalid || form.pristine"
+                (clicked)="save()"
+            >
+                Salvar alterações
+            </generic-button>
+        </div>
+    </section>
+        
+</main>

@@ -48,23 +48,64 @@ namespace API.Services
 
             var created = await _userRepository.AddAsync(newUser);
 
-            var resultDto = new UserDTO
-            {
-                Id = created.Id,
-                Name = created.Name,
-                Email = created.Email,
-                Birthday = created.Birthday,
-                Description = created.Description,
-                City = created.City,
-                UrlPhoto = created.UrlPhoto,
-                IsSuspended = created.IsSuspended,
-                IsAdmin = created.IsAdmin,
-                RegisterDate = created.RegisterDate
-            };
-
-            return Result<UserDTO>.Success(resultDto);
+            return Result<UserDTO>.Success(ToDto(created));
 
         }
+        
+        public async Task<Result<UserDTO>> GetMeAsync(Guid id)
+        {
+            var user = await _userRepository.GetByIdAsync(id);
+
+            if (user is null)
+                return Result<UserDTO>.Failure("Usuário não encontrado");
+
+            return Result<UserDTO>.Success(ToDto(user));
+        }
+
+        public async Task<Result<UserDTO>> UpdateMeAsync(Guid id, UpdateUserDTO dto)
+        {
+            var user = await _userRepository.GetByIdAsync(id);
+
+            if (user is null)
+                return Result<UserDTO>.Failure("Usuário não encontrado");
+
+            var fieldErrors = new Dictionary<string, List<string>>();
+            var name = (dto.Name ?? string.Empty).Trim();
+
+            if (string.IsNullOrWhiteSpace(name))
+                fieldErrors["name"] = new List<string> { "Informe seu nome." };
+
+            if (dto.Birthday == default)
+                fieldErrors["birthday"] = new List<string> { "Informe sua data de nascimento." };
+            else if (dto.Birthday.Date > DateTime.Today)
+                fieldErrors["birthday"] = new List<string> { "A data de nascimento não pode ser no futuro." };
+
+            if (fieldErrors.Count > 0)
+                return Result<UserDTO>.Failure(fieldErrors);
+
+            user.Name = name;
+            user.Birthday = DateTime.SpecifyKind(dto.Birthday, DateTimeKind.Utc);
+            user.Description = string.IsNullOrWhiteSpace(dto.Description) ? null : dto.Description.Trim();
+            user.City = string.IsNullOrWhiteSpace(dto.City) ? null : dto.City.Trim();
+
+            await _userRepository.UpdateAsync(user);
+
+            return Result<UserDTO>.Success(ToDto(user));
+        }
+
+        private static UserDTO ToDto(User user) => new()
+        {
+            Id = user.Id,
+            Name = user.Name,
+            Email = user.Email,
+            Birthday = user.Birthday,
+            Description = user.Description,
+            City = user.City,
+            UrlPhoto = user.UrlPhoto,
+            IsSuspended = user.IsSuspended,
+            IsAdmin = user.IsAdmin,
+            RegisterDate = user.RegisterDate
+        };
 
         public async Task<Result<UserPublicDTO?>> GetByIdAsync(Guid id)
         {

@@ -1,8 +1,9 @@
+using System.Security.Claims;
 using API.DTO;
 using API.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-
+ 
 namespace API.Controllers
 {
     [ApiController]
@@ -37,6 +38,36 @@ namespace API.Controllers
 
             return Ok(result.Value);
         }
+ 
+        [Authorize]
+        [HttpGet("me")]
+        public async Task<IActionResult> GetMe()
+        {
+            if (!TryGetUserId(out var userId))
+                return Unauthorized();
+ 
+            var result = await _userService.GetMeAsync(userId);
+ 
+            if(!result.IsSuccess)
+                return BadRequest(new { errors = result.Errors });
+ 
+            return Ok(result.Value);
+        }
+ 
+        [Authorize]
+        [HttpPut("me")]
+        public async Task<IActionResult> UpdateMe(UpdateUserDTO dto)
+        {
+            if (!TryGetUserId(out var userId))
+                return Unauthorized();
+ 
+            var result = await _userService.UpdateMeAsync(userId, dto);
+ 
+            if(!result.IsSuccess)
+                return BadRequest(new { errors = result.Errors, fieldErrors = result.FieldErrors });
+ 
+            return Ok(result.Value);
+        }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(Guid id)
@@ -47,6 +78,13 @@ namespace API.Controllers
                 return BadRequest(new { errors = result.Errors });
 
             return Ok(result.Value);
+        }
+ 
+        private bool TryGetUserId(out Guid userId)
+        {
+            var claim = User.FindFirstValue(ClaimTypes.NameIdentifier);
+ 
+            return Guid.TryParse(claim, out userId);
         }
     }
 }

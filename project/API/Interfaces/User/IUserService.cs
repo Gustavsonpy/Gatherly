@@ -8,6 +8,8 @@ namespace API.Interfaces
     {
         Task<Result<UserDTO>> CreateAsync(CreateUserDTO createUserDTO);
         Task<Result<UserPublicDTO?>> GetByIdAsync(Guid id);
+        Task<Result<UserDTO>> GetMeAsync(Guid id);
+        Task<Result<UserDTO>> UpdateMeAsync(Guid id, UpdateUserDTO dto);
         Task<Result<List<UserPublicDTO>>> GetAllAsync();
         Task<Result<UserDTO>> UpdateEmailAsync(string email);
     }
