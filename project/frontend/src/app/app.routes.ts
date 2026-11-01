@@ -35,5 +35,10 @@ export const routes: Routes = [
     canActivate: [authGuard],
     loadComponent: () => import('./pages/my-events/my-events').then((m) => m.MyEvents),
   },
+  {
+    path: 'history',
+    canActivate: [authGuard],
+    loadComponent: () => import('./pages/history/history').then((h) => h.HistoryPage),
+  },
   { path: '**', redirectTo: 'login' },
 ];
