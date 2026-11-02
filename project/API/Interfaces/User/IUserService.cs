@@ -10,6 +10,7 @@ namespace API.Interfaces
         Task<Result<UserPublicDTO?>> GetByIdAsync(Guid id);
         Task<Result<UserDTO>> GetMeAsync(Guid id);
         Task<Result<UserDTO>> UpdateMeAsync(Guid id, UpdateUserDTO dto);
+        Task<Result<UserDTO>> UpdatePhotoAsync(Guid id, string urlPhoto);
         Task<Result<List<UserPublicDTO>>> GetAllAsync();
         Task<Result<UserDTO>> UpdateEmailAsync(string email);
     }

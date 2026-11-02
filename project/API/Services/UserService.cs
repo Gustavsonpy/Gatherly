@@ -93,6 +93,20 @@ namespace API.Services
             return Result<UserDTO>.Success(ToDto(user));
         }
 
+        public async Task<Result<UserDTO>> UpdatePhotoAsync(Guid id, string urlPhoto)
+        {
+            var user = await _userRepository.GetByIdAsync(id);
+
+            if (user is null)
+                return Result<UserDTO>.Failure("Usuário não encontrado");
+
+            user.UrlPhoto = urlPhoto;
+
+            await _userRepository.UpdateAsync(user);
+
+            return Result<UserDTO>.Success(ToDto(user));
+        }
+
         private static UserDTO ToDto(User user) => new()
         {
             Id = user.Id,

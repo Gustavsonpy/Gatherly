@@ -53,6 +53,13 @@ export class UserService {
     return this.http.put<UserDTO>(`${this.baseUrl}/me`, dto);
   }
 
+  uploadPhoto(file: File): Observable<UserDTO> {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    return this.http.post<UserDTO>(`${this.baseUrl}/me/photo`, formData);
+  }
+
   getUserById(id: string): Observable<UserPublicDTO> {
     return this.http.get<UserPublicDTO>(`${this.baseUrl}/${id}`);
   } 

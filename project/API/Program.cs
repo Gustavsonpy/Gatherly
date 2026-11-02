@@ -53,6 +53,8 @@ builder.Services.AddScoped<ICommentService, CommentService>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 
+builder.Services.AddScoped<IImageStorage, LocalImageStorage>();
+
 builder.Services.AddScoped<IEventParticipantRepository, EventParticipantRepository>();
 
 builder.Services.AddAuthentication(options =>

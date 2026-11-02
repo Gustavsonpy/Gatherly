@@ -7,7 +7,7 @@
             <p class="text-xs text-gray-500 mt-1">Configure sua conta ou o Gatherly do seu jeito</p>
         </header>
         
-        <div id="tabOptions" class="flex justify-between px-8 max-w-[50%] h-10 border border-gray-200 rounded-lg bg-white">
+        <div id="tabOptions" class="flex justify-between w-fit px-8 h-10 border border-gray-200 rounded-lg bg-white">
             @for(tab of tabs; track tab.id) {
                 <button 
                     id="options" 
@@ -27,16 +27,41 @@
         </div>
 
         <div id="essential-account-info" class="flex gap-10">
-            <div id="user-picture" class="flex flex-col gap-5">
+            <div id="user-picture" class="flex flex-col gap-5 shrink-0">
                 <span>Foto de perfil</span>
-                <div id="account-profile" class="relative">
-                    <img src="images/default_profile_pic.jpg" alt="" class="rounded-full object-cover w-40 h-40">
-                    <div id="account-profile-miniature" class="flex absolute right-0 bottom-0 bg-white rounded-full justify-center items-center w-10 h-10 border border-gray-200">
-                        <img src="icons/pen.svg" alt="">
-                    </div>
+
+                <div id="account-profile" class="relative w-40 h-40">
+                    <img
+                        [src]="photoUrl() ?? 'images/default_profile_pic.jpg'"
+                        alt="Foto de perfil"
+                        class="rounded-full object-cover w-40 h-40 max-w-none"
+                        [class.opacity-50]="uploadingPhoto()"
+                    >
+
+                    <label
+                        for="profile-photo-input"
+                        id="account-profile-miniature"
+                        class="flex absolute right-0 bottom-0 bg-white rounded-full justify-center items-center w-10 h-10 border border-gray-200 cursor-pointer"
+                    >
+                        <img src="icons/pen.svg" alt="Alterar foto">
+                    </label>
+
+                    <input
+                        id="profile-photo-input"
+                        type="file"
+                        accept="image/jpeg,image/png,image/webp"
+                        class="hidden"
+                        [disabled]="uploadingPhoto()"
+                        (change)="onPhotoSelected($event)"
+                    />
                 </div>
+
+                @if (photoError()) {
+                    <span class="block w-40 text-xs text-red-500">{{ photoError() }}</span>
+                }
             </div>
-            <div id="obrigatory-infos" class="w-full">
+
+            <div id="obrigatory-infos" class="w-full flex flex-col justify-center">
                 <generic-input
                     id="completename-input"
                     type="text"
@@ -70,16 +95,24 @@
                     [control]="form.controls.birthDate"
                     class="w-full"
                 />
-                <generic-input
-                    id="city-input"
-                    type="text"
+                <city-autocomplete
+                    inputId="city-input"
                     label="Cidade"
+                    placeholder="Digite para buscar..."
                     [control]="form.controls.city"
                     class="w-full"
                 />
             </div>
         </div>
-        <div id="buttondasd" class="flex w-full justify-end">
+        <div id="settings-buttons" class="flex w-full justify-end gap-3">
+            <generic-button
+                class="w-[15%]"
+                variant="secondary"
+                [disabled]="loading()"
+                (clicked)="logout()"
+            >
+                Fazer log out
+            </generic-button>
             <generic-button
                 class="w-[15%]"
                 [disabled]="loading() || form.invalid || form.pristine"

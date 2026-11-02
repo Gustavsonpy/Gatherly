@@ -4,7 +4,9 @@ using System.Diagnostics;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using API.Common;
 using API.DTO.Event;
+using API.Interfaces;
 using API.Interfaces.Event;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -17,14 +19,13 @@ namespace API.Controllers
     public class EventController : ControllerBase
     {
         private readonly IEventService _eventService;
+        private readonly IImageStorage _imageStorage;
         private readonly ILogger<EventController> _logger;
 
-        private static readonly string[] AllowedExtensions = { ".jpg", ".jpeg", ".png", ".webp" }; 
-        private const long MaxImageSize = 5 * 1024 * 1024;
-
-        public EventController(IEventService eventService, ILogger<EventController> logger)
+        public EventController(IEventService eventService, IImageStorage imageStorage, ILogger<EventController> logger)
         {
             _eventService = eventService;
+            _imageStorage = imageStorage;
             _logger = logger;
         }
 
@@ -83,32 +84,15 @@ namespace API.Controllers
 
         [Authorize]
         [HttpPost("upload-image")]
-        [RequestSizeLimit(MaxImageSize)]
-        public async Task<IActionResult> UploadImage(IFormFile file, [FromServices] IWebHostEnvironment env)
+        [RequestSizeLimit(ImageFileValidator.MaxSizeBytes)]
+        public async Task<IActionResult> UploadImage(IFormFile file)
         {
-            if (file is null || file.Length == 0)
-                return BadRequest(new { errors = new[] { "Nenhum arquivo enviado" } });
+            var validationError = ImageFileValidator.Validate(file);
 
-            if (file.Length > MaxImageSize)
-                return BadRequest(new { errors = new[] { "A imagem deve ter no máximo 5 MB" } });
+            if (validationError is not null)
+                return BadRequest(new { errors = new[] { validationError } });
 
-            var extension = Path.GetExtension(file.FileName).ToLowerInvariant();
-
-            if (!AllowedExtensions.Contains(extension) || !file.ContentType.StartsWith("image/"))
-                return BadRequest(new { errors = new[] { "Formato de imagem inválido" } });
-
-            var folder = Path.Combine(env.WebRootPath, "uploads", "events");
-            Directory.CreateDirectory(folder);
-
-            var fileName = $"{Guid.NewGuid()}{extension}";
-            var fullPath = Path.Combine(folder, fileName);
-
-            await using (var stream = new FileStream(fullPath, FileMode.Create))
-            {
-                await file.CopyToAsync(stream);
-            }
-
-            var url = $"{Request.Scheme}://{Request.Host}/uploads/events/{fileName}";
+            var url = await _imageStorage.SaveAsync(file, "events");
 
             return Ok(new { url });
         }
