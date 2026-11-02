@@ -9,10 +9,14 @@ import { CommentModel } from '../../core/comments/comment.model';
 import { CommentSender } from '../../components/comment/comment-sender';
 import { getErrorMessage } from '../../core/utils/http-error';
 import { finalize } from 'rxjs';
+import { Icon } from '../../components/icon/icon';
+import { GenericButton } from '../../components/buttons/generic-button';
+
+type TabId = 'about' | 'participants' | 'chat';
 
 @Component({
   selector: 'app-event-detail',
-  imports: [Sidebar, CommentSender, DatePipe, TitleCasePipe],
+  imports: [Sidebar, CommentSender, DatePipe, TitleCasePipe, Icon, GenericButton],
   templateUrl: './event-detail.html',
 })
 export class EventDetail implements OnInit {
@@ -20,6 +24,27 @@ export class EventDetail implements OnInit {
   private eventService = inject(EventService);
   private commentService = inject(CommentService)
 
+  readonly tabs: { id: TabId; label: string; icon: string; empty: string }[] = [
+    {
+      id: 'about',
+      label: 'Sobre',
+      icon: 'people-md',
+      empty: 'Nenhum detalhe para esse evento ainda.',
+    },
+    {
+      id: 'participants',
+      label: 'Participantes',
+      icon: 'crown-sm',
+      empty: 'Nenhum participante ainda.',
+    },
+    {
+      id: 'chat',
+      label: 'Chat',
+      icon: 'crown-sm',
+      empty: 'Nenhum comentário feito ainda.',
+    },
+  ];
+  
   event = signal<EventModel | null>(null);
   participants = signal<ParticipantModel[]>([]);
   participantsCount = signal(0);
@@ -31,6 +56,7 @@ export class EventDetail implements OnInit {
   joining = signal(false);
   comments = signal<CommentModel[]>([]);
   status = signal('outcoming');
+  activeTab = signal<TabId>('about');
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id')!;
@@ -49,6 +75,10 @@ export class EventDetail implements OnInit {
 
     this.loadParticipants(id);
     this.loadComments(id);
+  }
+
+  setActiveTab(value: TabId): void {
+    this.activeTab.set(value);
   }
 
   private loadParticipants(id: string): void {
