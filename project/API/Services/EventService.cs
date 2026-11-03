@@ -226,13 +226,17 @@ namespace API.Services
                 return Result<bool>.Failure("Evento não encontrado.");
 
             if (ev.UserId == userId)
-                return Result<bool>.Failure("O organizador não pode sair do próprio evento.");
+                return Result<bool>.Failure(
+                    "O organizador não pode sair do próprio evento.");
 
-            var removed = await _participantRepository.RemoveAsync(eventId, userId);
+            var removed = await _participantRepository.RemoveAsync(
+                eventId,
+                userId);
 
             return removed
                 ? Result<bool>.Success(true)
-                : Result<bool>.Failure("Você não participa deste evento.");
+                : Result<bool>.Failure(
+                    "Você não participa deste evento.");
         }
 
         public async Task<Result<List<ParticipantDTO>>> GetParticipantsAsync(Guid eventId)
@@ -294,8 +298,11 @@ namespace API.Services
             UserId = e.UserId,
             CreatorName = e.User?.Name,
             CreatorPhoto = e.User?.UrlPhoto,
-            ParticipantsCount = e.Participants.Count,
-            IsParticipating = userId != Guid.Empty && e.Participants.Any(p => p.UserId == userId),
+            ParticipantsCount = e.Participants.Count(p => p.LeftAt == null),
+            IsParticipating = userId != Guid.Empty
+                && e.Participants.Any(p =>
+                    p.UserId == userId &&
+                    p.LeftAt == null),
             Status = e.CanceledAt is not null ? "canceled"
                 : DateTime.UtcNow < e.DateTimeStart ? "upcoming"
                 : DateTime.UtcNow < e.DateTimeEnd ? "ongoing"

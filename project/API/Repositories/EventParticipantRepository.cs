@@ -16,58 +16,96 @@ namespace API.Repositories
         }
 
         public Task<bool> ExistsAsync(Guid eventId, Guid userId) =>
-            _context.EventParticipants.AnyAsync(p => p.EventId == eventId && p.UserId == userId);
+            _context.EventParticipants.AnyAsync(p =>
+                p.EventId == eventId &&
+                p.UserId == userId &&
+                p.LeftAt == null);
 
         public Task<int> CountByEventAsync(Guid eventId) =>
-            _context.EventParticipants.CountAsync(p => p.EventId == eventId);
+            _context.EventParticipants.CountAsync(p =>
+                p.EventId == eventId &&
+                p.LeftAt == null);
 
         public Task<List<User>> GetUsersByEventAsync(Guid eventId) =>
             _context.EventParticipants
-                .Where(p => p.EventId == eventId)
-                .OrderBy(p => p.RegisterDate)   
+                .Where(p =>
+                    p.EventId == eventId &&
+                    p.LeftAt == null)
+                .OrderBy(p => p.RegisterDate)
                 .Select(p => p.User)
                 .ToListAsync();
 
         public async Task<JoinEventStatus> JoinAsync(Guid eventId, Guid userId)
         {
-            await using var tx = await _context.Database.BeginTransactionAsync();
+            await using var transaction =
+                await _context.Database.BeginTransactionAsync();
 
             var ev = await _context.Events
-                .FromSqlInterpolated($@"SELECT * FROM ""Events"" WHERE ""Id"" = {eventId} FOR UPDATE")
+                .FromSqlInterpolated(
+                    $@"SELECT * FROM ""Events""
+                    WHERE ""Id"" = {eventId} FOR UPDATE")
                 .AsNoTracking()
                 .SingleOrDefaultAsync();
 
             if (ev is null)
                 return JoinEventStatus.EventNotFound;
 
-            if (await _context.EventParticipants.AnyAsync(p => p.EventId == eventId && p.UserId == userId))
-                return JoinEventStatus.AlreadyJoined;
+            var participation = await _context.EventParticipants
+                .FirstOrDefaultAsync(p =>
+                    p.EventId == eventId &&
+                    p.UserId == userId);
 
-            var count = await _context.EventParticipants.CountAsync(p => p.EventId == eventId);
+            if (participation is not null && participation.LeftAt is null)
+            {
+                return JoinEventStatus.AlreadyJoined;
+            }
+
+            var count = await _context.EventParticipants
+                .CountAsync(p =>
+                    p.EventId == eventId &&
+                    p.LeftAt == null);
 
             if (count >= ev.MaxCapacity)
                 return JoinEventStatus.Full;
 
-            _context.EventParticipants.Add(new EventParticipant
+            if (participation is not null)
             {
-                EventId = eventId,
-                UserId = userId,
-                RegisterDate = DateTime.UtcNow
-            });
+                participation.LeftAt = null;
+                participation.RegisterDate = DateTime.UtcNow;
+            }
+            else
+            {
+                _context.EventParticipants.Add(
+                    new EventParticipant
+                    {
+                        EventId = eventId,
+                        UserId = userId,
+                        RegisterDate = DateTime.UtcNow
+                    });
+            }
 
             await _context.SaveChangesAsync();
-            await tx.CommitAsync();
+            await transaction.CommitAsync();
 
             return JoinEventStatus.Joined;
         }
 
         public async Task<bool> RemoveAsync(Guid eventId, Guid userId)
         {
-            var removed = await _context.EventParticipants
-                .Where(p => p.EventId == eventId && p.UserId == userId)
-                .ExecuteDeleteAsync();
+            var participation = await _context.EventParticipants
+                .FirstOrDefaultAsync(p =>
+                    p.EventId == eventId &&
+                    p.UserId == userId &&
+                    p.LeftAt == null);
 
-            return removed > 0;
+            if (participation is null)
+                return false;
+
+            participation.LeftAt = DateTime.UtcNow;
+
+            await _context.SaveChangesAsync();
+
+            return true;
         }
     }
 }
