@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { DatePipe, TitleCasePipe } from '@angular/common';
 import { EventService } from '../../core/event/event.service';
@@ -11,6 +11,7 @@ import { getErrorMessage } from '../../core/utils/http-error';
 import { finalize } from 'rxjs';
 import { Icon } from '../../components/icon/icon';
 import { GenericButton } from '../../components/buttons/generic-button';
+import { AuthService } from '../../core/auth/auth.service';
 
 type TabId = 'about' | 'participants' | 'chat';
 
@@ -22,7 +23,8 @@ type TabId = 'about' | 'participants' | 'chat';
 export class EventDetail implements OnInit {
   private route = inject(ActivatedRoute);
   private eventService = inject(EventService);
-  private commentService = inject(CommentService)
+  private commentService = inject(CommentService);
+  private authService = inject(AuthService);
 
   readonly tabs: { id: TabId; label: string; icon: string; empty: string }[] = [
     {
@@ -57,6 +59,8 @@ export class EventDetail implements OnInit {
   comments = signal<CommentModel[]>([]);
   status = signal('outcoming');
   activeTab = signal<TabId>('about');
+
+  private readonly userId = computed(() => this.authService.currentUser()?.id);
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id')!;
@@ -123,7 +127,28 @@ export class EventDetail implements OnInit {
       });
   }
 
+  leave(): void {
+    if (!this.joined()) return;
+
+    const id = this.event()!.id;
+
+    this.eventService.leaveEvent(id).subscribe({
+      next: () => {
+        this.participantsCount.update((c) => c - 1);
+        this.loadParticipants(id);
+        this.joined.set(false);
+      },
+      error: (err) => this.participantsError.set(
+          getErrorMessage(err, 'Não foi possível sair do evento.'),
+        ),
+    });
+  }
+
   onCommentCreated(comment: CommentModel): void {
     this.comments.update((list) => [...list, comment]);
+  }
+
+  isOrganizer(): boolean {
+    return this.event()?.userId.toLowerCase() === this.userId()?.toLowerCase();
   }
 }

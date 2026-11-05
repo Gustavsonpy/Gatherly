@@ -141,7 +141,7 @@ namespace API.Services
             if (userId == Guid.Empty)
                 return Result<List<ReturnEventDTO>>.Failure("Usuário não autenticado.");
 
-            var events = await _eventRepository.GetByUserAsync(userId);
+            var events = await _participantRepository.GetEventsByActiveUser(userId);
 
             return Result<List<ReturnEventDTO>>.Success(
                 events.Select(e => ToReturnDto(e, userId)).ToList());

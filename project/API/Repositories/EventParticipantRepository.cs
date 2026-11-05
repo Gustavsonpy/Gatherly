@@ -35,6 +35,16 @@ namespace API.Repositories
                 .Select(p => p.User)
                 .ToListAsync();
 
+        public Task<List<Event>> GetEventsByActiveUser(Guid UserId)
+        {
+            return _context.EventParticipants
+                .Where(p =>
+                    p.UserId == UserId &&
+                    p.LeftAt == null)
+                .Select(p => p.Event)
+                .ToListAsync();
+        }
+
         public async Task<JoinEventStatus> JoinAsync(Guid eventId, Guid userId)
         {
             await using var transaction =
