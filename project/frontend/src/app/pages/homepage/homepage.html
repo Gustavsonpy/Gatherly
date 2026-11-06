@@ -134,7 +134,7 @@
                 <section class="rounded-xl bg-gray-50 p-4">
                     <h2 class="text-sm font-bold mb-3">Vistos recentemente</h2>
                     <div class="flex flex-col gap-2">
-                        <ng-container *ngTemplateOutlet="miniList; context: { $implicit: viewedEvents(), empty: 'Nenhum evento visto ainda.' }" />
+                        <ng-container *ngTemplateOutlet="miniList;" />
                     </div>
                 </section>
             </aside>
