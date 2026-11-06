@@ -6,7 +6,6 @@ import { EventService } from '../../core/event/event.service';
 import { EventModel } from '../../core/event/event.model';
 import { CategoryService } from '../../core/category/category.service';
 import { CategoryModel } from '../../core/category/CategoryModel';
-import { RecentlyViewedService } from '../../core/event/recently-viewed.service';
 
 const MONTHS = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
 const MONTHS_LONG = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
@@ -20,7 +19,6 @@ export class Homepage implements OnInit {
   private readonly router = inject(Router);
   private readonly eventService = inject(EventService);
   private readonly categoryService = inject(CategoryService);
-  private readonly recentlyViewed = inject(RecentlyViewedService);
   private readonly destroyRef = inject(DestroyRef);
 
   events = signal<EventModel[]>([]);
@@ -62,11 +60,6 @@ export class Homepage implements OnInit {
       .sort((a, b) => a.dateTimeStart.localeCompare(b.dateTimeStart))
       .slice(0, 4),
   );
-
-  viewedEvents = computed(() => {
-    const byId = new Map(this.events().map((e) => [e.id, e]));
-    return this.recentlyViewed.ids().map((id) => byId.get(id)).filter((e): e is EventModel => !!e).slice(0, 4);
-  });
 
   ngOnInit(): void {
     this.eventService.getEvents().subscribe({
