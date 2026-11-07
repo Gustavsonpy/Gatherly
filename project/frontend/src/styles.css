@@ -10,3 +10,11 @@
   --color-primary-lighter: #DDD6FE;/* hover de fundos claros */
   --color-primary-accent: #8B5CF6; /* destaque (borda do upload) */
 }
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  right: 8px;
+  cursor: pointer;
+}
