@@ -1,0 +1,57 @@
+<main class="flex min-h-dvh fixed top-0 left-0 right-0 bottom-0 z-50 bg-black/50 items-center justify-center">
+    <div id="modal-container" class="flex flex-col border border-black w-[600px] bg-white p-6 gap-5">
+        <header>
+            <h1 class="text-xl font-semibold">Denunciar usuário</h1>
+            <p class="text-xs text-gray-500 mt-1">Ajude a manter a comunidade segura</p>
+        </header>
+
+        <hr>
+
+        <div id="user-details" class="flex items-center">
+            <div id="user-image" class="flex w-30 h-30">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTU8TFJ7iUwyhF0_LOmPpst5aFLBQUYvRcuREn63JTVvg&s=10" alt="name"
+                    class="object-cover bg-black overflow-hidden rounded-full">
+            </div>
+
+            <span>Fulano de Tal</span>
+        </div>
+
+        <div id="report-details">
+            <div id="report-detail-header" class="flex flex-col">
+                <h2 class="text-md font-semibold">Qual o motivo da denúncia?</h2>
+                <p class="text-xs text-gray-500 mt-1">Selecione a opção que melhor descreve o problema</p>
+            </div>
+
+            <div id="reports" class="flex flex-col gap-3">
+                @for (item of Array(5); track $index){
+                    <button id="report" class="flex border border-black rounded-md items-center gap-10">
+                        <img src="icons/user.svg" alt="">
+                        <div id="reason" class="flex flex-col text-sm">
+                            <p class="font-semibold">Comportamento inadequado</p>
+                            <p>Assédio, discurso de ódio, intimidação, etc.</p>
+                        </div>
+                    </button>
+                }
+            </div>
+
+            <div id="description-container" class="flex flex-col h-[15%] mb-4.5">
+                <h2>Descreva o que aconteceu</h2>
+                <textarea
+                    name="description"
+                    id="description"
+                    class="border border-primary-dark rounded-sm w-full h-[125px] p-2 text-[12px]">
+                </textarea>
+            </div>
+
+            <div id="anonymous-warning" class="flex flex-col w-full h-[100px]">
+                <div id="warning" class="flex border border-primary bg-primary-light rounded-md items-center gap-10 h-full w-full">
+                    <img src="icons/user.svg" alt="">
+                    <div id="warning-info" class="flex flex-col text-sm">
+                        <span class="font-semibold">Sua denúncia é anônima</span>
+                        <span>O usuário não será informado sobre quem fez a denúncia</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
