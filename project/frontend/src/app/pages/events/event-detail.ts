@@ -12,12 +12,13 @@ import { finalize } from 'rxjs';
 import { Icon } from '../../components/icon/icon';
 import { GenericButton } from '../../components/buttons/generic-button';
 import { AuthService } from '../../core/auth/auth.service';
+import { ReportModal } from '../../components/report-modal/report-modal';
 
 type TabId = 'about' | 'participants' | 'chat';
 
 @Component({
   selector: 'app-event-detail',
-  imports: [Sidebar, CommentSender, DatePipe, TitleCasePipe, Icon, GenericButton],
+  imports: [Sidebar, CommentSender, DatePipe, TitleCasePipe, Icon, GenericButton, ReportModal],
   templateUrl: './event-detail.html',
 })
 export class EventDetail implements OnInit {
@@ -30,19 +31,19 @@ export class EventDetail implements OnInit {
     {
       id: 'about',
       label: 'Sobre',
-      icon: 'people-md',
+      icon: 'info-sm',
       empty: 'Nenhum detalhe para esse evento ainda.',
     },
     {
       id: 'participants',
       label: 'Participantes',
-      icon: 'crown-sm',
+      icon: 'people-sm',
       empty: 'Nenhum participante ainda.',
     },
     {
       id: 'chat',
       label: 'Chat',
-      icon: 'crown-sm',
+      icon: 'chat-sm',
       empty: 'Nenhum comentário feito ainda.',
     },
   ];
@@ -59,6 +60,9 @@ export class EventDetail implements OnInit {
   comments = signal<CommentModel[]>([]);
   status = signal('outcoming');
   activeTab = signal<TabId>('about');
+  reportedUser = signal<ParticipantModel | null>(null);
+
+  activeReportModal = signal<boolean>(false);
 
   private readonly userId = computed(() => this.authService.currentUser()?.id);
 
@@ -71,7 +75,6 @@ export class EventDetail implements OnInit {
         this.participantsCount.set(data.participantsCount);
         this.joined.set(data.isParticipating);
         this.status.set(data.status);
-        console.log(`Status: ${JSON.stringify(data)}`);
       },
       error: (err) =>
         this.loadError.set(getErrorMessage(err, 'Não foi possível carregar o evento.')),
@@ -150,5 +153,15 @@ export class EventDetail implements OnInit {
 
   isOrganizer(): boolean {
     return this.event()?.userId.toLowerCase() === this.userId()?.toLowerCase();
+  }
+  
+  openReportModal(user: ParticipantModel): void {
+    this.reportedUser.set(user);
+    this.activeReportModal.set(true);
+  }
+
+  closeReportModal(): void {
+    this.activeReportModal.set(false);
+    this.reportedUser.set(null);
   }
 }

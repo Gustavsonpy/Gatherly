@@ -271,7 +271,9 @@ namespace API.Migrations
 
                     b.HasIndex("ReportedUserId");
 
-                    b.HasIndex("ReporterId");
+                    b.HasIndex("ReporterId", "ReportedUserId", "EventId", "Reason")
+                        .IsUnique()
+                        .HasDatabaseName("IX_UserReports_Reporter_Reported_Event_Reason");
 
                     b.ToTable("UserReports", null, t =>
                         {

@@ -59,6 +59,8 @@ builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 
 builder.Services.AddScoped<IEventParticipantRepository, EventParticipantRepository>();
 
+builder.Services.AddScoped<ReportReasonService>();
+
 builder.Services.AddAuthentication(options =>
     {
         options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

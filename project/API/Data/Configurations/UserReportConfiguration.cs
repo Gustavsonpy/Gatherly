@@ -51,6 +51,10 @@ namespace API.Data.Configurations
                 .HasForeignKey(r => r.EventId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            builder.HasIndex(r => new { r.ReporterId, r.ReportedUserId, r.EventId, r.Reason })
+                .IsUnique()
+                .HasDatabaseName("IX_UserReports_Reporter_Reported_Event_Reason");
+
             builder.HasCheckConstraint(
                 "CK_UserReport_NoSelfReport",
                 "\"ReporterId\" <> \"ReportedUserId\"");

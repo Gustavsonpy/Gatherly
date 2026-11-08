@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using API.DTO.Report;
 using API.Interfaces.Report;
 using Microsoft.AspNetCore.Authorization;
@@ -17,11 +18,17 @@ namespace API.Controllers
 
         [Authorize]
         [HttpPost("create")]
-        public async Task<IActionResult> Create(CreateReportDTO dto)
+        public async Task<IActionResult> Create([FromBody] CreateReportDTO dto)
         {
+            var userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (!Guid.TryParse(userIdClaim, out var reporterId))
+                return Unauthorized();
+
+            dto.ReporterId = reporterId;
+
             var result = await _userReportService.CreateReport(dto);
 
-            if(!result.IsSuccess)
+            if (!result.IsSuccess)
                 return BadRequest(new { errors = result.Errors });
 
             return Ok(result.Value);

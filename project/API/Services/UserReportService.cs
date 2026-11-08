@@ -1,5 +1,6 @@
 using API.Common;
 using API.DTO.Report;
+using API.Enums;
 using API.Interfaces;
 using API.Interfaces.Report;
 using API.Models;
@@ -17,6 +18,22 @@ namespace API.Services
 
         public async Task<Result<UserReportDTO>> CreateReport(CreateReportDTO reportDTO)
         {
+            if (reportDTO.ReporterId == reportDTO.ReportedUserId)
+                return Result<UserReportDTO>.Failure("Você não pode denunciar a si mesmo.");
+
+            if (!Enum.IsDefined(typeof(ReportReason), reportDTO.Reason))
+                return Result<UserReportDTO>.Failure("Motivo da denúncia inválido.");
+
+            var alreadyReported = await _userReportRepository.ExistsAsync(
+                reportDTO.ReporterId,
+                reportDTO.ReportedUserId,
+                reportDTO.EventId,
+                reportDTO.Reason
+            );
+
+            if (alreadyReported)
+                return Result<UserReportDTO>.Failure("Você já denunciou esse mesmo usuário nesse evento com a mesma denúncia.");
+
             var report = new UserReport
             {
                 Id = reportDTO.Id,
@@ -28,12 +45,9 @@ namespace API.Services
                 Description = reportDTO.Description,
             };
 
-            var crated = await _userReportRepository.AddAsync(report);
+            var created = await _userReportRepository.AddAsync(report);
 
-            var reportDto = ToReturnDTO(crated);
-
-            return Result<UserReportDTO>.Success(reportDto); 
-            
+            return Result<UserReportDTO>.Success(ToReturnDTO(created)); 
         }
 
         private static UserReportDTO ToReturnDTO(UserReport report)

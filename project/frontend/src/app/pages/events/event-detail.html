@@ -193,7 +193,7 @@
                       </div>
                     </div>
                     <div class="flex justify-end w-full gap-10">
-                      <generic-button variant="red_white" class="w-[25%]">
+                      <generic-button variant="red_white" (click)="openReportModal(p)" class="w-[25%]">
                           <span class="flex items-center justify-center gap-2">
                             <app-icon name="warning" class="w-3.5 h-3.5" />
                             <span>Denunciar</span>
@@ -210,6 +210,9 @@
                 }
               </div>
             </div>
+          }
+          @if (activeReportModal()){
+            <report-modal [reportedUser]="reportedUser()!" (close)="closeReportModal()" [eventId]="e.id"/>
           }
         </div>
 
