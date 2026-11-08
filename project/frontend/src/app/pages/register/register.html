@@ -25,6 +25,14 @@
                 placeholder="exemplo@email.com"
               />
             <generic-input
+                id="date-input"
+                type="date"
+                label="Data de nascimento"
+                [control]="form.controls.birthDate"
+                errorMessage="Insira uma data válida"
+                placeholder="dd/mm/yyyy"
+            />  
+            <generic-input
                 id="password-input"
                 type="password"
                 label="Senha"
@@ -40,19 +48,11 @@
                 errorMessage="As senhas precisam ser iguais"
                 placeholder="Mínimo 6 caracteres"
               />
-              <generic-input
-                id="date-input"
-                type="date"
-                label="Data de nascimento"
-                [control]="form.controls.birthDate"
-                errorMessage="Insira uma data válida"
-                placeholder="dd/mm/yyyy"
-              />
           </div>
 
           <div id="terms-container" class="flex gap-3">
             <input type="checkbox" id="accept-terms">
-            <p>Eu aceito os <span class="text-primary">Termos de uso</span> e a <span class="text-primary">Política de privacidade</span></p>
+            <p>Li e estou de acordo com o <span class="text-primary">Termo de uso</span> e a <span class="text-primary">Política de privacidade</span></p>
           </div>
           
           <generic-button type="submit" [disabled]="loading()">

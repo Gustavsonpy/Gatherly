@@ -1,4 +1,5 @@
-import { Component, input } from '@angular/core';
+
+import { Component, input, signal } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
@@ -8,14 +9,36 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
   template: `
     <div class="flex flex-col">
       <label [for]="id()">{{ label() }}</label>
-      <input
-        [id]="id()"
-        [type]="type()"
-        [formControl]="control()"
-        [autocomplete]="autoComplete()"
-        [placeholder]="placeholder()"
-        class="border border-primary-dark rounded-md p-2 text-[12px] w-full"
-      />
+
+      <div class="relative">
+        <input
+          [id]="id()"
+          [type]="type() === 'password' && passwordVisible() ? 'text' : type()"
+          [formControl]="control()"
+          [autocomplete]="autoComplete()"
+          [placeholder]="placeholder()"
+          [class.date-input]="type() === 'date'"
+          [class.pr-16]="type() === 'password'"
+          class="border border-primary-dark rounded-md p-2 text-[12px] w-full"
+        />
+
+        @if (type() === 'password') {
+          <button
+            type="button"
+            (click)="togglePasswordVisibility()"
+            aria-label="Alternar visibilidade da senha"
+            [attr.aria-pressed]="passwordVisible()"
+            class="absolute right-2 top-1/2 -translate-y-1/2 text-[12px] text-primary-dark cursor-pointer"
+          >
+            <img
+              [src]="passwordVisible() ? '/icons/eye-off.svg' : '/icons/eye.svg'"
+              alt=""
+              class="w-4 h-4"
+            />
+          </button>
+        }
+      </div>
+
       <p
         class="text-[12px] text-red-500"
         [class.invisible]="!(control().invalid && control().touched)"
@@ -33,4 +56,10 @@ export class GenericInput {
   type = input<'text' | 'email' | 'password' | 'date' | 'time' | 'number'>('text');
   autoComplete = input<string>('off');
   placeholder = input<string>("");
+
+  passwordVisible = signal(false);
+
+  togglePasswordVisibility(): void {
+    this.passwordVisible.update(value => !value);
+  }
 }
