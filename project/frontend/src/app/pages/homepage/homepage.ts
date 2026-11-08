@@ -1,6 +1,6 @@
 import { Component, DestroyRef, OnInit, computed, inject, signal } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { Sidebar } from '../../components/sidebar/sidebar';
 import { EventService } from '../../core/event/event.service';
 import { EventModel } from '../../core/event/event.model';
@@ -12,7 +12,7 @@ const MONTHS_LONG = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
 
 @Component({
   selector: 'app-home',
-  imports: [Sidebar, NgTemplateOutlet],
+  imports: [Sidebar, NgTemplateOutlet, RouterLink],
   templateUrl: './homepage.html',
 })
 export class Homepage implements OnInit {
@@ -90,7 +90,6 @@ export class Homepage implements OnInit {
 
   categoryIcon(name: string): string {
     const slug = name.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
-    console.log(`Icon path: icons/${slug}.svg`)
     return `icons/${slug}.svg`;
   }
 
@@ -111,13 +110,32 @@ export class Homepage implements OnInit {
 
   join(e: EventModel): void {
     if (e.isParticipating) return this.open(e.id);
+
     this.actionError.set(null);
+
     this.eventService.joinEvent(e.id).subscribe({
-      next: () =>
+      next: () => {
         this.events.update((list) =>
-          list.map((x) => (x.id === e.id ? { ...x, isParticipating: true, participantsCount: x.participantsCount + 1 } : x)),
+          list.map((x) =>
+            x.id === e.id
+              ? {
+                  ...x,
+                  isParticipating: true,
+                  participantsCount: x.participantsCount + 1,
+                }
+              : x,
+          ),
+        );
+
+        this.eventService.getMyEvents().subscribe({
+          next: (data) => this.myEvents.set(data),
+          error: (err) => console.error(err),
+        });
+      },
+      error: (err) =>
+        this.actionError.set(
+          err.error?.errors?.[0] ?? 'Não foi possível entrar no evento.',
         ),
-      error: (err) => this.actionError.set(err.error?.errors?.[0] ?? 'Não foi possível entrar no evento.'),
     });
   }
 }
