@@ -18,14 +18,15 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
           [autocomplete]="autoComplete()"
           [placeholder]="placeholder()"
           [class.date-input]="type() === 'date'"
-          class="border border-primary-dark rounded-md p-2 pr-16 text-[12px] w-full"
+          [class.pr-16]="type() === 'password'"
+          class="border border-primary-dark rounded-md p-2 text-[12px] w-full"
         />
 
         @if (type() === 'password') {
           <button
             type="button"
             (click)="togglePasswordVisibility()"
-            [attr.aria-label]="passwordVisible() ? 'Ocultar senha' : 'Mostrar senha'"
+            aria-label="Alternar visibilidade da senha"
             [attr.aria-pressed]="passwordVisible()"
             class="absolute right-2 top-1/2 -translate-y-1/2 text-[12px] text-primary-dark cursor-pointer"
           >
