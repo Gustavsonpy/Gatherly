@@ -87,7 +87,7 @@ namespace API.Controllers
         [RequestSizeLimit(ImageFileValidator.MaxSizeBytes)]
         public async Task<IActionResult> UploadImage(IFormFile file)
         {
-            var validationError = ImageFileValidator.Validate(file);
+            var validationError = await ImageFileValidator.ValidateAsync(file);
 
             if (validationError is not null)
                 return BadRequest(new { errors = new[] { validationError } });
