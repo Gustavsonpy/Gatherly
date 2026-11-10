@@ -281,6 +281,49 @@ namespace API.Migrations
                         });
                 });
 
+            modelBuilder.Entity("API.Models.UserRating", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("now() at time zone 'utc'");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(300)
+                        .HasColumnType("character varying(300)");
+
+                    b.Property<Guid>("EventId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("Rate")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid>("RatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ReporterId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EventId");
+
+                    b.HasIndex("RatedUserId");
+
+                    b.HasIndex("ReporterId", "RatedUserId", "EventId")
+                        .IsUnique()
+                        .HasDatabaseName("IX_UserRate_Reporter_Rated_Event");
+
+                    b.ToTable("UserRating", null, t =>
+                        {
+                            t.HasCheckConstraint("CK_UserRate_NoSelfRate", "\"ReporterId\" <> \"RatedUserId\"");
+                        });
+                });
+
             modelBuilder.Entity("API.Models.Comment", b =>
                 {
                     b.HasOne("API.Models.Event", "Event")
@@ -361,6 +404,33 @@ namespace API.Migrations
                     b.Navigation("Event");
 
                     b.Navigation("ReportedUser");
+
+                    b.Navigation("Reporter");
+                });
+
+            modelBuilder.Entity("API.Models.UserRating", b =>
+                {
+                    b.HasOne("API.Models.Event", "Event")
+                        .WithMany()
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("API.Models.User", "RatedUser")
+                        .WithMany()
+                        .HasForeignKey("RatedUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("API.Models.User", "Reporter")
+                        .WithMany()
+                        .HasForeignKey("ReporterId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Event");
+
+                    b.Navigation("RatedUser");
 
                     b.Navigation("Reporter");
                 });

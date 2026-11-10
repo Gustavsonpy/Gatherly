@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using API.Interfaces.Participant;
 using API.Interfaces.Report;
+using API.Interfaces.Rate;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -62,6 +63,9 @@ builder.Services.AddScoped<IImageStorage, LocalImageStorage>();
 builder.Services.AddScoped<IEventParticipantRepository, EventParticipantRepository>();
 
 builder.Services.AddScoped<ReportReasonService>();
+
+builder.Services.AddScoped<IUserRatingRepository, UserRatingRepository>();
+builder.Services.AddScoped<IUserRatingService, UserRatingService>();
 
 builder.Services.AddAuthentication(options =>
     {
