@@ -80,7 +80,7 @@ namespace API.Controllers
             if (!TryGetUserId(out var userId))
                 return Unauthorized();
 
-            var validationError = await ImageFileValidator.ValidateAsync(file);
+            var validationError = ImageFileValidator.Validate(file);
 
             if (validationError is not null)
                 return BadRequest(new { errors = new[] { validationError } });
