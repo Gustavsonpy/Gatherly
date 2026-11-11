@@ -17,7 +17,7 @@ import { Component, computed, input, output } from '@angular/core';
 export class GenericButton {
   type = input<'button' | 'submit'>('button');
   disabled = input(false);
-  variant = input<'primary' | 'secondary'>('primary');
+  variant = input<'primary' | 'secondary' | 'red_white'>('primary');
   clicked = output<void>();
 
   private readonly base =
@@ -26,6 +26,7 @@ export class GenericButton {
   private readonly variants = {
     primary: 'bg-primary border-primary text-white hover:bg-primary-hover',
     secondary: 'bg-white border-primary-dark text-primary-dark hover:bg-primary-light',
+    red_white: 'bg-white border-red-500 text-red-500 hover:bg-red-100',
   };
 
   classes = computed(() => `${this.base} ${this.variants[this.variant()]}`);

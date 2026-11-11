@@ -1,0 +1,59 @@
+@if (reportedUser()) {
+    <main class="flex min-h-dvh top-0 left-0 right-0 bottom-0 z-50 fixed bg-black/50 items-center justify-center p-5">
+        <div id="modal-container" class="flex flex-col border border-[#9A9AAB] rounded-md w-[700px] bg-white p-6 gap-5">
+
+            <div id="user-details" class="flex items-center gap-5">
+                <div id="user-image" class="flex w-30 h-30">
+                    <img [src]="reportedUser().urlPhoto ?? 'images/default_profile_pic.jpg'" [alt]="reportedUser().name"
+                        class="object-cover bg-black overflow-hidden rounded-full">
+                </div>
+
+                <div id="text-user-container" class="flex flex-col">
+                    <span class="text-[12px] text-[#9A9AAB]">Usuário denunciado</span>
+                    <span>{{ reportedUser().name }}</span>
+                </div>
+            </div>
+
+            <div id="report-details" class="flex flex-col gap-5">
+                <div id="report-detail-header" class="flex flex-col">
+                    <h2 class="text-md font-semibold">Qual o motivo da denúncia?</h2>
+                    <p class="text-xs text-gray-500 mt-1">Selecione a opção que melhor descreve o problema</p>
+                </div>
+
+                <div id="reports" class="flex flex-col gap-3">
+                    @for (reason of reportReasons(); track reason.id){
+                        <button 
+                            id="report"
+                            [ngClass]="{
+                                'bg-primary-lighter border-primary-accent' : selectedReason()?.id === reason.id,
+                                'bg-white border-black' : selectedReason()?.id !== reason.id
+                            }"
+                            class="flex border rounded-md items-center gap-5 p-2 cursor-pointer" (click)="activateReason(reason)"
+                        >
+                            <input type="radio" name="report" value="report.id" [checked]="selectedReason()?.id === reason.id" class="accent-primary">
+                            <app-icon [name]="reason.icon" class="w-5 h-5"/>
+                            <div id="reason" class="flex flex-col text-sm items-start">
+                                <p class="font-semibold">{{ reason.name }}</p>
+                                <p>{{ reason.description }}</p>
+                            </div>
+                        </button>
+                    }
+                </div>
+
+                <div id="description-container" class="flex flex-col h-[15%]">
+                    <h2>Descreva o que aconteceu <span class="text-gray-400">(opcional)</span></h2>
+                    <textarea
+                        name="description"
+                        id="description"
+                        (input)="onDescriptionInput($event)"
+                        class="border border-primary-dark rounded-sm w-full h-[125px] p-2 text-[12px]"></textarea>
+                </div>
+
+                <div id="report-buttons" class="flex gap-10">
+                    <generic-button variant="secondary" (click)="close.emit()" class="w-full">Cancelar</generic-button>
+                    <generic-button class="w-full" [disabled]="!selectedReason() || loading()" (click)="submitReport()">Enviar a denúncia</generic-button>
+                </div>
+            </div>
+        </div>
+    </main>
+}

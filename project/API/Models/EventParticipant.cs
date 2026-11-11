@@ -4,6 +4,7 @@ namespace API.Models
     {
         public Guid Id { get; set; } = Guid.NewGuid();
         public DateTime RegisterDate { get; set; }
+        public DateTime? LeftAt { get; set; }
 
         public Guid UserId { get; set; }
         public User User { get; set; }
