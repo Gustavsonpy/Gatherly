@@ -13,12 +13,13 @@ import { Icon } from '../../components/icon/icon';
 import { GenericButton } from '../../components/buttons/generic-button';
 import { AuthService } from '../../core/auth/auth.service';
 import { ReportModal } from '../../components/report-modal/report-modal';
+import { RatingUserModal } from '../../components/user-rating-modal/user-rating-modal';
 
 type TabId = 'about' | 'participants' | 'chat';
 
 @Component({
   selector: 'app-event-detail',
-  imports: [Sidebar, CommentSender, DatePipe, TitleCasePipe, Icon, GenericButton, ReportModal],
+  imports: [Sidebar, CommentSender, DatePipe, TitleCasePipe, Icon, GenericButton, ReportModal, RatingUserModal],
   templateUrl: './event-detail.html',
 })
 export class EventDetail implements OnInit {
@@ -61,8 +62,10 @@ export class EventDetail implements OnInit {
   status = signal('outcoming');
   activeTab = signal<TabId>('about');
   reportedUser = signal<ParticipantModel | null>(null);
+  ratedUser = signal<ParticipantModel | null>(null);
 
   activeReportModal = signal<boolean>(false);
+  activeRatingModal = signal<boolean>(false);
 
   private readonly userId = computed(() => this.authService.currentUser()?.id);
 
@@ -163,5 +166,15 @@ export class EventDetail implements OnInit {
   closeReportModal(): void {
     this.activeReportModal.set(false);
     this.reportedUser.set(null);
+  }
+
+  openRatingModal(user: ParticipantModel): void {
+    this.ratedUser.set(user);
+    this.activeRatingModal.set(true);
+  }
+
+  closeRatingModal(): void {
+    this.ratedUser.set(null);
+    this.activeRatingModal.set(false);
   }
 }

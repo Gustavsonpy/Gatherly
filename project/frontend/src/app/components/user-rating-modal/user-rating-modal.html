@@ -1,0 +1,64 @@
+@if (ratedUser()){
+    <main class="flex min-h-dvh top-0 left-0 right-0 bottom-0 z-50 fixed bg-black/50 items-center justify-center p-5">
+    <div id="modal-container" class="flex flex-col border border-[#9A9AAB] rounded-md w-[700px] bg-white p-6 gap-5">
+
+        <div id="user-details" class="flex items-center gap-5">
+            <div id="user-image" class="flex w-30 h-30">
+                <img src="images/default_profile_pic.jpg" alt="name"
+                    class="object-cover bg-black overflow-hidden rounded-full">
+            </div>
+
+            <div id="text-user-container" class="flex flex-col">
+                <span class="text-[12px] text-[#9A9AAB]">Usuário denunciado</span>
+                <span>Fulana de Tal</span>
+            </div>
+        </div>
+
+        <div id="event-container" class="flex items-center border border-primary rounded-md bg-primary-light gap-5 p-6">
+            <app-icon name="calendar-sm" class="w-5 h-5"/>
+
+            <div id="event-info" class="flex flex-col text-[12px]">
+                <span class="flex text-gray-500 gap-x-1">Evento: <p class="text-primary">Futebol Society - Domingo</p></span>
+                <span class="flex text-gray-500 gap-x-1"><p>23 de Maio de 2026</p> - <p>ADE</p></span>
+            </div>
+        </div>
+
+        <hr>
+
+        <div id="rating-container" class="flex flex-col gap-10">
+            <h2>Como foi sua experiência com o usuário?</h2>
+            <div id="rate" class="flex flex-col justify-center items-center">
+                <div id="stars" class="flex justify-around w-full">
+                    <button>
+                        <app-icon name="star" class="w-10 h-10 text-primary"/>
+                    </button>
+                    <button>
+                        <app-icon name="star" class="w-10 h-10"/>
+                    </button>
+                    <button>
+                        <app-icon name="star" class="w-10 h-10"/>
+                    </button>
+                    <button>
+                        <app-icon name="star" class="w-10 h-10"/>
+                    </button>
+                    <button>
+                        <app-icon name="star" class="w-10 h-10"/>
+                    </button>
+                </div>
+                <span>Bom!</span>
+            </div>
+        </div>
+
+        <div id="description-container" class="flex flex-col h-[15%]">
+            <h2>Descreva sobre a sua experiência <span class="text-gray-400">(opcional)</span></h2>
+            <textarea
+                name="description"
+                id="description"
+                class="border border-primary-dark rounded-sm w-full h-[125px] p-2 text-[12px]"></textarea>
+        </div>
+    </div>
+</main>
+}
+@else {
+    <p class="text-red-500">Usuário não encontrado!</p>
+}

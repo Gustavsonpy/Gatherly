@@ -199,7 +199,7 @@
                             <span>Denunciar</span>
                           </span>
                       </generic-button>
-                      <generic-button variant="secondary" class="w-[25%]">
+                      <generic-button variant="secondary" (click)="openRatingModal(p)" class="w-[25%]">
                           <span class="flex items-center justify-center gap-2">
                             <app-icon name="star" class="w-3.5 h-3.5" />
                             <span>Avaliar</span>
@@ -213,6 +213,10 @@
           }
           @if (activeReportModal()){
             <report-modal [reportedUser]="reportedUser()!" (close)="closeReportModal()" [eventId]="e.id"/>
+          }
+
+          @if (activeRatingModal()){
+            <user-rating-modal [ratedUser]="ratedUser()!" (close)="closeRatingModal()" [eventId]="e.id"/>
           }
         </div>
 
