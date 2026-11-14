@@ -8,7 +8,7 @@ on:
 
 env:
   DOTNET_VERSION: "10.0.x"
-  NODE_VERSION: "22.x" 
+  NODE_VERSION: "22.x"
   SOLUTION_PATH: "./project/Gatherly.slnx"
   BACKEND_PROJECT_PATH: "./project/API/API.csproj"
   BACKEND_DIR: "./project/API"
@@ -60,12 +60,18 @@ jobs:
         if: github.ref == 'refs/heads/main'
         run: dotnet publish ${{ env.BACKEND_PROJECT_PATH }} --no-build --configuration Release --output ./publish/backend
 
+      - name: Create deployment ZIP
+        if: github.ref == 'refs/heads/main'
+        run: |
+          cd ./publish/backend
+          zip -r ../backend.zip .
+
       - name: Upload backend artifact
         if: github.ref == 'refs/heads/main'
         uses: actions/upload-artifact@v4
         with:
           name: backend-publish
-          path: ./publish/backend
+          path: ./publish/backend.zip
 
   # ----------------------------------------------------------------
   # FRONTEND: lint + test + build the Angular app
@@ -109,8 +115,7 @@ jobs:
           path: ${{ env.FRONTEND_DIR }}/dist
 
   # ----------------------------------------------------------------
-  # DOCKER: valida que as imagens de produção (backend + frontend)
-  # realmente buildam a partir dos Dockerfiles usados no docker-compose
+  # DOCKER: validate production images
   # ----------------------------------------------------------------
   docker-build:
     name: Docker - Validate images
@@ -137,3 +142,27 @@ jobs:
           context: ${{ env.FRONTEND_DIR }}
           push: false
           tags: gatherly-frontend:ci
+
+  # ----------------------------------------------------------------
+  # DEPLOY: publish API automatically to Azure App Service
+  # ----------------------------------------------------------------
+  deploy-backend:
+    name: Deploy Backend to Azure
+    runs-on: ubuntu-latest
+    needs: [backend, frontend, docker-build]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Download backend artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: backend-publish
+          path: ./publish
+
+      - name: Deploy to Azure App Service
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: gatherly-api
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          package: ./publish/backend.zip
+```
