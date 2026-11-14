@@ -26,6 +26,12 @@ if (builder.Environment.IsDevelopment())
 var jwtKey = builder.Configuration["Jwt:Key"];
 var jwtIssuer = builder.Configuration["Jwt:Issuer"];
 
+if (string.IsNullOrWhiteSpace(jwtKey))
+    throw new InvalidOperationException("JWT Key não configurada.");
+
+if (string.IsNullOrWhiteSpace(jwtIssuer))
+    throw new InvalidOperationException("JWT Issuer não configurado.");
+
 // Add services to the container.
 
 builder.Services.AddControllers();
