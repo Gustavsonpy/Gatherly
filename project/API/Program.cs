@@ -127,6 +127,14 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapGet("/health", () => Results.Ok("Healthy"));
+app.MapGet("/health/db", async (AppDbContext db) =>
+{
+    var canConnect = await db.Database.CanConnectAsync();
+
+    return canConnect
+        ? Results.Ok("Database connected")
+        : Results.Problem("Database unavailable");
+});
 
 app.MapControllers();
 
