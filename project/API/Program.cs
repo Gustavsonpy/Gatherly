@@ -14,10 +14,23 @@ using API.Interfaces.Report;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Configuration.AddJsonFile("appsettings.Local.json", optional: true, reloadOnChange: true);
+if (builder.Environment.IsDevelopment())
+{
+    builder.Configuration.AddJsonFile(
+        "appsettings.Local.json",
+        optional: true,
+        reloadOnChange: true
+    );
+}
 
 var jwtKey = builder.Configuration["Jwt:Key"];
 var jwtIssuer = builder.Configuration["Jwt:Issuer"];
+
+if (string.IsNullOrWhiteSpace(jwtKey))
+    throw new InvalidOperationException("JWT Key não configurada.");
+
+if (string.IsNullOrWhiteSpace(jwtIssuer))
+    throw new InvalidOperationException("JWT Issuer não configurado.");
 
 // Add services to the container.
 
@@ -26,11 +39,24 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
 const string FrontendCorsPolicy = "FrontendCorsPolicy";
+
+var allowedOrigins = new List<string>
+{
+    "http://localhost:4200"
+};
+
+var frontendOrigin = builder.Configuration["Cors:FrontendOrigin"];
+
+if (!string.IsNullOrWhiteSpace(frontendOrigin))
+{
+    allowedOrigins.Add(frontendOrigin);
+}
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(FrontendCorsPolicy, policy =>
     {
-        policy.WithOrigins("http://localhost:4200")
+        policy.WithOrigins(allowedOrigins.ToArray())
               .AllowAnyHeader()
               .AllowAnyMethod();
     });
