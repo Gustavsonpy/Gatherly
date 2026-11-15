@@ -14,18 +14,16 @@ namespace API.Services
             _userRatingRepository = userRatingRepository;
         }
 
-        public async Task<Result<UserRatingDTO>> CreateRatingAsync(CreateUserRatingDTO userRatingDTO, Guid reporterId)
+        public async Task<Result<UserRatingDTO>> CreateRatingAsync(CreateUserRatingDTO userRatingDTO)
         {
-            if(reporterId == userRatingDTO.RatedUserId)
-            {
-                return Result<UserRatingDTO>.Failure("Você não pode avaliar a si mesmo!");
-            }
+            if (userRatingDTO.ReporterId == userRatingDTO.RatedUserId)
+                return Result<UserRatingDTO>.Failure("Você não pode avaliar a si mesmo.");
 
             var newUserRating = new UserRating
             {
                 Rate = userRatingDTO.Rate,
                 Description = userRatingDTO.Description,
-                ReporterId = reporterId,
+                ReporterId = userRatingDTO.ReporterId,
                 RatedUserId = userRatingDTO.RatedUserId,
                 EventId = userRatingDTO.EventId
             };

@@ -5,7 +5,7 @@ namespace API.Interfaces.Rate
 {
     public interface IUserRatingService
     {
-        Task<Result<UserRatingDTO>> CreateRatingAsync(CreateUserRatingDTO userRatingDTO, Guid reporterId);
+        Task<Result<UserRatingDTO>> CreateRatingAsync(CreateUserRatingDTO userRatingDTO);
         Task<List<UserRatingDTO>> GetAll();        
         Task<List<UserRatingDTO>> GetRatingByUser(Guid userId);        
         Task<List<UserRatingDTO>> UpdateUserRating(UserRatingDTO userRatingDTO);        
