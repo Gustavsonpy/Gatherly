@@ -165,4 +165,3 @@ jobs:
           app-name: gatherly-api
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
           package: ./publish/backend.zip
-```
