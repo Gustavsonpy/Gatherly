@@ -273,6 +273,24 @@ namespace API.Services
             return Result<bool>.Success(true);
         }
 
+        public async Task<Result<List<ReturnEventDTO>>> GetFutureEvents()
+        {
+            var userId = _currentUserService.UserId;
+            
+            if (userId == Guid.Empty)
+                return Result<List<ReturnEventDTO>>.Failure("Usuário não autenticado.");
+
+            var user = await _userRepository.GetByIdAsync(userId);
+
+            if (user is null)
+                return Result<List<ReturnEventDTO>>.Failure("Usuário não encontrado.");
+            
+            var events = await _eventRepository.GetFutureEvents();
+
+            return Result<List<ReturnEventDTO>>.Success(events.Select(e => ToReturnDto(e, userId)).ToList());
+
+        }
+
         private static ReturnEventDTO ToReturnDto(Event e, Guid userId) => new()
         {
             Id = e.Id,

@@ -1,4 +1,5 @@
 using API.Data;
+using API.DTO.Event;
 using API.Interfaces.Event;
 using Microsoft.EntityFrameworkCore;
 using EventModel = API.Models.Event;
@@ -80,5 +81,18 @@ namespace API.Repositories
             _context.Events.Update(informal_event);
             await _context.SaveChangesAsync();
         }
+
+        public async Task<List<EventModel>> GetFutureEvents()
+        {
+            var now = DateTime.UtcNow;
+
+            return await _context.Events
+                .Where(e => e.DateTimeStart > now && e.CanceledAt == null)
+                .Include(e => e.Category)
+                .Include(e => e.User)
+                .Include(e => e.Participants)
+                .OrderBy(e => e.DateTimeStart)
+                .ToListAsync();
+                }
     }
 }

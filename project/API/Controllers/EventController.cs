@@ -156,5 +156,17 @@ namespace API.Controllers
 
             return NoContent();
         }
+
+        [Authorize]
+        [HttpGet("future-events")]
+        public async Task<IActionResult> GetFutureEvents()
+        {
+            var result = await _eventService.GetFutureEvents();
+
+            if (!result.IsSuccess)
+                return BadRequest(new { errors = result.Errors });
+
+            return Ok(result.Value);
+        }
     }
 }
