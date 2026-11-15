@@ -48,14 +48,47 @@ namespace API.Services
             throw new NotImplementedException();
         }
 
-        public Task<List<UserRatingDTO>> GetRatingByUser(Guid userId)
+        public async Task<List<UserRatingDTO>> GetRatingsReceivedByUser(Guid userId)
         {
-            throw new NotImplementedException();
+            var ratings = await _userRatingRepository.GetRateByUser(userId);
+            return ratings.Select(MapToDto).ToList();
+        }
+
+        public async Task<List<UserRatingDTO>> GetRatingByUser(Guid userId)
+        {
+            var ratings = await _userRatingRepository.GetRateByUser(userId);
+
+            return ratings
+                .OrderByDescending(r => r.CreatedAt)
+                .Select(MapToDto)
+                .ToList();
+        }
+
+        public async Task<UserScoreDTO> GetUserScore(Guid userId)
+        {
+            var (average, count) = await _userRatingRepository.GetUserScoreAsync(userId);
+
+            return new UserScoreDTO
+            {
+                UserId = userId,
+                Average = average,
+                Count = count
+            };
         }
 
         public Task<List<UserRatingDTO>> UpdateUserRating(UserRatingDTO userRatingDTO)
         {
             throw new NotImplementedException();
         }
+        
+        private static UserRatingDTO MapToDto(UserRating rating) => new UserRatingDTO
+        {
+            Id = rating.Id,
+            Rate = rating.Rate,
+            Description = rating.Description,
+            ReporterId = rating.ReporterId,
+            RatedUserId = rating.RatedUserId,
+            EventId = rating.EventId
+        };
     }
 }

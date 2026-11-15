@@ -18,8 +18,9 @@
             <app-icon name="calendar-sm" class="w-5 h-5"/>
 
             <div id="event-info" class="flex flex-col text-[12px]">
-                <span class="flex text-gray-500 gap-x-1">Evento: <p class="text-primary">Futebol Society - Domingo</p></span>
-                <span class="flex text-gray-500 gap-x-1"><p>23 de Maio de 2026</p> - <p>ADE</p></span>
+                <span class="flex text-gray-500 gap-x-1">Evento: <p class="text-primary">{{ event().title }}</p></span>
+                <span class="flex text-gray-500 gap-x-1"><p>{{ event().dateTimeStart | date: 'dd/MM/yyyy' : 'pt' | titlecase }}</p></span>
+                <span class="flex text-gray-500 gap-x-1"><p>{{ event().localization }}</p></span>
             </div>
         </div>
 

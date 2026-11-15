@@ -36,4 +36,6 @@ export interface ParticipantModel {
     id: string;
     name: string;
     urlPhoto: string | null;
+    userScore: number;
+    ratingsCount: number;
 }

@@ -1,14 +1,15 @@
 import { Component, computed, inject, input, OnInit, output, signal } from '@angular/core';
 import { Icon } from '../icon/icon';
 import { AuthService } from '../../core/auth/auth.service';
-import { ParticipantModel } from '../../core/event/event.model';
+import { EventModel, ParticipantModel } from '../../core/event/event.model';
 import { GenericButton } from '../buttons/generic-button';
 import { RateService } from '../../core/rating/rating.service';
 import { CreateUserRatingModel } from '../../core/rating/user-rating.model';
+import { DatePipe, TitleCasePipe } from '@angular/common';
 
 @Component({
   selector: 'user-rating-modal',
-  imports: [Icon, GenericButton],
+  imports: [Icon, GenericButton, DatePipe, TitleCasePipe],
   templateUrl: './user-rating-modal.html',
 })
 export class RatingUserModal implements OnInit {
@@ -19,9 +20,10 @@ export class RatingUserModal implements OnInit {
   rate = ["Muito ruim", "Ruim", "Bom", "Muito bom", "Excelente"];
 
   ratedUser = input.required<ParticipantModel>();
-  eventId = input.required<string>();
+  event = input.required<EventModel>();
   loading = signal(false);
   close = output<void>();
+  rated = output<void>();
   starValue = signal<number>(0);
   rateFeedback = signal<string>("");
   errorMessage = signal<string>("");
@@ -45,11 +47,12 @@ export class RatingUserModal implements OnInit {
       rate: this.starValue(),
       description: this.description(),
       ratedUserId: this.ratedUser().id,
-      eventId: this.eventId()
+      eventId: this.event().id
     }
     
     this.userRatingService.sendRating(rating).subscribe({
       next: () => {
+        this.rated.emit();
         this.close.emit();
       },
       error: (error) => this.errorMessage.set(error.error?.errors?.[0] ?? 'Não foi possível avaliar o usuário.')

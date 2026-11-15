@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { CreateUserRatingModel } from './user-rating.model';
+import { CreateUserRatingModel, UserScore } from './user-rating.model';
 
 @Injectable({providedIn: 'root'})
 export class RateService {
@@ -10,5 +10,9 @@ export class RateService {
 
   sendRating(rate: CreateUserRatingModel) {
     return this.http.post<CreateUserRatingModel>(`${this.ratingUrl}/create`, rate);
+  }
+
+  getUserScore(userId: string) {
+    return this.http.get<UserScore>(`${userId}/score`);
   }
 }

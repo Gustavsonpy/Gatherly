@@ -1,6 +1,6 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { DatePipe, TitleCasePipe } from '@angular/common';
+import { DatePipe, DecimalPipe, TitleCasePipe } from '@angular/common';
 import { EventService } from '../../core/event/event.service';
 import { EventModel, ParticipantModel } from '../../core/event/event.model';
 import { Sidebar } from '../../components/sidebar/sidebar';
@@ -19,7 +19,7 @@ type TabId = 'about' | 'participants' | 'chat';
 
 @Component({
   selector: 'app-event-detail',
-  imports: [Sidebar, CommentSender, DatePipe, TitleCasePipe, Icon, GenericButton, ReportModal, RatingUserModal],
+  imports: [Sidebar, CommentSender, DatePipe, TitleCasePipe, Icon, GenericButton, ReportModal, RatingUserModal, DecimalPipe],
   templateUrl: './event-detail.html',
 })
 export class EventDetail implements OnInit {
@@ -176,5 +176,9 @@ export class EventDetail implements OnInit {
   closeRatingModal(): void {
     this.ratedUser.set(null);
     this.activeRatingModal.set(false);
+  }
+
+  onUserRated(): void {
+    this.loadParticipants(this.event()!.id);
   }
 }

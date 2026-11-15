@@ -33,5 +33,20 @@ namespace API.Controllers
 
             return Ok(result.Value);
         }
+
+        [Authorize]
+        [HttpGet("user/{userId:guid}")]
+        public async Task<IActionResult> GetByUser(Guid userId)
+        {
+            var ratings = await _userRatingService.GetRatingByUser(userId);
+            return Ok(ratings);
+        }
+
+        [HttpGet("{userId}/score")]
+        public async Task<IActionResult> GetScore(Guid userId)
+        {
+            var score = await _userRatingService.GetUserScore(userId);
+            return Ok(score);
+        }
     }
 }

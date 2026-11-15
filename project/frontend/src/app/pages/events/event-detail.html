@@ -188,7 +188,7 @@
                         <span>{{ p.name }}</span>
                         <span class="flex text-sm text-gray-400 gap-1 items-center">
                           <app-icon name="star" class="w-3.5 h-3.5"/>
-                          <p>4.5</p>
+                          <p>{{ p.userScore | number: '1.1' }}</p>
                         </span>
                       </div>
                     </div>
@@ -201,7 +201,7 @@
                       </generic-button>
                       <generic-button variant="secondary" (click)="openRatingModal(p)" class="w-[25%]">
                           <span class="flex items-center justify-center gap-2">
-                            <app-icon name="star" class="w-3.5 h-3.5" />
+                            <app-icon name="star-outline" class="w-3.5 h-3.5" />
                             <span>Avaliar</span>
                           </span>
                       </generic-button>
@@ -216,7 +216,7 @@
           }
 
           @if (activeRatingModal()){
-            <user-rating-modal [ratedUser]="ratedUser()!" (close)="closeRatingModal()" [eventId]="e.id"/>
+            <user-rating-modal [ratedUser]="ratedUser()!" (close)="closeRatingModal()" (rated)="onUserRated()" [event]="e"/>
           }
         </div>
 

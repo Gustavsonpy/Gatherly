@@ -12,3 +12,9 @@ export interface CreateUserRatingModel {
     ratedUserId: string;
     eventId: string;
 }
+
+export interface UserScore {
+    userId: string; 
+    average: number;
+    count: number;
+}
