@@ -1,4 +1,5 @@
 using API.Data;
+using API.DTO.Event;
 using API.Interfaces.Participant;
 using API.Models;
 using Microsoft.EntityFrameworkCore;
@@ -26,13 +27,23 @@ namespace API.Repositories
                 p.EventId == eventId &&
                 p.LeftAt == null);
 
-        public Task<List<User>> GetUsersByEventAsync(Guid eventId) =>
+        public Task<List<ParticipantDTO>> GetParticipantsByEventAsync(Guid eventId) =>
             _context.EventParticipants
                 .Where(p =>
                     p.EventId == eventId &&
                     p.LeftAt == null)
                 .OrderBy(p => p.RegisterDate)
-                .Select(p => p.User)
+                .Select(p => new ParticipantDTO
+                {
+                    Id = p.User.Id,
+                    Name = p.User.Name,
+                    UrlPhoto = p.User.UrlPhoto,
+                    UserScore = _context.UserRatings
+                        .Where(r => r.RatedUserId == p.UserId)
+                        .Average(r => (double?)r.Rate) ?? 0,
+                    RatingsCount = _context.UserRatings
+                        .Count(r => r.RatedUserId == p.UserId)
+                })
                 .ToListAsync();
 
         public Task<List<Event>> GetEventsByActiveUser(Guid UserId)

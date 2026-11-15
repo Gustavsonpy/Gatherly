@@ -241,14 +241,7 @@ namespace API.Services
 
         public async Task<Result<List<ParticipantDTO>>> GetParticipantsAsync(Guid eventId)
         {
-            var users = await _participantRepository.GetUsersByEventAsync(eventId);
-
-            var dtos = users.Select(u => new ParticipantDTO
-            {
-                Id = u.Id,
-                Name = u.Name,
-                UrlPhoto = u.UrlPhoto
-            }).ToList();
+            var dtos = await _participantRepository.GetParticipantsByEventAsync(eventId);
 
             return Result<List<ParticipantDTO>>.Success(dtos);
         }

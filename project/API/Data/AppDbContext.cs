@@ -11,6 +11,7 @@ namespace API.Data
         public DbSet<Comment> Comments { get; set; }
         public DbSet<EventParticipant> EventParticipants { get; set; }
         public DbSet<UserReport> UserReports { get; set; }
+        public DbSet<UserRating> UserRatings { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
