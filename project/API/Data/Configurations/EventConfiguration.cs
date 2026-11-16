@@ -32,7 +32,7 @@ namespace API.Data.Configurations
 
             builder.Property(e => e.Localization) // Ver se tem que ser outra tabela
                 .IsRequired()
-                .HasMaxLength(200);
+                .HasMaxLength(500);
 
             builder.Property(e => e.MaxCapacity)
                 .IsRequired()
@@ -44,6 +44,11 @@ namespace API.Data.Configurations
             
             builder.Property(e => e.Level) // Ver se tem que ser outra tabela
                 .HasMaxLength(200);
+
+            builder.Property(e => e.PlaceName).HasMaxLength(200);
+            builder.Property(e => e.Street).HasMaxLength(200);
+            builder.Property(e => e.District).HasMaxLength(100);
+            builder.Property(e => e.State).HasMaxLength(50);
 
             builder.Property(e => e.UrlImage)
                 .IsRequired();

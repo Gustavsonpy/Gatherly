@@ -14,12 +14,13 @@ import { GenericButton } from '../../components/buttons/generic-button';
 import { AuthService } from '../../core/auth/auth.service';
 import { ReportModal } from '../../components/report-modal/report-modal';
 import { RatingUserModal } from '../../components/user-rating-modal/user-rating-modal';
+import { MiniMap } from '../../components/mini-map/mini-map';
 
 type TabId = 'about' | 'participants' | 'chat';
 
 @Component({
   selector: 'app-event-detail',
-  imports: [Sidebar, CommentSender, DatePipe, TitleCasePipe, Icon, GenericButton, ReportModal, RatingUserModal, DecimalPipe],
+  imports: [Sidebar, CommentSender, DatePipe, TitleCasePipe, Icon, GenericButton, ReportModal, RatingUserModal, DecimalPipe, MiniMap],
   templateUrl: './event-detail.html',
 })
 export class EventDetail implements OnInit {

@@ -17,7 +17,7 @@ namespace API.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.4")
+                .HasAnnotation("ProductVersion", "10.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -97,23 +97,45 @@ namespace API.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("character varying(200)");
 
+                    b.Property<string>("District")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<double?>("Latitude")
+                        .HasColumnType("double precision");
+
                     b.Property<string>("Level")
                         .HasMaxLength(200)
                         .HasColumnType("character varying(200)");
 
                     b.Property<string>("Localization")
                         .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<double?>("Longitude")
+                        .HasColumnType("double precision");
 
                     b.Property<int>("MaxCapacity")
                         .HasMaxLength(200)
                         .HasColumnType("integer");
 
+                    b.Property<string>("PlaceName")
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
                     b.Property<DateTime>("RegisterDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
                         .HasDefaultValueSql("now() at time zone 'utc'");
+
+                    b.Property<string>("State")
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<string>("Street")
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -224,6 +246,49 @@ namespace API.Migrations
                     b.ToTable("Users", (string)null);
                 });
 
+            modelBuilder.Entity("API.Models.UserRating", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("now() at time zone 'utc'");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(300)
+                        .HasColumnType("character varying(300)");
+
+                    b.Property<Guid>("EventId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("Rate")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid>("RatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ReporterId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EventId");
+
+                    b.HasIndex("RatedUserId");
+
+                    b.HasIndex("ReporterId", "RatedUserId", "EventId")
+                        .IsUnique()
+                        .HasDatabaseName("IX_UserRate_Reporter_Rated_Event");
+
+                    b.ToTable("UserRating", null, t =>
+                        {
+                            t.HasCheckConstraint("CK_UserRate_NoSelfRate", "\"ReporterId\" <> \"RatedUserId\"");
+                        });
+                });
+
             modelBuilder.Entity("API.Models.UserReport", b =>
                 {
                     b.Property<Guid>("Id")
@@ -278,49 +343,6 @@ namespace API.Migrations
                     b.ToTable("UserReports", null, t =>
                         {
                             t.HasCheckConstraint("CK_UserReport_NoSelfReport", "\"ReporterId\" <> \"ReportedUserId\"");
-                        });
-                });
-
-            modelBuilder.Entity("API.Models.UserRating", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
-                        .HasDefaultValueSql("now() at time zone 'utc'");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(300)
-                        .HasColumnType("character varying(300)");
-
-                    b.Property<Guid>("EventId")
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("Rate")
-                        .HasColumnType("integer");
-
-                    b.Property<Guid>("RatedUserId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("ReporterId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EventId");
-
-                    b.HasIndex("RatedUserId");
-
-                    b.HasIndex("ReporterId", "RatedUserId", "EventId")
-                        .IsUnique()
-                        .HasDatabaseName("IX_UserRate_Reporter_Rated_Event");
-
-                    b.ToTable("UserRating", null, t =>
-                        {
-                            t.HasCheckConstraint("CK_UserRate_NoSelfRate", "\"ReporterId\" <> \"RatedUserId\"");
                         });
                 });
 
@@ -381,33 +403,6 @@ namespace API.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("API.Models.UserReport", b =>
-                {
-                    b.HasOne("API.Models.Event", "Event")
-                        .WithMany()
-                        .HasForeignKey("EventId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("API.Models.User", "ReportedUser")
-                        .WithMany()
-                        .HasForeignKey("ReportedUserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("API.Models.User", "Reporter")
-                        .WithMany()
-                        .HasForeignKey("ReporterId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Event");
-
-                    b.Navigation("ReportedUser");
-
-                    b.Navigation("Reporter");
-                });
-
             modelBuilder.Entity("API.Models.UserRating", b =>
                 {
                     b.HasOne("API.Models.Event", "Event")
@@ -431,6 +426,33 @@ namespace API.Migrations
                     b.Navigation("Event");
 
                     b.Navigation("RatedUser");
+
+                    b.Navigation("Reporter");
+                });
+
+            modelBuilder.Entity("API.Models.UserReport", b =>
+                {
+                    b.HasOne("API.Models.Event", "Event")
+                        .WithMany()
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("API.Models.User", "ReportedUser")
+                        .WithMany()
+                        .HasForeignKey("ReportedUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("API.Models.User", "Reporter")
+                        .WithMany()
+                        .HasForeignKey("ReporterId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Event");
+
+                    b.Navigation("ReportedUser");
 
                     b.Navigation("Reporter");
                 });

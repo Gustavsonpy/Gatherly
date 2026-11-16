@@ -15,6 +15,12 @@ namespace API.DTO.Event
         public string City { get; set; }
         public string Level { get; set; }
         public string UrlImage { get; set; }
+        public string? PlaceName { get; set; }
+        public string? Street { get; set; }
+        public string? District { get; set; }
+        public string? State { get; set; }
+        public double? Latitude { get; set; }
+        public double? Longitude { get; set; }
         public DateTime RegisterDate { get; set; }
 
         public Guid UserId { get; set; }

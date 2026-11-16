@@ -21,7 +21,7 @@ import { CategoryService } from '../../core/category/category.service';
 import { CategoryModel } from '../../core/category/CategoryModel';
 import { EventService } from '../../core/event/event.service';
 import { CreateEventModel } from '../../core/event/event.model';
-import { PlaceProvider, PlaceSuggestion } from '../../core/places/place-provider';
+import { PlaceDetails, PlaceProvider, PlaceSuggestion } from '../../core/places/place-provider';
 import { compressImage } from '../../core/utils/image-compressor';
 
 interface NewEventForm {
@@ -61,6 +61,7 @@ export class NewEvent implements OnInit {
     readonly placeSelected = signal(false);
     readonly localizationTyped = signal('');
     readonly searchFinished = signal(true);
+    readonly placeDetails = signal<PlaceDetails | null>(null);
 
     readonly showCityInput = computed(
         () =>
@@ -116,6 +117,7 @@ export class NewEvent implements OnInit {
                 tap((text) => {
                     if (this.placeSelected()) {
                         this.form.controls.city.setValue('');
+                        this.placeDetails.set(null);
                         this.placeSelected.set(false);
                     }
                     this.localizationTyped.set(text);
@@ -139,10 +141,11 @@ export class NewEvent implements OnInit {
     }
 
     async selectPlace(suggestion: PlaceSuggestion): Promise<void> {
-        const { localization, city } = await this.places.resolve(suggestion);
+        const { localization, city, ...details } = await this.places.resolve(suggestion);
 
         this.form.controls.localization.setValue(localization, { emitEvent: false });
         this.form.controls.city.setValue(city);
+        this.placeDetails.set(details);
         this.localizationTyped.set(localization);
         this.placeSelected.set(true);
         this.suggestions.set([]);
@@ -262,6 +265,7 @@ export class NewEvent implements OnInit {
                         localization: v.localization,
                         maxCapacity: v.spots,
                         city: v.city.trim(),
+                        ...this.placeDetails(),
                         level: v.level || null,
                         urlImage: url,
                         categoryId: v.category,

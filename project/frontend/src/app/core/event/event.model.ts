@@ -1,4 +1,6 @@
-export interface EventModel{
+import { PlaceDetails } from '../places/place-provider';
+
+export interface EventModel extends PlaceDetails {
     id: string;
     title: string;
     description: string;
@@ -19,7 +21,7 @@ export interface EventModel{
     status: 'upcoming' | 'ongoing' | 'done' | 'canceled';
 }
 
-export interface CreateEventModel {
+export interface CreateEventModel extends PlaceDetails {
     title: string;
     description: string;
     dateTimeStart: string;

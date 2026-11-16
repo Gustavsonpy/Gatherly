@@ -132,14 +132,27 @@
             <div id="localization-event" class="flex flex-col gap-5 p-4 border border-primary-dark rounded-md">
               <h1 class="font-bold text-[12px]">Local</h1>
               <div id="localization-img-text" class="flex gap-5">
-                <img
-                  src="https://media.wired.com/photos/5932303458b0d64bb35d023b/3:2/w_2560%2Cc_limit/street-view-spyglass.png"
-                  alt=""
-                  class="w-40 h-24 rounded-md object-cover">
-                <div id="localization-info" class="text-[11px] flex flex-col justify-center gap-2">
-                  <span>ADE - Associação Desportiva Esportiva</span>
-                  <span class="text-gray-400">R. Rui Barbosa, 925</span>
-                  <span class="text-gray-400">Costa e Silva, Joinville - SC</span>
+                @if (e.latitude != null && e.longitude != null) {
+                  <mini-map [latitude]="e.latitude" [longitude]="e.longitude" class="w-40 h-24 shrink-0" />
+                } @else {
+                  <div class="flex items-center justify-center w-40 h-24 shrink-0 rounded-md bg-gray-100">
+                    <img src="icons/localization-md.svg" alt="">
+                  </div>
+                }
+                <div id="localization-info" class="text-[11px] flex flex-col justify-center gap-2 min-w-0">
+                  @if (e.placeName || e.street) {
+                    <span>{{ e.placeName || e.street }}</span>
+                    @if (e.street && e.street !== e.placeName) {
+                      <span class="text-gray-400">{{ e.street }}</span>
+                    }
+                    <span class="text-gray-400">
+                      {{ e.district ? e.district + ', ' : '' }}{{ e.city }}{{ e.state ? ' - ' + e.state : '' }}
+                    </span>
+                  } @else {
+                    <!-- eventos antigos: só têm o endereço completo -->
+                    <span class="line-clamp-2">{{ e.localization }}</span>
+                    <span class="text-gray-400">{{ e.city }}</span>
+                  }
                 </div>
               </div>
             </div>
