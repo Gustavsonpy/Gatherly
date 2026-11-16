@@ -14,6 +14,7 @@ import { GenericButton } from '../../components/buttons/generic-button';
 import { AuthService } from '../../core/auth/auth.service';
 import { ReportModal } from '../../components/report-modal/report-modal';
 import { RatingUserModal } from '../../components/user-rating-modal/user-rating-modal';
+import { MiniMap } from '../../components/mini-map/mini-map';
 import { EventComments } from '../../components/event-comments/event-comments';
 
 type TabId = 'about' | 'participants' | 'chat';
@@ -29,7 +30,9 @@ type TabId = 'about' | 'participants' | 'chat';
     ReportModal,
     RatingUserModal,
     DecimalPipe, 
-    EventComments
+    EventComments,
+    CommentSender,
+    MiniMap
   ],
   templateUrl: './event-detail.html',
 })

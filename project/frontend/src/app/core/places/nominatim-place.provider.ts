@@ -5,13 +5,14 @@ import { PlaceProvider, PlaceSuggestion, SelectedPlace } from './place-provider'
 
 interface NominatimResult {
     place_id: number;
+    lat: string;
+    lon: string;
+    name?: string;
     display_name: string;
     address: {
-        city?: string;
-        town?: string;
-        village?: string;
-        municipality?: string;
-        county?: string;
+        road?: string; house_number?: string; suburb?: string;
+        city?: string; town?: string; village?: string; municipality?: string; county?: string;
+        state?: string; 'ISO3166-2-lvl4'?: string;
     };
 }
 
@@ -43,10 +44,17 @@ export class NominatimPlaceProvider extends PlaceProvider {
                 r.address.municipality ??
                 r.address.county ??
                 '',
+            placeName: r.name || r.address.road,
+            street: [r.address.road, r.address.house_number].filter(Boolean).join(', '),
+            district: r.address.suburb,
+            state: r.address['ISO3166-2-lvl4']?.replace('BR-', ''),
+            latitude: Number(r.lat),
+            longitude: Number(r.lon),
         }));
     }
 
     async resolve(s: PlaceSuggestion): Promise<SelectedPlace> {
-        return { localization: s.label, city: s.city ?? '' };
+        const { id, label, city, ...details } = s;
+        return { ...details, localization: label, city: city ?? '' };
     }
 }

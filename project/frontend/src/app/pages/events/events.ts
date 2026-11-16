@@ -24,7 +24,7 @@ export class Events implements OnInit{
   loading = signal(true);
 
   ngOnInit(): void {
-    this.eventService.getEvents().subscribe({
+    this.eventService.getFutureEvents().subscribe({
       next: (data) => {
         this.events.set(data);
         this.loading.set(false);

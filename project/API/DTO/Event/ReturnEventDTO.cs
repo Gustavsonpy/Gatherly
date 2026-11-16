@@ -16,6 +16,12 @@ namespace API.DTO.Event
         public int ParticipantsCount { get; set; }
         public bool IsParticipating { get; set; }
         public string Status { get; set; }
+        public string? PlaceName { get; set; }
+        public string? Street { get; set; }
+        public string? District { get; set; }
+        public string? State { get; set; }
+        public double? Latitude { get; set; }
+        public double? Longitude { get; set; }
 
         public Guid UserId { get; set; }
         public string? CreatorName { get; set; }

@@ -14,6 +14,7 @@ namespace API.Interfaces.Event
         Task<Result<bool>> JoinAsync(Guid eventId);
         Task<Result<bool>> LeaveAsync(Guid eventId);
         Task<Result<List<ParticipantDTO>>> GetParticipantsAsync(Guid eventId);
+        Task<Result<List<ReturnEventDTO>>> GetFutureEvents();
         Task<Result<bool>> CancelAsync(Guid eventId);
     }
 }

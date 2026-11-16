@@ -56,6 +56,12 @@ namespace API.Services
                 City = createEventDTO.City,
                 Level = createEventDTO.Level,
                 UrlImage = createEventDTO.UrlImage,
+                PlaceName = createEventDTO.PlaceName,
+                Street = createEventDTO.Street,
+                District = createEventDTO.District,
+                State = createEventDTO.State,
+                Latitude = createEventDTO.Latitude,
+                Longitude = createEventDTO.Longitude,
                 UserId = userId,
                 CategoryId = createEventDTO.CategoryId,
                 Participants =
@@ -83,6 +89,12 @@ namespace API.Services
                 City = created.City,
                 Level = created.Level,
                 UrlImage = created.UrlImage,
+                PlaceName = created.PlaceName,
+                Street = created.Street,
+                District = created.District,
+                State = created.State,
+                Latitude = created.Latitude,
+                Longitude = created.Longitude,
                 RegisterDate = created.RegisterDate,
                 UserId = created.UserId,
                 User = created.User
@@ -113,6 +125,12 @@ namespace API.Services
                 City = eventId.City,
                 Level = eventId.Level,
                 UrlImage = eventId.UrlImage,
+                PlaceName = eventId.PlaceName,
+                Street = eventId.Street,
+                District = eventId.District,
+                State = eventId.State,
+                Latitude = eventId.Latitude,
+                Longitude = eventId.Longitude,
                 RegisterDate = eventId.RegisterDate,
                 UserId = eventId.UserId,
                 CreatorName = eventId.User?.Name,
@@ -273,6 +291,24 @@ namespace API.Services
             return Result<bool>.Success(true);
         }
 
+        public async Task<Result<List<ReturnEventDTO>>> GetFutureEvents()
+        {
+            var userId = _currentUserService.UserId;
+            
+            if (userId == Guid.Empty)
+                return Result<List<ReturnEventDTO>>.Failure("Usuário não autenticado.");
+
+            var user = await _userRepository.GetByIdAsync(userId);
+
+            if (user is null)
+                return Result<List<ReturnEventDTO>>.Failure("Usuário não encontrado.");
+            
+            var events = await _eventRepository.GetFutureEvents();
+
+            return Result<List<ReturnEventDTO>>.Success(events.Select(e => ToReturnDto(e, userId)).ToList());
+
+        }
+
         private static ReturnEventDTO ToReturnDto(Event e, Guid userId) => new()
         {
             Id = e.Id,
@@ -287,6 +323,12 @@ namespace API.Services
             City = e.City,
             Level = e.Level,
             UrlImage = e.UrlImage,
+            PlaceName = e.PlaceName,
+            Street = e.Street,
+            District = e.District,
+            State = e.State,
+            Latitude = e.Latitude,
+            Longitude = e.Longitude,
             RegisterDate = e.RegisterDate,
             UserId = e.UserId,
             CreatorName = e.User?.Name,
