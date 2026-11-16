@@ -1,0 +1,36 @@
+<div class="flex flex-col gap-4 p-4 border border-primary-dark rounded-md"
+     [class.h-full]="!compact()">
+  <div class="flex justify-between items-center">
+    <h1 class="font-bold text-[12px]">Comentários</h1>
+    @if (compact()) {
+      <button (click)="viewAll.emit()" class="text-[11px] font-bold text-primary-accent cursor-pointer">
+        Acessar comentários
+      </button>
+    }
+  </div>
+
+  <div class="flex flex-col gap-4" [class.h-full]="!compact()" [class.justify-between]="!compact()">
+    <div class="flex flex-col gap-3">
+      @for (comment of visibleComments(); track comment.id) {
+        <div class="flex gap-3 w-full items-center">
+          <img [src]="comment.userPhoto ?? 'images/default_profile_pic.jpg'" alt=""
+               class="rounded-full bg-black w-8 h-8 object-cover">
+          <div class="flex flex-col flex-1 text-[11px]">
+            <span>{{ comment.commentUserName }}
+              @if (isHost(comment)) {
+                <span class="px-1.5 py-0.5 rounded-sm bg-primary/10 text-primary-accent text-[8px]">Anfitrião</span>
+              }
+            </span>
+            <span class="text-gray-400">{{ comment.text }}</span>
+          </div>
+          <span class="text-[10px] text-gray-400">{{ comment.registerDate | date:'HH:mm' }}</span>
+        </div>
+        <hr class="border-gray-200">
+      } @empty {
+        <span class="text-[11px] text-gray-400">Nenhum comentário ainda.</span>
+      }
+    </div>
+
+    <commentSender [eventId]="eventId()" (commentCreated)="commentCreated.emit($event)" />
+  </div>
+</div>

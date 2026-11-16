@@ -15,12 +15,25 @@ import { AuthService } from '../../core/auth/auth.service';
 import { ReportModal } from '../../components/report-modal/report-modal';
 import { RatingUserModal } from '../../components/user-rating-modal/user-rating-modal';
 import { MiniMap } from '../../components/mini-map/mini-map';
+import { EventComments } from '../../components/event-comments/event-comments';
 
 type TabId = 'about' | 'participants' | 'chat';
 
 @Component({
   selector: 'app-event-detail',
-  imports: [Sidebar, CommentSender, DatePipe, TitleCasePipe, Icon, GenericButton, ReportModal, RatingUserModal, DecimalPipe, MiniMap],
+  imports: [
+    Sidebar,
+    DatePipe,
+    TitleCasePipe,
+    Icon,
+    GenericButton,
+    ReportModal,
+    RatingUserModal,
+    DecimalPipe, 
+    EventComments,
+    CommentSender,
+    MiniMap
+  ],
   templateUrl: './event-detail.html',
 })
 export class EventDetail implements OnInit {
@@ -181,5 +194,9 @@ export class EventDetail implements OnInit {
 
   onUserRated(): void {
     this.loadParticipants(this.event()!.id);
+  }
+
+  goChatView(): void{
+    this.activeTab.set('chat');
   }
 }
