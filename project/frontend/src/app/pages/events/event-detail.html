@@ -145,33 +145,16 @@
             </div>
 
             <!-- Comentários -->
-            <div id="commentary-event" class="flex flex-col gap-4 p-4 border border-primary-dark rounded-md">
-              <div class="flex justify-between items-center">
-                <h1 class="font-bold text-[12px]">Comentários</h1>
-                <a href="#" class="text-[11px] font-bold text-primary-accent">Acessar comentários</a>
-              </div>
-
-              <div id="comments" class="flex flex-col gap-3">
-                @for (comment of comments().slice(0, 5); track comment.id) {
-                  <div class="user-comment flex gap-3 w-full items-center">
-                    <img src="images/default_profile_pic.jpg" alt="" class="rounded-full bg-black w-8 h-8 object-cover">
-                    <div class="comment-info flex flex-col flex-1 text-[11px]">
-                      <span>{{ comment.commentUserName }}
-                        <span class="px-1.5 py-0.5 rounded-sm bg-primary/10 text-primary-accent text-[8px]">Anfitrião</span>
-                      </span>
-                      <span class="text-gray-400">{{ comment.text }}</span>
-                    </div>
-                    <span class="text-[10px] text-gray-400">{{ comment.registerDate | date:'HH:mm' }}</span>
-                  </div>
-
-                  <hr class="border-gray-200">
-                }
-              </div>
-              
-              @if(event(); as ev) {
-                <commentSender [eventId]="ev.id" (commentCreated)="onCommentCreated($event)"/>
-              }
-            </div>
+            @if (event(); as ev) {
+              <event-comments
+                [comments]="comments()"
+                [eventId]="ev.id"
+                [organizerId]="ev.userId"
+                [limit]="2"
+                [compact]="true"
+                (commentCreated)="onCommentCreated($event)"
+                (viewAll)="goChatView()" />
+            }
           } @else if(activeTab() === 'participants') {
             <div id="participants-container" class="flex flex-col gap-5 p-4 border border-primary-dark rounded-md">
               <div id="participants-columns" class="flex justify-around items-center w-full">
@@ -211,6 +194,17 @@
               </div>
             </div>
           }
+          @else if (activeTab() === 'chat') {
+            @if (event(); as ev) {
+              <event-comments
+                [comments]="comments()"
+                [eventId]="ev.id"
+                [organizerId]="ev.userId"
+                [limit]="4"
+                (commentCreated)="onCommentCreated($event)" />
+            }
+          }
+
           @if (activeReportModal()){
             <report-modal [reportedUser]="reportedUser()!" (close)="closeReportModal()" [eventId]="e.id"/>
           }
