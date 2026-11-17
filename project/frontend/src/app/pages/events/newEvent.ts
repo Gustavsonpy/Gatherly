@@ -23,6 +23,9 @@ import { EventService } from '../../core/event/event.service';
 import { CreateEventModel } from '../../core/event/event.model';
 import { PlaceDetails, PlaceProvider, PlaceSuggestion } from '../../core/places/place-provider';
 import { compressImage } from '../../core/utils/image-compressor';
+import { ToastService } from '../../core/toaster/toaster.service';
+import { ToasterComponent } from '../../components/toaster/toaster';
+import { ToasterSuccessEventMessage } from '../../enum/toaster/toaster-enum';
 
 interface NewEventForm {
     eventName: FormControl<string>;
@@ -40,7 +43,7 @@ interface NewEventForm {
 @Component({
     selector: 'app-new-event',
     standalone: true,
-    imports: [Sidebar, GenericInput, GenericButton, NgClass, ReactiveFormsModule],
+    imports: [Sidebar, GenericInput, GenericButton, NgClass, ReactiveFormsModule, ToasterComponent],
     templateUrl: 'newEvent.html',
 })
 export class NewEvent implements OnInit {
@@ -49,6 +52,7 @@ export class NewEvent implements OnInit {
     private readonly places = inject(PlaceProvider);
     private readonly router = inject(Router);
     private readonly destroyRef = inject(DestroyRef);
+    private readonly toasterService = inject(ToastService);
 
     readonly categories = signal<CategoryModel[]>([]);
     readonly loading = signal(true);
@@ -76,6 +80,7 @@ export class NewEvent implements OnInit {
 
     readonly submitting = signal(false);
     readonly errorMessage = signal<string | null>(null);
+    
 
     readonly form = new FormGroup<NewEventForm>({
         eventName: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
@@ -275,7 +280,10 @@ export class NewEvent implements OnInit {
                 finalize(() => this.submitting.set(false)),
             )
             .subscribe({
-                next: () => this.router.navigate(['/events']),
+                next: () => {
+                    this.toasterService.success(ToasterSuccessEventMessage.new_event);
+                    this.router.navigate(['/events']);
+                },
                 error: (err) => {
                     console.error('Erro ao criar evento:', err.status, err.error);
                     this.errorMessage.set(this.extractError(err));

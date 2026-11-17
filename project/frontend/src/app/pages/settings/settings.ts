@@ -8,6 +8,8 @@ import { compressImage } from "../../core/utils/image-compressor";
 import { CityAutocomplete } from "../../components/input/city-autocomplete/city-autocomplete";
 import { AuthService } from "../../core/auth/auth.service";
 import { Router } from "@angular/router";
+import { ToastService } from "../../core/toaster/toaster.service";
+import { ToasterSuccessSettingsMessage } from "../../enum/toaster/toaster-enum";
 
 type TabId = 'account';
 
@@ -28,6 +30,7 @@ export class Settings implements OnInit {
     private readonly userService = inject(UserService);
     private readonly authService = inject(AuthService);
     private readonly router = inject(Router);
+    private readonly toastService = inject(ToastService);
 
     readonly tabs: { id: TabId; label: string; icon: string; color: string }[] = [
         { id: 'account', label: 'Conta', icon: 'icons/user.svg', color: 'text-primary' },
@@ -169,6 +172,7 @@ export class Settings implements OnInit {
                 next: (user) => {
                     this.setUserDetails(user);
                     this.saving.set(false);
+                    this.toastService.success(ToasterSuccessSettingsMessage.save_changes)
                 },
                 error: (error) => {
                     console.error(error);

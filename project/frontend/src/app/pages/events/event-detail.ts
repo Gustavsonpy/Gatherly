@@ -16,6 +16,8 @@ import { ReportModal } from '../../components/report-modal/report-modal';
 import { RatingUserModal } from '../../components/user-rating-modal/user-rating-modal';
 import { MiniMap } from '../../components/mini-map/mini-map';
 import { EventComments } from '../../components/event-comments/event-comments';
+import { ToastService, ToastType } from '../../core/toaster/toaster.service';
+import { ToasterSuccessEventMessage } from '../../enum/toaster/toaster-enum'; 
 
 type TabId = 'about' | 'participants' | 'chat';
 
@@ -32,7 +34,7 @@ type TabId = 'about' | 'participants' | 'chat';
     DecimalPipe, 
     EventComments,
     CommentSender,
-    MiniMap
+    MiniMap,
   ],
   templateUrl: './event-detail.html',
 })
@@ -41,6 +43,7 @@ export class EventDetail implements OnInit {
   private eventService = inject(EventService);
   private commentService = inject(CommentService);
   private authService = inject(AuthService);
+  private toastService = inject(ToastService);
 
   readonly tabs: { id: TabId; label: string; icon: string; empty: string }[] = [
     {
@@ -80,6 +83,7 @@ export class EventDetail implements OnInit {
 
   activeReportModal = signal<boolean>(false);
   activeRatingModal = signal<boolean>(false);
+  toastEnum = ToasterSuccessEventMessage;
 
   private readonly userId = computed(() => this.authService.currentUser()?.id);
 
@@ -91,7 +95,7 @@ export class EventDetail implements OnInit {
         this.event.set(data);
         this.participantsCount.set(data.participantsCount);
         this.joined.set(data.isParticipating);
-        this.status.set(data.status);
+        this.status.set(data.status)
       },
       error: (err) =>
         this.loadError.set(getErrorMessage(err, 'Não foi possível carregar o evento.')),
@@ -140,6 +144,7 @@ export class EventDetail implements OnInit {
           this.justJoined.set(true);
           this.participantsCount.update((c) => c + 1);
           this.loadParticipants(id);
+          this.toastService.success(this.toastEnum.join_event);
           setTimeout(() => this.justJoined.set(false), 4000);
         },
         error: (err) =>
@@ -157,6 +162,7 @@ export class EventDetail implements OnInit {
         this.participantsCount.update((c) => c - 1);
         this.loadParticipants(id);
         this.joined.set(false);
+        this.toastService.success(this.toastEnum.leave_event);
       },
       error: (err) => this.participantsError.set(
           getErrorMessage(err, 'Não foi possível sair do evento.'),

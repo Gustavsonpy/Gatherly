@@ -6,6 +6,8 @@ import { GenericButton } from '../buttons/generic-button';
 import { RateService } from '../../core/rating/rating.service';
 import { CreateUserRatingModel } from '../../core/rating/user-rating.model';
 import { DatePipe, TitleCasePipe } from '@angular/common';
+import { ToastService } from '../../core/toaster/toaster.service';
+import { ToasterErrorEventMessage, ToasterSuccessEventMessage } from '../../enum/toaster/toaster-enum';
 
 @Component({
   selector: 'user-rating-modal',
@@ -15,6 +17,7 @@ import { DatePipe, TitleCasePipe } from '@angular/common';
 export class RatingUserModal implements OnInit {
   private authService = inject(AuthService);
   private userRatingService = inject(RateService);
+  private toastService = inject(ToastService);
 
   stars = [1, 2, 3, 4, 5];
   rate = ["Muito ruim", "Ruim", "Bom", "Muito bom", "Excelente"];
@@ -54,8 +57,12 @@ export class RatingUserModal implements OnInit {
       next: () => {
         this.rated.emit();
         this.close.emit();
+        this.toastService.success(ToasterSuccessEventMessage.rating_user);
       },
-      error: (error) => this.errorMessage.set(error.error?.errors?.[0] ?? 'Não foi possível avaliar o usuário.')
+      error: (error) => {
+        this.errorMessage.set(error.error?.errors?.[0] ?? 'Não foi possível avaliar o usuário.')
+        this.toastService.error(ToasterErrorEventMessage.rating_user);
+      }
     })
   }
 
