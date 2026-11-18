@@ -13,11 +13,13 @@ namespace API.Services
         private readonly ICommentRepository _commentRepository;
         private readonly ICurrentUserService _currentUser;
         private readonly IUserRepository _userRepository;
-        public CommentService(ICommentRepository repository, ICurrentUserService currentUser, IUserRepository userRepository)
+        private readonly IEventRepository _eventRepository;
+        public CommentService(ICommentRepository repository, ICurrentUserService currentUser, IUserRepository userRepository, IEventRepository eventRepository)
         {
             _commentRepository = repository;
             _currentUser = currentUser;
             _userRepository = userRepository;
+            _eventRepository = eventRepository;
         }
         public async Task<Result<CommentDTO>> createAsync(CreateCommentDTO commentDTO)
         {
@@ -30,6 +32,19 @@ namespace API.Services
 
             if (user is null)
                 return Result<CommentDTO>.Failure("Usuário não encontrado!");
+
+            var text = commentDTO.Text.Trim();
+
+            if (string.IsNullOrWhiteSpace(text))
+                return Result<CommentDTO>.Failure("O comentário não pode ser vazio.");
+
+            var ev = await _eventRepository.GetByIdAsync(commentDTO.EventId);
+
+            if (ev is null)
+                return Result<CommentDTO>.Failure("Evento não encontrado.");
+
+            if (ev.CanceledAt is not null)
+                return Result<CommentDTO>.Failure("Não é possível comentar em um evento cancelado.");
 
             var newComment = new Comment
             {

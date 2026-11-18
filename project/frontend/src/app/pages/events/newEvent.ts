@@ -43,7 +43,7 @@ interface NewEventForm {
 @Component({
     selector: 'app-new-event',
     standalone: true,
-    imports: [Sidebar, GenericInput, GenericButton, NgClass, ReactiveFormsModule, ToasterComponent],
+    imports: [Sidebar, GenericInput, GenericButton, NgClass, ReactiveFormsModule],
     templateUrl: 'newEvent.html',
 })
 export class NewEvent implements OnInit {

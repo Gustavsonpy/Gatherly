@@ -19,9 +19,6 @@ namespace API.Data.Configurations
                 .IsRequired()
                 .HasMaxLength(50);
 
-            builder.Property(r => r.CustomReason)
-                .HasMaxLength(200);
-
             builder.Property(r => r.Description)
                 .IsRequired()
                 .HasMaxLength(1000);

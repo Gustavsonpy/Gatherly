@@ -4,7 +4,6 @@ export interface UserInterfaceDTO {
     reportedUserId: string,
     eventId: string,
     reason: number,
-    customReason: string | null,
     description: string,
     status: string,
     createdAt: string

@@ -29,6 +29,7 @@ export class ReportModal implements OnInit {
   description = signal('');
   loading = signal(false);
   errorMessage = signal<string | null>(null);
+  isDescriptionOptional = signal<boolean>(true);
 
   ngOnInit(): void {
     this.reportService.getReportReasons().subscribe({
@@ -42,6 +43,12 @@ export class ReportModal implements OnInit {
 
   activateReason(reason: ReportReasonModel): void {
     this.selectedReason.set(reason);
+    
+    if(reason.name.toLowerCase() === "outro"){
+      this.isDescriptionOptional.set(false);
+    } else{
+      this.isDescriptionOptional.set(true);
+    }
   }
 
   onDescriptionInput(event: Event): void {
@@ -56,7 +63,6 @@ export class ReportModal implements OnInit {
       reportedUserId: this.reportedUser().id,
       eventId: this.eventId(),
       reason: reason.id,
-      customReason: null,
       description: this.description().trim(),
     };
 

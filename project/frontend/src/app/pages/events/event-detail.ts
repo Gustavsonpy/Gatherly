@@ -33,7 +33,6 @@ type TabId = 'about' | 'participants' | 'chat';
     RatingUserModal,
     DecimalPipe, 
     EventComments,
-    CommentSender,
     MiniMap,
   ],
   templateUrl: './event-detail.html',

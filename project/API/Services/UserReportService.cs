@@ -2,22 +2,40 @@ using API.Common;
 using API.DTO.Report;
 using API.Enums;
 using API.Interfaces;
+using API.Interfaces.Event;
+using API.Interfaces.Participant;
 using API.Interfaces.Report;
 using API.Models;
-using API.Repositories;
 
 namespace API.Services
 {
     public class UserReportService : IUserReportService
     {
         private readonly IUserReportRepository _userReportRepository;
-        public UserReportService(IUserReportRepository userReportRepository)
+        private readonly IEventRepository _eventRepository;
+        private readonly IEventParticipantRepository _eventParticipantRepository;
+        private readonly ILogger<string> _logger;
+        public UserReportService(IUserReportRepository userReportRepository, IEventRepository eventRepository, IEventParticipantRepository eventParticipantRepository, ILogger<string> logger)
         {
             _userReportRepository = userReportRepository;
+            _eventRepository = eventRepository;
+            _eventParticipantRepository = eventParticipantRepository;
+            _logger = logger;
         }
 
         public async Task<Result<UserReportDTO>> CreateReport(CreateReportDTO reportDTO)
         {
+            var ev = await _eventRepository.GetByIdAsync(reportDTO.EventId);
+
+            if (ev is null)
+                return Result<UserReportDTO>.Failure("Evento não encontrado.");
+
+            if (!await _eventParticipantRepository.HasJoinedAsync(ev.Id, reportDTO.ReporterId))
+                return Result<UserReportDTO>.Failure("Você não participou deste evento.");
+
+            if (!await _eventParticipantRepository.HasJoinedAsync(ev.Id, reportDTO.ReportedUserId))
+                return Result<UserReportDTO>.Failure("Este usuário não participou deste evento.");
+
             if (reportDTO.ReporterId == reportDTO.ReportedUserId)
                 return Result<UserReportDTO>.Failure("Você não pode denunciar a si mesmo.");
 
@@ -34,14 +52,15 @@ namespace API.Services
             if (alreadyReported)
                 return Result<UserReportDTO>.Failure("Você já denunciou esse mesmo usuário nesse evento com a mesma denúncia.");
 
+            if (reportDTO.Reason == ReportReason.Other && string.IsNullOrWhiteSpace(reportDTO.Description))
+                return Result<UserReportDTO>.Failure("A descrição é obrigatória");
+
             var report = new UserReport
             {
-                Id = reportDTO.Id,
                 ReporterId = reportDTO.ReporterId,
                 ReportedUserId = reportDTO.ReportedUserId,
                 EventId = reportDTO.EventId,
                 Reason = reportDTO.Reason,
-                CustomReason = reportDTO.CustomReason,
                 Description = reportDTO.Description,
             };
 
@@ -59,7 +78,6 @@ namespace API.Services
                 ReportedUserId = report.ReportedUserId,
                 EventId = report.EventId,
                 Reason = report.Reason,
-                CustomReason = report.CustomReason,
                 Description = report.Description,
             };
         }

@@ -1,9 +1,11 @@
 using API.Common;
 using API.DTO.Event;
 using API.Interfaces;
+using API.Interfaces.Category;
 using API.Interfaces.Event;
 using API.Interfaces.Participant;
 using API.Models;
+using API.Repositories;
 using static API.Interfaces.Participant.IEventParticipantRepository;
 
 namespace API.Services
@@ -14,36 +16,46 @@ namespace API.Services
         private readonly IUserRepository _userRepository;
         private readonly ICurrentUserService _currentUserService;
         private readonly IEventParticipantRepository _participantRepository;
-        private readonly ILogger<EventService> _logger;
+        private readonly ICategoryRepository _categoryRepository;
 
         public EventService(
             IEventRepository eventRepository,
             IUserRepository userRepository,
             IEventParticipantRepository participantRepository,
-            ICurrentUserService currentUserService, ILogger<EventService> logger
+            ICurrentUserService currentUserService,
+            ICategoryRepository categoryRepository
             )
         {
             _eventRepository = eventRepository;
             _userRepository = userRepository;
             _participantRepository = participantRepository;
             _currentUserService = currentUserService;
-            _logger = logger;
+            _categoryRepository = categoryRepository;
         }
 
         public async Task<Result<EventDTO>> CreateAsync(CreateEventDTO createEventDTO, Guid userId)
         {
             var errors = new List<string>();
+            var title = createEventDTO.Title.Trim();
 
-            var existedEvent = await _eventRepository.GetByTitle(createEventDTO.Title);
+            if (string.IsNullOrWhiteSpace(title))
+                errors.Add("O título é obrigatório.");
 
-            if(existedEvent is not null)
-                errors.Add("Já existe um evento com esse nome");
+            if (createEventDTO.DateTimeStart <= DateTime.UtcNow)
+                errors.Add("O evento deve começar no futuro.");
 
             if (createEventDTO.DateTimeEnd <= createEventDTO.DateTimeStart)
                 errors.Add("O término deve ser depois do início");
 
-            if(errors.Any())
+            if (!IsOwnUploadUrl(createEventDTO.UrlImage, "events"))
+                errors.Add("Imagem inválida.");
+
+            if (await _categoryRepository.GetByIdAsync(createEventDTO.CategoryId) is null)
+                errors.Add("Categoria não encontrada.");
+
+            if (errors.Any())
                 return Result<EventDTO>.Failure(errors);
+
 
             var newEvent = new Event
             {
@@ -247,6 +259,9 @@ namespace API.Services
                 return Result<bool>.Failure(
                     "O organizador não pode sair do próprio evento.");
 
+            if (ev.DateTimeStart <= DateTime.UtcNow)
+                return Result<bool>.Failure("Não é possível sair de um evento que já começou.");
+
             var removed = await _participantRepository.RemoveAsync(
                 eventId,
                 userId);
@@ -343,5 +358,11 @@ namespace API.Services
                 : DateTime.UtcNow < e.DateTimeEnd ? "ongoing"
                 : "done",
         };
+
+        private static bool IsOwnUploadUrl(string url, string folder){
+            return Uri.TryCreate(url, UriKind.Absolute, out var uri)
+            && (uri.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps)
+            && uri.AbsolutePath.StartsWith($"/uploads/{folder}/", StringComparison.OrdinalIgnoreCase);
+        }
     }
 }

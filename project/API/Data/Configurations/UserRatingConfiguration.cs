@@ -44,6 +44,10 @@ namespace API.Data.Configurations
             builder.HasCheckConstraint(
                 "CK_UserRate_NoSelfRate",
                 "\"ReporterId\" <> \"RatedUserId\"");
+
+            builder.HasCheckConstraint(
+                "CK_UserRate_RateRange",
+                "\"Rate\" BETWEEN 1 AND 5");
         }
     }
 }
