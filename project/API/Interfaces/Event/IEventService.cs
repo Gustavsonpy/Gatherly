@@ -10,7 +10,8 @@ namespace API.Interfaces.Event
         Task<Result<List<ReturnEventDTO>>> GetMyCityEventsAsync();
         Task<Result<List<ReturnEventDTO>>> GetAllAsync();
         Task<Result<List<ReturnEventDTO>>> GetMyEventsAsync();
-        Task<Result<EventDTO>> UpdateTitleAsync(string title);
+        Task<Result<ReturnEventDTO>> UpdateAsync(Guid eventId, UpdateEventDTO dto);
+        Task<Result<bool>> DeleteAsync(Guid eventId);
         Task<Result<bool>> JoinAsync(Guid eventId);
         Task<Result<bool>> LeaveAsync(Guid eventId);
         Task<Result<List<ParticipantDTO>>> GetParticipantsAsync(Guid eventId);

@@ -25,9 +25,16 @@ namespace API.Repositories
             
         }
 
-        public Task DeleteAsync(int id)
+        public async Task DeleteAsync(EventModel informal_event)
         {
-            throw new NotImplementedException();
+            _context.Events.Remove(informal_event);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<bool> HasReportsOrRatingsAsync(Guid eventId)
+        {
+            return await _context.UserReports.AnyAsync(r => r.EventId == eventId)
+                || await _context.UserRatings.AnyAsync(r => r.EventId == eventId);
         }
 
         public async Task<List<EventModel>> GetAllAsync()

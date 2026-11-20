@@ -9,6 +9,7 @@ export interface EventModel extends PlaceDetails {
     localization: string;
     maxCapacity: number;
     city: string;
+    level: string | null;
     urlImage: string;
     registerDate: string;
     userId: string;

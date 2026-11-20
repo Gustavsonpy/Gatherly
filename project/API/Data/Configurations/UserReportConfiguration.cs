@@ -41,6 +41,7 @@ namespace API.Data.Configurations
             builder.HasOne(r => r.ReportedUser)
                 .WithMany()
                 .HasForeignKey(r => r.ReportedUserId)
+                .IsRequired(false)
                 .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasOne(r => r.Event)
@@ -51,6 +52,11 @@ namespace API.Data.Configurations
             builder.HasIndex(r => new { r.ReporterId, r.ReportedUserId, r.EventId, r.Reason })
                 .IsUnique()
                 .HasDatabaseName("IX_UserReports_Reporter_Reported_Event_Reason");
+
+            builder.HasIndex(r => new { r.ReporterId, r.EventId, r.Reason })
+                .IsUnique()
+                .HasFilter("\"ReportedUserId\" IS NULL")
+                .HasDatabaseName("IX_UserReports_Reporter_Event_Reason_EventReport");
 
             builder.HasCheckConstraint(
                 "CK_UserReport_NoSelfReport",
