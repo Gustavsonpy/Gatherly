@@ -14,8 +14,6 @@ namespace API.DTO.Report
 
         public ReportReason Reason { get; set; }
 
-        public string? CustomReason { get; set; }
-
         public string Description { get; set; } = string.Empty;
 
         public string Status { get; set; } = "Pending";

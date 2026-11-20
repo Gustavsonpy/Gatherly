@@ -1,22 +1,44 @@
-namespace API.DTO.Event
+using System.ComponentModel.DataAnnotations;
+
+public class CreateEventDTO
 {
-    public class CreateEventDTO
-    {
-        public string Title { get; set; }
-        public string Description { get; set; }
-        public DateTime DateTimeStart { get; set; }
-        public DateTime DateTimeEnd { get; set; }
-        public string Localization { get; set; }
-        public int MaxCapacity { get; set; }
-        public string City { get; set; }
-        public string? Level { get; set; }
-        public string UrlImage { get; set; }
-        public string? PlaceName { get; set; }
-        public string? Street { get; set; }
-        public string? District { get; set; }
-        public string? State { get; set; }
-        public double? Latitude { get; set; }
-        public double? Longitude { get; set; }
-        public Guid CategoryId { get; set; }
-    }
+    [Required(ErrorMessage = "O título é obrigatório.")]
+    [MaxLength(200, ErrorMessage = "O título deve ter no máximo 200 caracteres.")]
+    public string Title { get; set; }
+
+    [Required(ErrorMessage = "A descrição é obrigatória.")]
+    [MaxLength(1000, ErrorMessage = "A descrição deve ter no máximo 1000 caracteres.")]
+    public string Description { get; set; }
+
+    public DateTime DateTimeStart { get; set; }
+    public DateTime DateTimeEnd { get; set; }
+
+    [Required(ErrorMessage = "A localização é obrigatória.")]
+    [MaxLength(500)]
+    public string Localization { get; set; }
+
+    [Range(1, 1000, ErrorMessage = "A capacidade deve ser entre 1 e 1000.")]
+    public int MaxCapacity { get; set; }
+
+    [Required(ErrorMessage = "A cidade é obrigatória.")]
+    [MaxLength(200)]
+    public string City { get; set; }
+
+    [MaxLength(200)] public string? Level { get; set; }
+
+    [Required(ErrorMessage = "A imagem é obrigatória.")]
+    public string UrlImage { get; set; }
+
+    [MaxLength(200)] public string? PlaceName { get; set; }
+    [MaxLength(200)] public string? Street { get; set; }
+    [MaxLength(100)] public string? District { get; set; }
+    [MaxLength(50)]  public string? State { get; set; }
+
+    [Range(-90, 90, ErrorMessage = "Latitude inválida.")]
+    public double? Latitude { get; set; }
+
+    [Range(-180, 180, ErrorMessage = "Longitude inválida.")]
+    public double? Longitude { get; set; }
+
+    public Guid CategoryId { get; set; }
 }

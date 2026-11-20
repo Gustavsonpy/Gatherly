@@ -22,7 +22,7 @@ namespace API.Data.Configurations
 
             builder.Property(e => e.Description)
                 .IsRequired()
-                .HasMaxLength(200);
+                .HasMaxLength(1000);
 
             builder.Property(e => e.DateTimeStart)
                 .IsRequired();
@@ -30,7 +30,7 @@ namespace API.Data.Configurations
             builder.Property(e => e.DateTimeEnd)
                 .IsRequired();
 
-            builder.Property(e => e.Localization) // Ver se tem que ser outra tabela
+            builder.Property(e => e.Localization)
                 .IsRequired()
                 .HasMaxLength(500);
 
@@ -38,11 +38,11 @@ namespace API.Data.Configurations
                 .IsRequired()
                 .HasMaxLength(200);
 
-            builder.Property(e => e.City) // Ver se tem que ser outra tabela
+            builder.Property(e => e.City)
                 .IsRequired()
                 .HasMaxLength(200);
             
-            builder.Property(e => e.Level) // Ver se tem que ser outra tabela
+            builder.Property(e => e.Level)
                 .HasMaxLength(200);
 
             builder.Property(e => e.PlaceName).HasMaxLength(200);

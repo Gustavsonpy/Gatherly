@@ -12,6 +12,7 @@ using Microsoft.IdentityModel.Tokens;
 using API.Interfaces.Participant;
 using API.Interfaces.Report;
 using API.Interfaces.Rate;
+using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,7 +36,24 @@ if (string.IsNullOrWhiteSpace(jwtIssuer))
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .ConfigureApiBehaviorOptions(options =>
+    {
+        options.InvalidModelStateResponseFactory = context =>
+        {
+            var fieldErrors = context.ModelState
+                .Where(e => e.Value!.Errors.Count > 0)
+                .ToDictionary(
+                    e => char.ToLowerInvariant(e.Key[0]) + e.Key[1..],
+                    e => e.Value!.Errors.Select(x => x.ErrorMessage).ToList());
+
+            return new BadRequestObjectResult(new
+            {
+                errors = fieldErrors.SelectMany(f => f.Value).ToList(),
+                fieldErrors
+            });
+        };
+    });
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 

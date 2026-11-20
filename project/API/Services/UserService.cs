@@ -21,17 +21,21 @@ namespace API.Services
         public async Task<Result<UserDTO>> CreateAsync(CreateUserDTO userDTO)
         {
             var fieldErrors = new Dictionary<string, List<string>>();
+            var name = userDTO.Name.Trim();
+            var email = userDTO.Email.Trim().ToLowerInvariant();
 
-            var existedUser = await _userRepository.GetByEmail(userDTO.Email);
+            if (string.IsNullOrWhiteSpace(name))
+                fieldErrors["name"] = new() { "Informe seu nome." };
 
-            if(existedUser is not null)
-                fieldErrors["email"] = new List<string> { "Já existe uma conta com esse e-mail." };
+            if (userDTO.Birthday == default)
+                fieldErrors["birthDate"] = new() { "Informe sua data de nascimento." };
+            else if (userDTO.Birthday.Date > DateTime.Today)
+                fieldErrors["birthDate"] = new() { "A data não pode ultrapassar o dia de hoje" };
+            else if (userDTO.Birthday.Date > DateTime.Today.AddYears(-13))
+                fieldErrors["birthDate"] = new() { "Você precisa ter pelo menos 13 anos." };
 
-            if(userDTO.Password.Length < 6)
-                fieldErrors["password"] = new List<string> { "A senha precisa ter 6 caracteres ou mais." };
-
-            if (userDTO.Birthday.Date > DateTime.Today)
-                fieldErrors["birthDate"] = new List<string> { "A data não pode ultrapassar o dia de hoje" };
+            if (await _userRepository.GetByEmail(email) is not null)
+                fieldErrors["email"] = new() { "Já existe uma conta com esse e-mail." };
 
             if(fieldErrors.Any())
                 return Result<UserDTO>.Failure(fieldErrors);

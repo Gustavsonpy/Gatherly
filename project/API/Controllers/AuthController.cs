@@ -25,11 +25,22 @@ namespace API.Controllers
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginRequest request)
     {
+        var email = request.Email.Trim().ToLowerInvariant();
+
         var user = await _context.Users
-            .FirstOrDefaultAsync(u => u.Email == request.Email);
+            .FirstOrDefaultAsync(u => u.Email == email);
 
         if (user == null)
             return Unauthorized("Email ou senha inválidos.");
+
+        if (user.IsSuspended)
+            return Unauthorized("Você está suspenso, entrada não permitida.");
+
+        if (string.IsNullOrWhiteSpace(user.Email))
+            return Unauthorized("E-mail não preenchido");
+
+        if (string.IsNullOrWhiteSpace(user.HashPassword))
+            return Unauthorized("Senha não preenchida.");
 
         bool correctPassword = BCrypt.Net.BCrypt.Verify(request.Password, user.HashPassword);
 

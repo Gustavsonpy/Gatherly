@@ -5,6 +5,8 @@ import { Icon } from '../icon/icon';
 import { ReportService } from '../../core/report/report.service';
 import { CreateReport, ReportReasonModel } from '../../core/report/report-reason.model';
 import { NgClass } from '@angular/common';
+import { ToastService } from '../../core/toaster/toaster.service';
+import { ToasterErrorEventMessage, ToasterSuccessEventMessage } from '../../enum/toaster/toaster-enum';
 
 @Component({
   selector: 'report-modal',
@@ -14,6 +16,7 @@ import { NgClass } from '@angular/common';
 })
 export class ReportModal implements OnInit {
   private reportService = inject(ReportService);
+  private toastService = inject(ToastService);
 
   reportedUser = input.required<ParticipantModel>();
   eventId = input.required<string>();
@@ -26,6 +29,7 @@ export class ReportModal implements OnInit {
   description = signal('');
   loading = signal(false);
   errorMessage = signal<string | null>(null);
+  isDescriptionOptional = signal<boolean>(true);
 
   ngOnInit(): void {
     this.reportService.getReportReasons().subscribe({
@@ -39,6 +43,12 @@ export class ReportModal implements OnInit {
 
   activateReason(reason: ReportReasonModel): void {
     this.selectedReason.set(reason);
+    
+    if(reason.name.toLowerCase() === "outro"){
+      this.isDescriptionOptional.set(false);
+    } else{
+      this.isDescriptionOptional.set(true);
+    }
   }
 
   onDescriptionInput(event: Event): void {
@@ -53,7 +63,6 @@ export class ReportModal implements OnInit {
       reportedUserId: this.reportedUser().id,
       eventId: this.eventId(),
       reason: reason.id,
-      customReason: null,
       description: this.description().trim(),
     };
 
@@ -65,6 +74,7 @@ export class ReportModal implements OnInit {
         this.loading.set(false);
         this.reported.emit();
         this.close.emit();
+        this.toastService.success(ToasterSuccessEventMessage.report_user);
       },
       error: (err) => {
         console.error(err);
@@ -72,6 +82,7 @@ export class ReportModal implements OnInit {
         this.errorMessage.set(
           err.error?.errors?.[0] ?? 'Não foi possível enviar a denúncia. Tente novamente.'
         );
+        this.toastService.error(ToasterErrorEventMessage.rating_user);
       },
     });
   }

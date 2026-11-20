@@ -18,3 +18,8 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   right: 8px;
   cursor: pointer;
 }
+
+@keyframes slide-in {
+  from { opacity: 0; transform: translateX(1rem); }
+  to   { opacity: 1; transform: translateX(0); }
+}

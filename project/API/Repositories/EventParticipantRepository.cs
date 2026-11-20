@@ -128,5 +128,18 @@ namespace API.Repositories
 
             return true;
         }
+        
+        public Task<bool> AttendedAsync(Guid eventId, Guid userId, DateTime eventStart) {
+        return _context.EventParticipants.AnyAsync(p =>
+            p.EventId == eventId &&
+            p.UserId == userId &&
+            (p.LeftAt == null || p.LeftAt >= eventStart));
+        }
+
+        public Task<bool> HasJoinedAsync(Guid eventId, Guid userId) {
+            return _context.EventParticipants.AnyAsync(p =>
+                p.EventId == eventId &&
+                p.UserId == userId);
+        }
     }
 }

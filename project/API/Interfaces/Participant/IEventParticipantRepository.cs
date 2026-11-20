@@ -13,5 +13,7 @@ namespace API.Interfaces.Participant
         Task<List<EventModel>> GetEventsByActiveUser(Guid UserId);
         Task<JoinEventStatus> JoinAsync(Guid eventId, Guid userId);
         Task<bool> RemoveAsync(Guid eventId, Guid userId);
+        Task<bool> AttendedAsync(Guid eventId, Guid userId, DateTime eventStart);
+        Task<bool> HasJoinedAsync(Guid eventId, Guid userId);
     }
 }
