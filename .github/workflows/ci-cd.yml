@@ -1,3 +1,4 @@
+
 name: CI/CD
 
 on:
@@ -17,20 +18,31 @@ env:
 
 jobs:
   # ----------------------------------------------------------------
-  # BACKEND: build + test the ASP.NET Core API
+  # BACKEND: build + test + SonarQube analysis
   # ----------------------------------------------------------------
   backend:
-    name: Backend (.NET) - Build & Test
+    name: Backend (.NET) - Build, Test & SonarQube
     runs-on: ubuntu-latest
+
+    env:
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Install SonarScanner
+        run: dotnet tool install --global dotnet-sonarscanner
+
+      - name: Add .NET tools to PATH
+        run: echo "$HOME/.dotnet/tools" >> $GITHUB_PATH
 
       - name: Cache NuGet packages
         uses: actions/cache@v4
@@ -40,14 +52,25 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-nuget-
 
+      - name: SonarQube - Begin Analysis
+        run: |
+          dotnet sonarscanner begin \
+            /k:"Gustavsonpy_Gatherly" \
+            /o:"gustavsonpy" \
+            /d:sonar.token="$SONAR_TOKEN" \
+            /d:sonar.scanner.scanAll=true
+
       - name: Restore dependencies
         run: dotnet restore ${{ env.SOLUTION_PATH }}
 
       - name: Build
-        run: dotnet build ${{ env.SOLUTION_PATH }} --no-restore --configuration Release
+        run: dotnet build ${{ env.SOLUTION_PATH }} --no-restore --configuration Release --no-incremental
 
       - name: Run tests
         run: dotnet test ${{ env.TEST_PROJECT_PATH }} --no-build --configuration Release --logger "trx;LogFileName=test-results.trx" --results-directory ./TestResults
+
+      - name: SonarQube - End Analysis
+        run: dotnet sonarscanner end /d:sonar.token="$SONAR_TOKEN"
 
       - name: Upload test results
         if: always()
