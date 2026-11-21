@@ -58,7 +58,8 @@ namespace API.Migrations
 
                     b.Property<string>("Text")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
@@ -97,8 +98,8 @@ namespace API.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)");
 
                     b.Property<string>("District")
                         .HasMaxLength(100)
@@ -289,6 +290,8 @@ namespace API.Migrations
                     b.ToTable("UserRating", null, t =>
                         {
                             t.HasCheckConstraint("CK_UserRate_NoSelfRate", "\"ReporterId\" <> \"RatedUserId\"");
+
+                            t.HasCheckConstraint("CK_UserRate_RateRange", "\"Rate\" BETWEEN 1 AND 5");
                         });
                 });
 
@@ -302,10 +305,6 @@ namespace API.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
                         .HasDefaultValueSql("now() at time zone 'utc'");
-
-                    b.Property<string>("CustomReason")
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
 
                     b.Property<string>("Description")
                         .IsRequired()

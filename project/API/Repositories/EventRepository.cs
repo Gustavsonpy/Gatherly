@@ -62,8 +62,10 @@ namespace API.Repositories
 
         public async Task<List<EventModel>> GetByCityAsync(string city)
         {
+            var now = DateTime.UtcNow;
+            
             return await _context.Events
-                .Where(e => e.City == city)
+                .Where(e => e.City == city && e.DateTimeStart > now && e.CanceledAt == null)
                 .Include(e => e.Category)
                 .Include(e => e.User)
                 .Include(e => e.Participants)

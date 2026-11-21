@@ -14,9 +14,9 @@ namespace API.Services
         private readonly IUserReportRepository _userReportRepository;
         private readonly IEventRepository _eventRepository;
         private readonly IEventParticipantRepository _eventParticipantRepository;
-        private readonly ILogger _logger;
+        private readonly ILogger<UserReportService> _logger;
 
-        public UserReportService(IUserReportRepository userReportRepository, IEventRepository eventRepository, IEventParticipantRepository eventParticipantRepository, ILogger logger)
+        public UserReportService(IUserReportRepository userReportRepository, IEventRepository eventRepository, IEventParticipantRepository eventParticipantRepository, ILogger<UserReportService> logger)
         {
             _userReportRepository = userReportRepository;
             _eventRepository = eventRepository;
