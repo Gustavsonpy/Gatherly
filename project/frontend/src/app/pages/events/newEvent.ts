@@ -363,6 +363,7 @@ export class NewEvent implements OnInit {
                     if(editingId){
                         this.router.navigate(['/events', editingId])
                         this.toasterService.success(ToasterSuccessEventMessage.edited_event);
+                        return;
                     } 
                     
                     this.router.navigate(['/events'])
