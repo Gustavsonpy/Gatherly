@@ -2,17 +2,15 @@ import { provideHttpClient } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { Sidebar } from './sidebar';
+import { makeJwt, stubLocalStorage } from '../../testing/test-helpers';
 
 describe('Sidebar', () => {
   let component: Sidebar;
   let fixture: ComponentFixture<Sidebar>;
 
   beforeEach(async () => {
-    vi.stubGlobal('localStorage', {
-      getItem: () => null,
-      setItem: () => {},
-      removeItem: () => {},
-    });
+    stubLocalStorage({ gatherly_token: makeJwt({ name: 'Ana Maria da Silva' }) });
+    vi.spyOn(console, 'log').mockImplementation(() => {});
 
     await TestBed.configureTestingModule({
       imports: [Sidebar],
@@ -28,5 +26,13 @@ describe('Sidebar', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('mostra o primeiro e o último nome do usuário logado', () => {
+    expect(component.username()).toBe('Ana Silva');
+  });
+
+  it('transformUsername lida com nome único', () => {
+    expect(component.transformUsername('Ana')).toBe('Ana Ana');
   });
 });

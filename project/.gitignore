@@ -4,6 +4,9 @@
 **/bin/
 **/obj/
 
+# Resultados e cobertura de testes
+**/TestResults/
+
 # IDE (Visual Studio / Rider) aberto a partir da raiz
 .vs/
 .idea/
