@@ -255,12 +255,6 @@ public class EventServiceTests
         Assert.Same(list, result.Value);
     }
 
-    [Fact]
-    public async Task UpdateTitleAsync_NaoImplementado()
-    {
-        await Assert.ThrowsAsync<NotImplementedException>(() => CreateService().UpdateTitleAsync("x"));
-    }
-
     // ---------- JoinAsync ----------
 
     [Fact]

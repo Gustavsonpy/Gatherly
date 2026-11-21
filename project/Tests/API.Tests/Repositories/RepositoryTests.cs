@@ -6,7 +6,6 @@ using API.Tests.Helpers;
 
 namespace API.Tests.Repositories;
 
-/// <summary>Base com um banco em memória já populado com usuário, categoria e evento.</summary>
 public abstract class RepositoryTestBase : IDisposable
 {
     protected readonly AppDbContext Db = TestDb.Create();
@@ -182,9 +181,22 @@ public class EventRepositoryTests : RepositoryTestBase
     }
 
     [Fact]
-    public async Task DeleteAsync_NaoImplementado()
+    public async Task DeleteAsync_RemoveEvento()
     {
-        await Assert.ThrowsAsync<NotImplementedException>(() => Repo.DeleteAsync(1));
+        await Repo.DeleteAsync(Event);
+
+        Assert.Null(await Repo.GetByIdAsync(Event.Id));
+    }
+
+    [Fact]
+    public async Task HasReportsOrRatingsAsync_DetectaDenunciaOuAvaliacao()
+    {
+        Assert.False(await Repo.HasReportsOrRatingsAsync(Event.Id));
+
+        Db.UserReports.Add(new UserReport { ReporterId = Other.Id, EventId = Event.Id, Reason = API.Enums.ReportReason.Spam });
+        await Db.SaveChangesAsync();
+
+        Assert.True(await Repo.HasReportsOrRatingsAsync(Event.Id));
     }
 }
 

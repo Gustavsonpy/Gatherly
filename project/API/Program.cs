@@ -12,6 +12,8 @@ using Microsoft.IdentityModel.Tokens;
 using API.Interfaces.Participant;
 using API.Interfaces.Report;
 using API.Interfaces.Rate;
+using API.Interfaces.Admin;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -111,6 +113,9 @@ builder.Services.AddScoped<ReportReasonService>();
 builder.Services.AddScoped<IUserRatingRepository, UserRatingRepository>();
 builder.Services.AddScoped<IUserRatingService, UserRatingService>();
 
+builder.Services.AddScoped<IAdminRepository, AdminRepository>();
+builder.Services.AddScoped<IAdminService, AdminService>();
+
 builder.Services.AddAuthentication(options =>
     {
         options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -128,6 +133,40 @@ builder.Services.AddAuthentication(options =>
             ValidAudience = jwtIssuer,
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey)),
             ClockSkew = TimeSpan.Zero
+        };
+        
+        options.Events = new JwtBearerEvents
+        {
+            OnTokenValidated = async context =>
+            {
+                var identity = context.Principal?.Identity as ClaimsIdentity;
+                var userIdClaim = context.Principal?.FindFirstValue(ClaimTypes.NameIdentifier);
+
+                if (identity is null || !Guid.TryParse(userIdClaim, out var userId))
+                {
+                    context.Fail("Token inválido.");
+                    return;
+                }
+
+                var db = context.HttpContext.RequestServices.GetRequiredService<AppDbContext>();
+                var user = await db.Users
+                    .AsNoTracking()
+                    .Where(u => u.Id == userId)
+                    .Select(u => new { u.IsAdmin, u.IsSuspended })
+                    .FirstOrDefaultAsync();
+
+                if (user is null || user.IsSuspended)
+                {
+                    context.Fail("Usuário inexistente ou suspenso.");
+                    return;
+                }
+
+                foreach (var roleClaim in identity.FindAll(identity.RoleClaimType).ToList())
+                    identity.RemoveClaim(roleClaim);
+
+                if (user.IsAdmin)
+                    identity.AddClaim(new Claim(identity.RoleClaimType, API.Controllers.AdminController.AdminRole));
+            }
         };
     });
 

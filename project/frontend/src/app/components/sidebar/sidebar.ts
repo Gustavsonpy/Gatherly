@@ -21,6 +21,8 @@ export class Sidebar {
     return nameSeparated[0] + " " + nameSeparated[nameLength-1];
   }
 
+  readonly isAdmin = computed(() => this.authService.isAdmin());
+
   readonly username = computed(() => {
     return this.transformUsername(this.authService.currentUser()?.name ?? "Não foi");
   });

@@ -1,0 +1,311 @@
+<main class="flex min-h-dvh bg-gray-50">
+    <app-sidebar />
+
+    <section class="flex-1 min-w-0 p-8 w-full flex flex-col gap-6">
+        <header>
+            <h1 class="text-xl font-semibold">Administração</h1>
+            <p class="text-xs text-gray-500 mt-1">Analise denúncias e modere usuários, eventos e comentários</p>
+        </header>
+
+        <!-- ===================== RESUMO ===================== -->
+        @if (stats(); as s) {
+            <div id="stats" class="grid grid-cols-2 lg:grid-cols-4 gap-3">
+                <button type="button" (click)="setActiveTab('reports')"
+                        class="text-left p-4 bg-white border border-gray-200 rounded-lg cursor-pointer hover:border-primary">
+                    <p class="text-[11px] text-gray-500">Denúncias pendentes</p>
+                    <p class="text-2xl font-semibold" [class.text-red-500]="s.pendingReports > 0">{{ s.pendingReports }}</p>
+                </button>
+                <button type="button" (click)="setActiveTab('users')"
+                        class="text-left p-4 bg-white border border-gray-200 rounded-lg cursor-pointer hover:border-primary">
+                    <p class="text-[11px] text-gray-500">Usuários</p>
+                    <p class="text-2xl font-semibold">{{ s.totalUsers }}</p>
+                </button>
+                <button type="button" (click)="setActiveTab('users')"
+                        class="text-left p-4 bg-white border border-gray-200 rounded-lg cursor-pointer hover:border-primary">
+                    <p class="text-[11px] text-gray-500">Usuários suspensos</p>
+                    <p class="text-2xl font-semibold">{{ s.suspendedUsers }}</p>
+                </button>
+                <button type="button" (click)="setActiveTab('events')"
+                        class="text-left p-4 bg-white border border-gray-200 rounded-lg cursor-pointer hover:border-primary">
+                    <p class="text-[11px] text-gray-500">Eventos futuros / total</p>
+                    <p class="text-2xl font-semibold">{{ s.upcomingEvents }} <span class="text-sm text-gray-400">/ {{ s.totalEvents }}</span></p>
+                </button>
+            </div>
+        }
+
+        <!-- ===================== ABAS ===================== -->
+        <div id="tabOptions" class="flex gap-6 px-6 w-fit max-w-full overflow-x-auto h-10 border border-gray-200 rounded-lg bg-white">
+            @for (tab of tabs; track tab.id) {
+                <button
+                    type="button"
+                    class="flex items-center cursor-pointer text-sm whitespace-nowrap"
+                    [class]="tab.id === activeTab() ? 'border-b border-primary text-primary' : 'border-b border-b-transparent'"
+                    (click)="setActiveTab(tab.id)">
+                    {{ tab.label }}
+                </button>
+            }
+        </div>
+
+        <!-- ===================== FILTROS ===================== -->
+        <div id="filters" class="flex flex-wrap items-end gap-3 text-[12px]">
+            @if (activeTab() === 'reports') {
+                <label class="flex flex-col gap-1">
+                    <span class="text-gray-500">Status</span>
+                    <select (change)="onReportStatusChange($any($event.target).value)"
+                            class="border border-primary-dark rounded-sm h-9 min-w-40 p-2 bg-white">
+                        <option value="Pending" [selected]="reportStatus() === 'Pending'">Pendentes</option>
+                        <option value="Resolved" [selected]="reportStatus() === 'Resolved'">Resolvidas</option>
+                        <option value="Dismissed" [selected]="reportStatus() === 'Dismissed'">Descartadas</option>
+                        <option value="" [selected]="reportStatus() === ''">Todas</option>
+                    </select>
+                </label>
+            } @else {
+                <form class="flex items-center gap-2 w-full max-w-xl h-10 px-4 rounded-lg bg-white border border-gray-200"
+                      (submit)="$event.preventDefault(); onSearch(searchInput.value)">
+                    <span class="sr-only">Buscar</span>
+                    <input #searchInput type="search" [value]="search()"
+                           [placeholder]="searchPlaceholder()"
+                           class="flex-1 bg-transparent text-sm outline-none placeholder:text-gray-400">
+                    <button type="submit" class="text-primary font-medium cursor-pointer">Buscar</button>
+                </form>
+            }
+        </div>
+
+        <!-- ===================== CONTEÚDO ===================== -->
+        @if (loading()) {
+            <p class="text-sm text-gray-500">Carregando...</p>
+        } @else if (failed()) {
+            <p class="text-sm text-red-600">Não foi possível carregar os dados. Tente novamente.</p>
+        } @else {
+            @switch (activeTab()) {
+
+                @case ('reports') {
+                    <div id="reports" class="flex flex-col gap-3">
+                        @for (r of reports(); track r.id) {
+                            <article class="flex flex-col gap-3 p-4 bg-white border border-gray-200 rounded-lg text-sm">
+                                <div class="flex flex-wrap justify-between gap-2">
+                                    <div class="flex flex-col gap-1">
+                                        <p class="font-medium">
+                                            @if (r.reportedUserId) {
+                                                Denúncia contra <span class="text-primary">{{ r.reportedUserName }}</span>
+                                                @if (r.reportedUserSuspended) {
+                                                    <span class="ml-1 px-1.5 py-0.5 rounded-sm bg-red-100 text-red-600 text-[10px]">Suspenso</span>
+                                                }
+                                            } @else {
+                                                Denúncia do evento
+                                            }
+                                        </p>
+                                        <p class="text-[12px] text-gray-500">
+                                            Evento: <a [routerLink]="['/events', r.eventId]" class="underline">{{ r.eventTitle }}</a>
+                                            @if (r.eventCanceled) { <span class="text-red-500">(cancelado)</span> }
+                                            · por {{ r.reporterName }} · {{ r.createdAt | date:'dd/MM/yyyy HH:mm' }}
+                                        </p>
+                                    </div>
+                                    <span class="h-fit px-2 py-0.5 rounded-full text-[11px]"
+                                          [class]="r.status === 'Pending' ? 'bg-yellow-100 text-yellow-700'
+                                                 : r.status === 'Resolved' ? 'bg-green-100 text-green-700'
+                                                 : 'bg-gray-100 text-gray-600'">
+                                        {{ reportStatusLabels[r.status] }}
+                                    </span>
+                                </div>
+
+                                <div class="text-[12px]">
+                                    <p><span class="font-medium">Motivo:</span> {{ r.reasonName }}</p>
+                                    @if (r.description) {
+                                        <p class="text-gray-600 mt-1 whitespace-pre-line">{{ r.description }}</p>
+                                    }
+                                </div>
+
+                                <div class="flex flex-wrap gap-2 text-[12px]">
+                                    @if (r.status === 'Pending') {
+                                        <button type="button" [disabled]="busyId() === r.id" (click)="updateReport(r, 'Resolved')"
+                                                class="px-3 py-1.5 rounded-md bg-primary text-white cursor-pointer disabled:opacity-50">
+                                            Marcar como resolvida
+                                        </button>
+                                        <button type="button" [disabled]="busyId() === r.id" (click)="updateReport(r, 'Dismissed')"
+                                                class="px-3 py-1.5 rounded-md border border-primary-dark text-primary-dark cursor-pointer disabled:opacity-50">
+                                            Descartar
+                                        </button>
+                                    } @else {
+                                        <button type="button" [disabled]="busyId() === r.id" (click)="updateReport(r, 'Pending')"
+                                                class="px-3 py-1.5 rounded-md border border-primary-dark text-primary-dark cursor-pointer disabled:opacity-50">
+                                            Reabrir
+                                        </button>
+                                    }
+                                    @if (r.reportedUserId && !r.reportedUserSuspended) {
+                                        <button type="button" [disabled]="busyId() === r.id"
+                                                (click)="setSuspended(r.reportedUserId, r.reportedUserName ?? 'usuário', true)"
+                                                class="px-3 py-1.5 rounded-md border border-red-500 text-red-500 cursor-pointer disabled:opacity-50">
+                                            Suspender usuário
+                                        </button>
+                                    }
+                                    @if (!r.reportedUserId && !r.eventCanceled) {
+                                        <button type="button" [disabled]="busyId() === r.id"
+                                                (click)="cancelEvent(r.eventId, r.eventTitle, r.id)"
+                                                class="px-3 py-1.5 rounded-md border border-red-500 text-red-500 cursor-pointer disabled:opacity-50">
+                                            Cancelar evento
+                                        </button>
+                                    }
+                                </div>
+                            </article>
+                        } @empty {
+                            <p class="text-sm text-gray-500">Nenhuma denúncia encontrada.</p>
+                        }
+                    </div>
+                }
+
+                @case ('users') {
+                    <div id="users" class="overflow-x-auto bg-white border border-gray-200 rounded-lg">
+                        <table class="w-full text-[12px]">
+                            <thead class="text-left text-gray-500 border-b border-gray-200">
+                                <tr>
+                                    <th class="p-3 font-medium">Usuário</th>
+                                    <th class="p-3 font-medium">Cidade</th>
+                                    <th class="p-3 font-medium">Cadastro</th>
+                                    <th class="p-3 font-medium text-center">Eventos</th>
+                                    <th class="p-3 font-medium text-center">Denúncias</th>
+                                    <th class="p-3 font-medium">Situação</th>
+                                    <th class="p-3 font-medium text-right">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for (u of users(); track u.id) {
+                                    <tr class="border-b border-gray-100 last:border-0">
+                                        <td class="p-3">
+                                            <div class="flex items-center gap-2">
+                                                <img [src]="u.urlPhoto ?? 'images/default_profile_pic.jpg'" alt=""
+                                                     class="w-8 h-8 rounded-full object-cover">
+                                                <div class="flex flex-col">
+                                                    <span class="font-medium">{{ u.name }} @if (isSelf(u.id)) { <span class="text-gray-400">(você)</span> }</span>
+                                                    <span class="text-gray-500">{{ u.email }}</span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="p-3">{{ u.city ?? '—' }}</td>
+                                        <td class="p-3">{{ u.registerDate | date:'dd/MM/yyyy' }}</td>
+                                        <td class="p-3 text-center">{{ u.eventsCreated }}</td>
+                                        <td class="p-3 text-center" [class.text-red-500]="u.reportsReceived > 0">{{ u.reportsReceived }}</td>
+                                        <td class="p-3">
+                                            <div class="flex flex-wrap gap-1">
+                                                @if (u.isAdmin) {
+                                                    <span class="px-1.5 py-0.5 rounded-sm bg-primary/10 text-primary-accent text-[10px]">Admin</span>
+                                                }
+                                                @if (u.isSuspended) {
+                                                    <span class="px-1.5 py-0.5 rounded-sm bg-red-100 text-red-600 text-[10px]">Suspenso</span>
+                                                } @else {
+                                                    <span class="px-1.5 py-0.5 rounded-sm bg-green-100 text-green-700 text-[10px]">Ativo</span>
+                                                }
+                                            </div>
+                                        </td>
+                                        <td class="p-3">
+                                            @if (!isSelf(u.id)) {
+                                                <div class="flex justify-end gap-2 whitespace-nowrap">
+                                                    @if (u.isSuspended) {
+                                                        <button type="button" [disabled]="busyId() === u.id" (click)="setSuspended(u.id, u.name, false)"
+                                                                class="px-2 py-1 rounded-md border border-primary-dark text-primary-dark cursor-pointer disabled:opacity-50">
+                                                            Reativar
+                                                        </button>
+                                                    } @else {
+                                                        @if (!u.isAdmin) {
+                                                            <button type="button" [disabled]="busyId() === u.id" (click)="setSuspended(u.id, u.name, true)"
+                                                                    class="px-2 py-1 rounded-md border border-red-500 text-red-500 cursor-pointer disabled:opacity-50">
+                                                                Suspender
+                                                            </button>
+                                                        }
+                                                        <button type="button" [disabled]="busyId() === u.id" (click)="setAdmin(u, !u.isAdmin)"
+                                                                class="px-2 py-1 rounded-md border border-gray-300 text-gray-700 cursor-pointer disabled:opacity-50">
+                                                            {{ u.isAdmin ? 'Remover admin' : 'Tornar admin' }}
+                                                        </button>
+                                                    }
+                                                </div>
+                                            }
+                                        </td>
+                                    </tr>
+                                } @empty {
+                                    <tr><td colspan="7" class="p-4 text-gray-500">Nenhum usuário encontrado.</td></tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+
+                @case ('events') {
+                    <div id="events" class="overflow-x-auto bg-white border border-gray-200 rounded-lg">
+                        <table class="w-full text-[12px]">
+                            <thead class="text-left text-gray-500 border-b border-gray-200">
+                                <tr>
+                                    <th class="p-3 font-medium">Evento</th>
+                                    <th class="p-3 font-medium">Organizador</th>
+                                    <th class="p-3 font-medium">Data</th>
+                                    <th class="p-3 font-medium text-center">Vagas</th>
+                                    <th class="p-3 font-medium text-center">Denúncias</th>
+                                    <th class="p-3 font-medium">Status</th>
+                                    <th class="p-3 font-medium text-right">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for (e of events(); track e.id) {
+                                    <tr class="border-b border-gray-100 last:border-0">
+                                        <td class="p-3">
+                                            <div class="flex flex-col">
+                                                <a [routerLink]="['/events', e.id]" class="font-medium hover:underline">{{ e.title }}</a>
+                                                <span class="text-gray-500">{{ e.categoryName }} · {{ e.city }}</span>
+                                            </div>
+                                        </td>
+                                        <td class="p-3">{{ e.organizerName }}</td>
+                                        <td class="p-3 whitespace-nowrap">{{ e.dateTimeStart | date:'dd/MM/yyyy HH:mm' }}</td>
+                                        <td class="p-3 text-center">{{ e.participantsCount }}/{{ e.maxCapacity }}</td>
+                                        <td class="p-3 text-center" [class.text-red-500]="e.reportsCount > 0">{{ e.reportsCount }}</td>
+                                        <td class="p-3">
+                                            <span class="px-1.5 py-0.5 rounded-sm text-[10px]"
+                                                  [class]="e.status === 'canceled' ? 'bg-red-100 text-red-600'
+                                                         : e.status === 'finished' ? 'bg-gray-100 text-gray-600'
+                                                         : e.status === 'ongoing' ? 'bg-green-100 text-green-700'
+                                                         : 'bg-primary/10 text-primary-accent'">
+                                                {{ eventStatusLabels[e.status] }}
+                                            </span>
+                                        </td>
+                                        <td class="p-3 text-right">
+                                            @if (canCancel(e)) {
+                                                <button type="button" [disabled]="busyId() === e.id" (click)="cancelEvent(e.id, e.title)"
+                                                        class="px-2 py-1 rounded-md border border-red-500 text-red-500 cursor-pointer whitespace-nowrap disabled:opacity-50">
+                                                    Cancelar
+                                                </button>
+                                            }
+                                        </td>
+                                    </tr>
+                                } @empty {
+                                    <tr><td colspan="7" class="p-4 text-gray-500">Nenhum evento encontrado.</td></tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+
+                @case ('comments') {
+                    <div id="comments" class="flex flex-col gap-2">
+                        <p class="text-[11px] text-gray-400">Mostrando os 100 comentários mais recentes.</p>
+                        @for (c of comments(); track c.id) {
+                            <article class="flex justify-between gap-4 p-3 bg-white border border-gray-200 rounded-lg text-[12px]">
+                                <div class="flex flex-col gap-1 min-w-0">
+                                    <p class="text-gray-500">
+                                        <span class="font-medium text-black">{{ c.userName }}</span>
+                                        em <a [routerLink]="['/events', c.eventId]" class="underline">{{ c.eventTitle }}</a>
+                                        · {{ c.registerDate | date:'dd/MM/yyyy HH:mm' }}
+                                    </p>
+                                    <p class="break-words">{{ c.text }}</p>
+                                </div>
+                                <button type="button" [disabled]="busyId() === c.id" (click)="deleteComment(c)"
+                                        class="h-fit px-2 py-1 rounded-md border border-red-500 text-red-500 cursor-pointer disabled:opacity-50">
+                                    Excluir
+                                </button>
+                            </article>
+                        } @empty {
+                            <p class="text-sm text-gray-500">Nenhum comentário encontrado.</p>
+                        }
+                    </div>
+                }
+            }
+        }
+    </section>
+</main>
