@@ -1,9 +1,9 @@
 import { Component, inject, input, OnInit, output, signal } from '@angular/core';
 import { GenericButton } from '../buttons/generic-button';
-import { ParticipantModel } from '../../core/event/event.model';
+import { EventModel, ParticipantModel } from '../../core/event/event.model';
 import { Icon } from '../icon/icon';
 import { ReportService } from '../../core/report/report.service';
-import { CreateReport, ReportReasonModel } from '../../core/report/report-reason.model';
+import { ReportReasonModel } from '../../core/report/report-reason.model';
 import { NgClass } from '@angular/common';
 import { ToastService } from '../../core/toaster/toaster.service';
 import { ToasterErrorEventMessage, ToasterSuccessEventMessage } from '../../enum/toaster/toaster-enum';
@@ -18,7 +18,8 @@ export class ReportModal implements OnInit {
   private reportService = inject(ReportService);
   private toastService = inject(ToastService);
 
-  reportedUser = input.required<ParticipantModel>();
+  reportedUser = input<ParticipantModel | null>(null);
+  reportedEvent = input<EventModel | null>(null);
   eventId = input.required<string>();
 
   close = output<void>();
@@ -59,17 +60,26 @@ export class ReportModal implements OnInit {
     const reason = this.selectedReason();
     if (!reason || this.loading()) return;
 
-    const report: CreateReport = {
-      reportedUserId: this.reportedUser().id,
-      eventId: this.eventId(),
-      reason: reason.id,
-      description: this.description().trim(),
-    };
+    const user = this.reportedUser();
+    const description = this.description().trim();
+
+    const request = user
+      ? this.reportService.createReport({
+          reportedUserId: user.id,
+          eventId: this.eventId(),
+          reason: reason.id,
+          description,
+        })
+      : this.reportService.createEventReport({
+          eventId: this.eventId(),
+          reason: reason.id,
+          description,
+        });
 
     this.loading.set(true);
     this.errorMessage.set(null);
 
-    this.reportService.createReport(report).subscribe({
+    request.subscribe({
       next: () => {
         this.loading.set(false);
         this.reported.emit();

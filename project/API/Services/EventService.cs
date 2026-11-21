@@ -149,7 +149,8 @@ namespace API.Services
                 CreatorPhoto = eventId.User?.UrlPhoto,
                 ParticipantsCount = await _participantRepository.CountByEventAsync(id),
                 IsParticipating = userId != Guid.Empty
-                    && await _participantRepository.ExistsAsync(id, userId)
+                    && await _participantRepository.ExistsAsync(id, userId),
+                Status = GetStatus(eventId)
             };
 
             return Result<ReturnEventDTO?>.Success(dto);
@@ -177,9 +178,96 @@ namespace API.Services
                 events.Select(e => ToReturnDto(e, userId)).ToList());
         }
 
-        public Task<Result<EventDTO>> UpdateTitleAsync(string title)
+        public async Task<Result<ReturnEventDTO>> UpdateAsync(Guid eventId, UpdateEventDTO dto)
         {
-            throw new NotImplementedException();
+            var userId = _currentUserService.UserId;
+
+            if (userId == Guid.Empty)
+                return Result<ReturnEventDTO>.Failure("Usuário não autenticado.");
+
+            var ev = await _eventRepository.GetByIdAsync(eventId);
+
+            if (ev is null)
+                return Result<ReturnEventDTO>.Failure("Evento não encontrado.");
+
+            if (ev.UserId != userId)
+                return Result<ReturnEventDTO>.Failure("Apenas o organizador pode editar o evento.");
+
+            if (ev.CanceledAt is not null)
+                return Result<ReturnEventDTO>.Failure("Não é possível editar um evento cancelado.");
+
+            if (ev.DateTimeStart <= DateTime.UtcNow)
+                return Result<ReturnEventDTO>.Failure("Só é possível editar eventos que ainda não começaram.");
+
+            var errors = new List<string>();
+
+            var sameTitle = await _eventRepository.GetByTitle(dto.Title);
+            if (sameTitle is not null && sameTitle.Id != eventId)
+                errors.Add("Já existe um evento com esse nome");
+
+            if (dto.DateTimeStart <= DateTime.UtcNow)
+                errors.Add("A data de início deve ser futura");
+
+            if (dto.DateTimeEnd <= dto.DateTimeStart)
+                errors.Add("O término deve ser depois do início");
+
+            var participantsCount = await _participantRepository.CountByEventAsync(eventId);
+            if (dto.MaxCapacity < participantsCount)
+                errors.Add($"O evento já tem {participantsCount} participantes, as vagas não podem ser menores que isso");
+
+            if (errors.Any())
+                return Result<ReturnEventDTO>.Failure(errors);
+
+            ev.Title = dto.Title;
+            ev.Description = dto.Description;
+            ev.DateTimeStart = dto.DateTimeStart;
+            ev.DateTimeEnd = dto.DateTimeEnd;
+            ev.Localization = dto.Localization;
+            ev.MaxCapacity = dto.MaxCapacity;
+            ev.City = dto.City;
+            ev.Level = dto.Level;
+            ev.UrlImage = dto.UrlImage;
+            ev.PlaceName = dto.PlaceName;
+            ev.Street = dto.Street;
+            ev.District = dto.District;
+            ev.State = dto.State;
+            ev.Latitude = dto.Latitude;
+            ev.Longitude = dto.Longitude;
+            ev.CategoryId = dto.CategoryId;
+
+            await _eventRepository.UpdateAsync(ev);
+
+            var updated = await GetByIdAsync(eventId);
+
+            return updated.IsSuccess
+                ? Result<ReturnEventDTO>.Success(updated.Value!)
+                : Result<ReturnEventDTO>.Failure(updated.Errors);
+        }
+
+        public async Task<Result<bool>> DeleteAsync(Guid eventId)
+        {
+            var userId = _currentUserService.UserId;
+
+            if (userId == Guid.Empty)
+                return Result<bool>.Failure("Usuário não autenticado.");
+
+            var ev = await _eventRepository.GetByIdAsync(eventId);
+
+            if (ev is null)
+                return Result<bool>.Failure("Evento não encontrado.");
+
+            if (ev.UserId != userId)
+                return Result<bool>.Failure("Apenas o organizador pode excluir o evento.");
+
+            if (ev.CanceledAt is null && ev.DateTimeStart <= DateTime.UtcNow)
+                return Result<bool>.Failure("Não é possível excluir um evento que já começou ou aconteceu.");
+
+            if (await _eventRepository.HasReportsOrRatingsAsync(eventId))
+                return Result<bool>.Failure("Este evento possui denúncias ou avaliações e não pode ser excluído. Cancele o evento em vez disso.");
+
+            await _eventRepository.DeleteAsync(ev);
+
+            return Result<bool>.Success(true);
         }
 
         public async Task<Result<List<ReturnEventDTO>>> GetMyCityEventsAsync()
@@ -353,10 +441,7 @@ namespace API.Services
                 && e.Participants.Any(p =>
                     p.UserId == userId &&
                     p.LeftAt == null),
-            Status = e.CanceledAt is not null ? "canceled"
-                : DateTime.UtcNow < e.DateTimeStart ? "upcoming"
-                : DateTime.UtcNow < e.DateTimeEnd ? "ongoing"
-                : "done",
+            Status = GetStatus(e),
         };
 
         private static bool IsOwnUploadUrl(string url, string folder){
@@ -364,5 +449,10 @@ namespace API.Services
             && (uri.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps)
             && uri.AbsolutePath.StartsWith($"/uploads/{folder}/", StringComparison.OrdinalIgnoreCase);
         }
+        private static string GetStatus(Event e) =>
+            e.CanceledAt is not null ? "canceled"
+            : DateTime.UtcNow < e.DateTimeStart ? "upcoming"
+            : DateTime.UtcNow < e.DateTimeEnd ? "ongoing"
+            : "done";
     }
 }

@@ -1,0 +1,78 @@
+<section class="flex flex-col gap-4 min-w-0" [attr.aria-label]="title()">
+    <header class="flex items-center justify-between gap-4">
+        <h1 class="text-xl font-semibold">
+            {{ title() }}
+            @if (events().length) {
+                <span class="ml-1 text-sm font-normal text-gray-400">({{ events().length }})</span>
+            }
+        </h1>
+
+        @if (canPrev() || canNext()) {
+            <div class="flex gap-2">
+                <button
+                    type="button"
+                    (click)="scroll(-1)"
+                    [disabled]="!canPrev()"
+                    aria-label="Eventos anteriores"
+                    class="flex items-center justify-center w-9 h-9 rounded-full border border-primary-dark text-primary-dark bg-white
+                           cursor-pointer transition-colors hover:bg-primary-light
+                           disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-white">
+                    <svg viewBox="0 0 24 24" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5"
+                         stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M15 18l-6-6 6-6" />
+                    </svg>
+                </button>
+                <button
+                    type="button"
+                    (click)="scroll(1)"
+                    [disabled]="!canNext()"
+                    aria-label="Próximos eventos"
+                    class="flex items-center justify-center w-9 h-9 rounded-full border border-primary-dark text-primary-dark bg-white
+                           cursor-pointer transition-colors hover:bg-primary-light
+                           disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-white">
+                    <svg viewBox="0 0 24 24" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5"
+                         stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M9 18l6-6-6-6" />
+                    </svg>
+                </button>
+            </div>
+        }
+    </header>
+
+    @if (events().length) {
+        <div class="relative">
+            <div
+                #track
+                tabindex="0"
+                (scroll)="updateArrows()"
+                class="no-scrollbar flex gap-6 overflow-x-auto scroll-smooth snap-x snap-mandatory py-1
+                       focus-visible:outline-2 focus-visible:outline-primary-accent rounded-xl">
+                @for (event of events(); track event.id) {
+                    <div class="shrink-0 snap-start">
+                        <card-event
+                            [id]="event.id"
+                            [img]="event.urlImage"
+                            [title]="event.title"
+                            [dateTimeStart]="event.dateTimeStart"
+                            [dateTimeEnd]="event.dateTimeEnd"
+                            [localization]="event.localization"
+                            [description]="event.description"
+                        />
+                    </div>
+                }
+            </div>
+
+            <!-- Degradê nas bordas indicando que há mais cards para os lados. -->
+            <div
+                class="pointer-events-none absolute inset-y-0 left-0 w-16 bg-linear-to-r from-white to-transparent transition-opacity duration-200"
+                [class.opacity-0]="!canPrev()"></div>
+            <div
+                class="pointer-events-none absolute inset-y-0 right-0 w-16 bg-linear-to-l from-white to-transparent transition-opacity duration-200"
+                [class.opacity-0]="!canNext()"></div>
+        </div>
+    } @else {
+        <div class="flex items-center justify-center h-32 rounded-xl border border-dashed border-gray-300 text-sm text-gray-400">
+            {{ emptyMessage() }}
+        </div>
+    }
+</section>

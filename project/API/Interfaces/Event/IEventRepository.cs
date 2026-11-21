@@ -16,6 +16,7 @@ namespace API.Interfaces.Event
         Task<EventModel> AddAsync(EventModel informal_event);
         Task UpdateAsync(EventModel informal_event);
         Task<List<EventModel>> GetFutureEvents();
-        Task DeleteAsync(int id);
+        Task DeleteAsync(EventModel informal_event);
+        Task<bool> HasReportsOrRatingsAsync(Guid eventId);
     }
 }

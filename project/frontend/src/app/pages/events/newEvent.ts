@@ -1,5 +1,5 @@
 import { Component, DestroyRef, OnInit, computed, inject, signal } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NgClass } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -51,6 +51,7 @@ export class NewEvent implements OnInit {
     private readonly eventService = inject(EventService);
     private readonly places = inject(PlaceProvider);
     private readonly router = inject(Router);
+    private readonly route = inject(ActivatedRoute);
     private readonly destroyRef = inject(DestroyRef);
     private readonly toasterService = inject(ToastService);
 
@@ -82,6 +83,11 @@ export class NewEvent implements OnInit {
     readonly errorMessage = signal<string | null>(null);
     
 
+    readonly editingId = signal<string | null>(null);
+    readonly isEditing = computed(() => this.editingId() !== null);
+    readonly loadingEvent = signal(false);
+    private readonly currentImageUrl = signal<string | null>(null);
+
     readonly form = new FormGroup<NewEventForm>({
         eventName: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
         category: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
@@ -101,6 +107,64 @@ export class NewEvent implements OnInit {
     ngOnInit(): void {
         this.loadCategories();
         this.listenLocalizationChanges();
+
+        const id = this.route.snapshot.paramMap.get('id');
+        if (id) {
+            this.editingId.set(id);
+            this.loadEventForEdit(id);
+        }
+    }
+
+    private loadEventForEdit(id: string): void {
+        this.loadingEvent.set(true);
+
+        this.eventService
+            .getEventById(id)
+            .pipe(finalize(() => this.loadingEvent.set(false)))
+            .subscribe({
+                next: (ev) => {
+                    const start = new Date(ev.dateTimeStart);
+                    const end = new Date(ev.dateTimeEnd);
+
+                    this.form.patchValue({
+                        eventName: ev.title,
+                        category: ev.categoryId,
+                        description: ev.description,
+                        dateStart: this.toDateInput(start),
+                        timeStart: this.toTimeInput(start),
+                        timeEnd: this.toTimeInput(end),
+                        city: ev.city,
+                        spots: ev.maxCapacity,
+                        level: ev.level ?? '',
+                    });
+                    this.form.controls.localization.setValue(ev.localization, { emitEvent: false });
+
+                    this.categoryValue.set({ id: ev.categoryId, name: ev.categoryName });
+                    this.placeDetails.set({
+                        placeName: ev.placeName ?? undefined,
+                        street: ev.street ?? undefined,
+                        district: ev.district ?? undefined,
+                        state: ev.state ?? undefined,
+                        latitude: ev.latitude ?? undefined,
+                        longitude: ev.longitude ?? undefined,
+                    });
+                    this.localizationTyped.set(ev.localization);
+                    this.placeSelected.set(true);
+                    this.currentImageUrl.set(ev.urlImage);
+                    this.imagePreview.set(ev.urlImage);
+                },
+                error: (err) => this.errorMessage.set(this.extractError(err)),
+            });
+    }
+
+    private toDateInput(d: Date): string {
+        const pad = (n: number) => String(n).padStart(2, '0');
+        return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+    }
+
+    private toTimeInput(d: Date): string {
+        const pad = (n: number) => String(n).padStart(2, '0');
+        return `${pad(d.getHours())}:${pad(d.getMinutes())}`;
     }
 
     private loadCategories(): void {
@@ -225,10 +289,17 @@ export class NewEvent implements OnInit {
             if (first) return first;
         }
 
-        return e?.title ?? 'Não foi possível criar o evento';
+        return e?.title ?? (this.isEditing()
+            ? 'Não foi possível salvar o evento'
+            : 'Não foi possível criar o evento');
     }
 
     cancel(): void {
+        const editingId = this.editingId();
+        if (editingId) {
+            this.router.navigate(['/events', editingId]);
+            return;
+        }
         this.router.navigate(['/events']);
     }
 
@@ -244,7 +315,10 @@ export class NewEvent implements OnInit {
             return;
         }
 
-        if (!image) {
+        const editingId = this.editingId();
+        const existingImageUrl = this.currentImageUrl();
+
+        if (!image && !(editingId && existingImageUrl)) {
             this.errorMessage.set('Selecione uma imagem para o evento');
             return;
         }
@@ -258,8 +332,11 @@ export class NewEvent implements OnInit {
         this.submitting.set(true);
         this.errorMessage.set(null);
 
-        this.eventService
-            .uploadImage(image)
+        const imageUrl$ = image
+            ? this.eventService.uploadImage(image)
+            : of({ url: existingImageUrl! });
+
+        imageUrl$
             .pipe(
                 switchMap(({ url }) => {
                     const payload: CreateEventModel = {
@@ -275,17 +352,25 @@ export class NewEvent implements OnInit {
                         urlImage: url,
                         categoryId: v.category,
                     };
-                    return this.eventService.createEvent(payload);
+                    return editingId
+                        ? this.eventService.updateEvent(editingId, payload)
+                        : this.eventService.createEvent(payload);
                 }),
                 finalize(() => this.submitting.set(false)),
             )
             .subscribe({
                 next: () => {
+                    if(editingId){
+                        this.router.navigate(['/events', editingId])
+                        this.toasterService.success(ToasterSuccessEventMessage.edited_event);
+                        return;
+                    } 
+                    
+                    this.router.navigate(['/events'])
                     this.toasterService.success(ToasterSuccessEventMessage.new_event);
-                    this.router.navigate(['/events']);
                 },
                 error: (err) => {
-                    console.error('Erro ao criar evento:', err.status, err.error);
+                    console.error('Erro ao salvar evento:', err.status, err.error);
                     this.errorMessage.set(this.extractError(err));
                 },
             });

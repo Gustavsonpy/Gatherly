@@ -11,6 +11,10 @@
   --color-primary-accent: #8B5CF6; /* destaque (borda do upload) */
 }
 
+input[type="date"] {
+  position: relative;
+}
+
 input[type="date"]::-webkit-calendar-picker-indicator {
   margin: 0;
   padding: 0;

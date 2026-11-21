@@ -1,5 +1,5 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { DatePipe, DecimalPipe, TitleCasePipe } from '@angular/common';
 import { EventService } from '../../core/event/event.service';
 import { EventModel, ParticipantModel } from '../../core/event/event.model';
@@ -33,12 +33,13 @@ type TabId = 'about' | 'participants' | 'chat';
     RatingUserModal,
     DecimalPipe, 
     EventComments,
-    MiniMap,
+    MiniMap
   ],
   templateUrl: './event-detail.html',
 })
 export class EventDetail implements OnInit {
   private route = inject(ActivatedRoute);
+  private router = inject(Router);
   private eventService = inject(EventService);
   private commentService = inject(CommentService);
   private authService = inject(AuthService);
@@ -83,6 +84,10 @@ export class EventDetail implements OnInit {
   activeReportModal = signal<boolean>(false);
   activeRatingModal = signal<boolean>(false);
   toastEnum = ToasterSuccessEventMessage;
+  reportingEvent = signal(false);
+  deleting = signal(false);
+  actionError = signal<string | null>(null);
+  actionMessage = signal<string | null>(null);
 
   private readonly userId = computed(() => this.authService.currentUser()?.id);
 
@@ -185,6 +190,45 @@ export class EventDetail implements OnInit {
   closeReportModal(): void {
     this.activeReportModal.set(false);
     this.reportedUser.set(null);
+    this.reportingEvent.set(false);
+  }
+
+  openEventReportModal(): void {
+    this.reportedUser.set(null);
+    this.reportingEvent.set(true);
+    this.activeReportModal.set(true);
+  }
+
+  onReported(): void {
+    if (!this.reportingEvent()) return;
+    this.actionMessage.set('Denúncia enviada. Obrigado por avisar!');
+    setTimeout(() => this.actionMessage.set(null), 4000);
+  }
+
+  editEvent(): void {
+    this.router.navigate(['/events', this.event()!.id, 'edit']);
+  }
+
+  deleteEvent(): void {
+    const ev = this.event();
+    if (!ev || this.deleting()) return;
+
+    const confirmed = window.confirm(
+      `Tem certeza que deseja excluir o evento "${ev.title}"? Essa ação não pode ser desfeita.`,
+    );
+    if (!confirmed) return;
+
+    this.actionError.set(null);
+    this.deleting.set(true);
+
+    this.eventService
+      .deleteEvent(ev.id)
+      .pipe(finalize(() => this.deleting.set(false)))
+      .subscribe({
+        next: () => this.router.navigate(['/my-events']),
+        error: (err) =>
+          this.actionError.set(getErrorMessage(err, 'Não foi possível excluir o evento.')),
+      });
   }
 
   openRatingModal(user: ParticipantModel): void {

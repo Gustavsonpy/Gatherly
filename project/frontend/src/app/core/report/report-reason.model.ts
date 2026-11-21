@@ -11,3 +11,9 @@ export interface CreateReport {
   reason: number;
   description: string;
 }
+
+export interface CreateEventReport {
+  eventId: string;
+  reason: number;
+  description: string;
+}

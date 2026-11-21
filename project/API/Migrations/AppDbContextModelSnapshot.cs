@@ -316,7 +316,7 @@ namespace API.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)");
 
-                    b.Property<Guid>("ReportedUserId")
+                    b.Property<Guid?>("ReportedUserId")
                         .HasColumnType("uuid");
 
                     b.Property<Guid>("ReporterId")
@@ -334,6 +334,11 @@ namespace API.Migrations
                     b.HasIndex("EventId");
 
                     b.HasIndex("ReportedUserId");
+
+                    b.HasIndex("ReporterId", "EventId", "Reason")
+                        .IsUnique()
+                        .HasDatabaseName("IX_UserReports_Reporter_Event_Reason_EventReport")
+                        .HasFilter("\"ReportedUserId\" IS NULL");
 
                     b.HasIndex("ReporterId", "ReportedUserId", "EventId", "Reason")
                         .IsUnique()
@@ -440,8 +445,7 @@ namespace API.Migrations
                     b.HasOne("API.Models.User", "ReportedUser")
                         .WithMany()
                         .HasForeignKey("ReportedUserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("API.Models.User", "Reporter")
                         .WithMany()

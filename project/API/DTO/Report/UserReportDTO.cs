@@ -8,7 +8,7 @@ namespace API.DTO.Report
 
         public Guid ReporterId { get; set; }
 
-        public Guid ReportedUserId { get; set; }
+        public Guid? ReportedUserId { get; set; }
 
         public Guid EventId { get; set; }
 

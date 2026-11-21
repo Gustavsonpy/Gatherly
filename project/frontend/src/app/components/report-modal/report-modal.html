@@ -1,18 +1,33 @@
-@if (reportedUser()) {
+@if (reportedUser() || reportedEvent()) {
     <main class="flex min-h-dvh top-0 left-0 right-0 bottom-0 z-50 fixed bg-black/50 items-center justify-center p-5">
         <div id="modal-container" class="flex flex-col border border-[#9A9AAB] rounded-md w-[700px] bg-white p-6 gap-5">
 
-            <div id="user-details" class="flex items-center gap-5">
-                <div id="user-image" class="flex w-30 h-30">
-                    <img [src]="reportedUser().urlPhoto ?? 'images/default_profile_pic.jpg'" [alt]="reportedUser().name"
-                        class="object-cover bg-black overflow-hidden rounded-full">
-                </div>
+            @if (reportedUser(); as user) {
+                <div id="user-details" class="flex items-center gap-5">
+                    <div id="user-image" class="flex w-30 h-30">
+                        <img [src]="user.urlPhoto ?? 'images/default_profile_pic.jpg'" [alt]="user.name"
+                            class="object-cover bg-black overflow-hidden rounded-full">
+                    </div>
 
-                <div id="text-user-container" class="flex flex-col">
-                    <span class="text-[12px] text-[#9A9AAB]">Usuário denunciado</span>
-                    <span>{{ reportedUser().name }}</span>
+                    <div id="text-user-container" class="flex flex-col">
+                        <span class="text-[12px] text-[#9A9AAB]">Usuário denunciado</span>
+                        <span>{{ user.name }}</span>
+                    </div>
                 </div>
-            </div>
+            } @else if (reportedEvent(); as ev) {
+                <div id="event-details" class="flex items-center gap-5">
+                    <div id="event-image" class="flex w-40 h-24 shrink-0">
+                        <img [src]="ev.urlImage" [alt]="ev.title"
+                            class="w-full h-full object-cover bg-black overflow-hidden rounded-md">
+                    </div>
+
+                    <div id="text-event-container" class="flex flex-col">
+                        <span class="text-[12px] text-[#9A9AAB]">Evento denunciado</span>
+                        <span>{{ ev.title }}</span>
+                        <span class="text-[12px] text-[#9A9AAB]">Organizado por {{ ev.creatorName }}</span>
+                    </div>
+                </div>
+            }
 
             <div id="report-details" class="flex flex-col gap-5">
                 <div id="report-detail-header" class="flex flex-col">

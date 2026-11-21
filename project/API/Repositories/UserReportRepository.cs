@@ -32,5 +32,14 @@ namespace API.Repositories
                 r.EventId == eventId &&
                 r.Reason == reason);
         }
+
+        public async Task<bool> ExistsEventReportAsync(Guid reporterId, Guid eventId, ReportReason reason)
+        {
+            return await _context.UserReports.AnyAsync(r =>
+                r.ReporterId == reporterId &&
+                r.ReportedUserId == null &&
+                r.EventId == eventId &&
+                r.Reason == reason);
+        }
     }
 }

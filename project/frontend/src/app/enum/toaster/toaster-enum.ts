@@ -4,7 +4,8 @@ export enum ToasterSuccessEventMessage {
     leave_event = 'Você saiu do evento',
     report_user = 'Denúncia enviada!',
     rating_user = 'Avaliação enviada!',
-    new_event = 'Evento criado!'
+    new_event = 'Evento criado!',
+    edited_event = 'Evento editado!'
 }
 
 export enum ToasterErrorEventMessage {

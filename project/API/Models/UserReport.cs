@@ -10,8 +10,8 @@ namespace API.Models
         public Guid ReporterId { get; set; }
         public User Reporter { get; set; } = null!;
 
-        public Guid ReportedUserId { get; set; }
-        public User ReportedUser { get; set; } = null!;
+        public Guid? ReportedUserId { get; set; }
+        public User? ReportedUser { get; set; }
 
         public Guid EventId { get; set; }
         public Event Event { get; set; } = null!;

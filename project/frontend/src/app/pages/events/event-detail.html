@@ -82,7 +82,7 @@
 
         <hr class="border-gray-200 mx-4">
 
-        <div id="organizer-container" class="flex items-center px-4 py-4">
+        <div id="organizer-container" class="flex items-center justify-between px-4 py-4">
           <div id="organizer" class="flex items-center gap-3">
             <img [src]="e.creatorPhoto ?? 'images/default_profile_pic.jpg'" alt=""
                 class="rounded-full bg-black w-10 h-10 object-cover">
@@ -90,6 +90,41 @@
               <span class="text-gray-400">Organizado por</span>
               <span>{{ e.creatorName }}</span>
             </div>
+          </div>
+
+          <div id="event-actions" class="flex flex-col items-end gap-2 shrink-0">
+            <div class="flex gap-3">
+              @if (isOrganizer()) {
+                @if (status() === 'upcoming') {
+                  <generic-button variant="secondary" class="block w-44" (click)="editEvent()">
+                    <span class="flex items-center justify-center gap-2 px-4">
+                      <span>Editar evento</span>
+                    </span>
+                  </generic-button>
+                }
+                @if (status() === 'upcoming' || status() === 'canceled') {
+                  <generic-button variant="red_white" class="block w-44" [disabled]="deleting()" (click)="deleteEvent()">
+                    <span class="flex items-center justify-center gap-2 px-4">
+                      <span>{{ deleting() ? 'Excluindo...' : 'Excluir evento' }}</span>
+                    </span>
+                  </generic-button>
+                }
+              } @else {
+                <generic-button variant="red_white" class="block w-48" (click)="openEventReportModal()">
+                  <span class="flex items-center justify-center gap-2 px-4">
+                    <app-icon name="warning" class="w-3.5 h-3.5" />
+                    <span>Denunciar evento</span>
+                  </span>
+                </generic-button>
+              }
+            </div>
+
+            @if (actionError(); as msg) {
+              <span class="text-xs text-red-500" role="alert">{{ msg }}</span>
+            }
+            @if (actionMessage(); as msg) {
+              <span class="text-xs text-green-600" role="status">{{ msg }}</span>
+            }
           </div>
         </div>
       </section>
@@ -219,7 +254,12 @@
           }
 
           @if (activeReportModal()){
-            <report-modal [reportedUser]="reportedUser()!" (close)="closeReportModal()" [eventId]="e.id"/>
+            <report-modal
+              [reportedUser]="reportedUser()"
+              [reportedEvent]="reportingEvent() ? e : null"
+              [eventId]="e.id"
+              (reported)="onReported()"
+              (close)="closeReportModal()" />
           }
 
           @if (activeRatingModal()){
