@@ -33,5 +33,21 @@ namespace API.Controllers
 
             return Ok(result.Value);
         }
+
+        [Authorize]
+        [HttpPost("event")]
+        public async Task<IActionResult> CreateEventReport([FromBody] CreateEventReportDTO dto)
+        {
+            var userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (!Guid.TryParse(userIdClaim, out var reporterId))
+                return Unauthorized();
+
+            var result = await _userReportService.CreateEventReport(reporterId, dto);
+
+            if (!result.IsSuccess)
+                return BadRequest(new { errors = result.Errors });
+
+            return Ok(result.Value);
+        }
     }
 }

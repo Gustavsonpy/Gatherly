@@ -14,13 +14,50 @@ namespace API.Services
         private readonly IUserReportRepository _userReportRepository;
         private readonly IEventRepository _eventRepository;
         private readonly IEventParticipantRepository _eventParticipantRepository;
-        private readonly ILogger<string> _logger;
-        public UserReportService(IUserReportRepository userReportRepository, IEventRepository eventRepository, IEventParticipantRepository eventParticipantRepository, ILogger<string> logger)
+        private readonly ILogger<UserReportService> _logger;
+
+        public UserReportService(IUserReportRepository userReportRepository, IEventRepository eventRepository, IEventParticipantRepository eventParticipantRepository, ILogger<UserReportService> logger)
         {
             _userReportRepository = userReportRepository;
             _eventRepository = eventRepository;
             _eventParticipantRepository = eventParticipantRepository;
             _logger = logger;
+        }
+
+        public async Task<Result<UserReportDTO>> CreateEventReport(Guid reporterId, CreateEventReportDTO reportDTO)
+        {
+            var ev = await _eventRepository.GetByIdAsync(reportDTO.EventId);
+
+            if (ev is null)
+                return Result<UserReportDTO>.Failure("Evento não encontrado.");
+
+            if (ev.UserId == reporterId)
+                return Result<UserReportDTO>.Failure("Você não pode denunciar o seu próprio evento.");
+
+            if (!Enum.IsDefined(typeof(ReportReason), reportDTO.Reason))
+                return Result<UserReportDTO>.Failure("Motivo da denúncia inválido.");
+
+            var alreadyReported = await _userReportRepository.ExistsEventReportAsync(
+                reporterId,
+                reportDTO.EventId,
+                reportDTO.Reason
+            );
+
+            if (alreadyReported)
+                return Result<UserReportDTO>.Failure("Você já denunciou este evento com o mesmo motivo.");
+
+            var report = new UserReport
+            {
+                ReporterId = reporterId,
+                ReportedUserId = null,
+                EventId = reportDTO.EventId,
+                Reason = reportDTO.Reason,
+                Description = reportDTO.Description.Trim(),
+            };
+
+            var created = await _userReportRepository.AddAsync(report);
+
+            return Result<UserReportDTO>.Success(ToReturnDTO(created));
         }
 
         public async Task<Result<UserReportDTO>> CreateReport(CreateReportDTO reportDTO)

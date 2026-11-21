@@ -60,4 +60,12 @@ export class EventService {
     cancelEvent(id: string): Observable<void> {
         return this.http.post<void>(`${this.apiUrl}/${id}/cancel`, {});
     }
+
+    updateEvent(id: string, event: CreateEventModel): Observable<EventModel> {
+        return this.http.put<EventModel>(`${this.apiUrl}/${id}`, event);
+    }
+
+    deleteEvent(id: string): Observable<void> {
+        return this.http.delete<void>(`${this.apiUrl}/${id}`);
+    }
 }

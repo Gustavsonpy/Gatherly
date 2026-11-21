@@ -1,48 +1,131 @@
+<ng-template #card let-event>
+    <card-event
+        [id]="event.id"
+        [img]="event.urlImage"
+        [title]="event.title"
+        [dateTimeStart]="event.dateTimeStart"
+        [dateTimeEnd]="event.dateTimeEnd"
+        [localization]="event.localization"
+        [description]="event.description"
+    />
+</ng-template>
+
 <main class="flex min-h-dvh bg-white">
     <app-sidebar />
 
-    <section id="events" class="flex flex-col">
-        <section class="flex-1 p-6 overflow-hidden">
-            <h1 class="text-xl font-semibold mb-4">
-                Eventos perto de você
-            </h1>
+    <section id="events" class="flex flex-col flex-1 min-w-0">
+        <!-- ===================== FILTROS ===================== -->
+        <section id="filters" class="flex flex-col gap-3 px-6 pt-6">
+            <label class="flex items-center gap-2 w-full max-w-xl h-11 px-4 rounded-lg bg-gray-100">
+                <span class="sr-only">Buscar eventos</span>
+                <input
+                    type="search"
+                    placeholder="Buscar por nome, local, cidade ou categoria"
+                    [value]="filters().query"
+                    (input)="setFilter('query', $any($event.target).value)"
+                    class="flex-1 bg-transparent text-sm outline-none placeholder:text-gray-400">
+            </label>
 
-            <div class="flex gap-6 overflow-x-auto snap-x snap-mandatory pb-4">
-                @for (event of events(); track event.id) {
-                    <div class="shrink-0 snap-start">
-                        <card-event
-                            [id]="event.id"
-                            [img]="event.urlImage"
-                            [title]="event.title"
-                            [dateTimeStart]="event.dateTimeStart"
-                            [dateTimeEnd]="event.dateTimeEnd"
-                            [localization]="event.localization"
-                            [description]="event.description"
-                        />
-                    </div>
+            <div class="flex flex-wrap items-end gap-3 text-[12px]">
+                <label class="flex flex-col gap-1">
+                    <span class="text-gray-500">Categoria</span>
+                    <select
+                        [value]="filters().categoryId ?? ''"
+                        (change)="setOptional('categoryId', $event)"
+                        class="border border-primary-dark rounded-sm h-9 min-w-40 p-2 bg-white">
+                        <option value="">Todas</option>
+                        @for (c of categories(); track c.id) {
+                            <option [value]="c.id" [selected]="filters().categoryId === c.id">{{ c.name }}</option>
+                        }
+                    </select>
+                </label>
+
+                <label class="flex flex-col gap-1">
+                    <span class="text-gray-500">Cidade</span>
+                    <select
+                        [value]="filters().city ?? ''"
+                        (change)="setOptional('city', $event)"
+                        class="border border-primary-dark rounded-sm h-9 min-w-40 p-2 bg-white">
+                        <option value="">Todas</option>
+                        @for (city of cities(); track city) {
+                            <option [value]="city" [selected]="filters().city === city">{{ city }}</option>
+                        }
+                    </select>
+                </label>
+
+                <label class="flex flex-col gap-1">
+                    <span class="text-gray-500">De</span>
+                    <input
+                        type="date"
+                        [value]="filters().dateFrom ?? ''"
+                        [max]="filters().dateTo ?? ''"
+                        (change)="setOptional('dateFrom', $event)"
+                        class="border border-primary-dark rounded-sm h-9 p-2 pr-8">
+                </label>
+
+                <label class="flex flex-col gap-1">
+                    <span class="text-gray-500">Até</span>
+                    <input
+                        type="date"
+                        [value]="filters().dateTo ?? ''"
+                        [min]="filters().dateFrom ?? ''"
+                        (change)="setOptional('dateTo', $event)"
+                        class="border border-primary-dark rounded-sm h-9 p-2 pr-8">
+                </label>
+
+                <label class="flex flex-col gap-1">
+                    <span class="text-gray-500">Vagas livres (mín.)</span>
+                    <input
+                        type="number"
+                        min="0"
+                        placeholder="Qualquer"
+                        [value]="filters().minSpots || ''"
+                        (input)="setMinSpots($event)"
+                        class="border border-primary-dark rounded-sm h-9 w-32 p-2">
+                </label>
+
+                @if (filtering()) {
+                    <button
+                        type="button"
+                        (click)="clearFilters()"
+                        class="h-9 px-3 text-primary-accent hover:underline cursor-pointer">
+                        Limpar filtros
+                    </button>
                 }
             </div>
         </section>
-        <section class="flex-1 p-6 overflow-hidden">
-            <h1 class="text-xl font-semibold mb-4">
-                Eventos na sua cidade
-            </h1>
 
-            <div class="flex gap-6 overflow-x-auto snap-x snap-mandatory pb-4">
-                @for (event of cityEvents(); track event.id) {
-                    <div class="shrink-0 snap-start">
-                        <card-event
-                            [id]="event.id"
-                            [img]="event.urlImage"
-                            [title]="event.title"
-                            [dateTimeStart]="event.dateTimeStart"
-                            [dateTimeEnd]="event.dateTimeEnd"
-                            [localization]="event.localization"
-                            [description]="event.description"
-                        />
-                    </div>
-                }
+        @if (loading()) {
+            <p class="p-6 text-sm text-gray-400">Carregando eventos...</p>
+        } @else if (filtering()) {
+            <!-- ===================== RESULTADOS ===================== -->
+            <section class="flex-1 p-6">
+                <h1 class="text-xl font-semibold mb-4">
+                    {{ results().length }} {{ results().length === 1 ? 'evento encontrado' : 'eventos encontrados' }}
+                </h1>
+
+                <div class="flex flex-wrap gap-6">
+                    @for (event of results(); track event.id) {
+                        <ng-container *ngTemplateOutlet="card; context: { $implicit: event }" />
+                    } @empty {
+                        <p class="text-sm text-gray-400">
+                            Nenhum evento corresponde aos filtros. Tente ampliar a busca.
+                        </p>
+                    }
+                </div>
+            </section>
+        } @else {
+            <div class="flex flex-col gap-10 p-6 min-w-0">
+                <event-carousel
+                    title="Eventos"
+                    [events]="events()"
+                    emptyMessage="Nenhum evento futuro no momento." />
+
+                <event-carousel
+                    title="Eventos na sua cidade"
+                    [events]="cityEvents()"
+                    emptyMessage="Nenhum evento na sua cidade ainda. Que tal criar um?" />
             </div>
-        </section>
+        }
     </section>
 </main>

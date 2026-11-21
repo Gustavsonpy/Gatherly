@@ -25,6 +25,12 @@ export const routes: Routes = [
       import('./pages/events/newEvent').then((n) => n.NewEvent),
   },
   {
+    path: 'events/:id/edit',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./pages/events/newEvent').then((n) => n.NewEvent),
+  },
+  {
     path: 'events/:id',
     canActivate: [authGuard],
     loadComponent: () =>

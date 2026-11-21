@@ -2,10 +2,17 @@
     <app-sidebar />
     <section id="content" class="flex flex-1 flex-col p-6">
         <div id="title-container" class="flex flex-col">
-            <h2 class="font-bold">Criar evento</h2>
+            <h2 class="font-bold">{{ isEditing() ? 'Editar evento' : 'Criar evento' }}</h2>
             <span class="text-[12px] text-gray-400">
-                Preencha os detalhes para criar o seu evento
+                @if (isEditing()) {
+                    Altere os detalhes do seu evento
+                } @else {
+                    Preencha os detalhes para criar o seu evento
+                }
             </span>
+            @if (loadingEvent()) {
+                <span class="text-xs text-gray-400">Carregando evento...</span>
+            }
         </div>
 
         <div id="form-container" class="flex grow w-full justify-center items-start">
@@ -193,8 +200,14 @@
                     <generic-button
                         type="submit"
                         class="flex-1"
-                        [disabled]="submitting()"
-                    >{{ submitting() ? 'Criando...' : 'Criar' }}</generic-button>
+                        [disabled]="submitting() || loadingEvent()"
+                    >
+                        @if (isEditing()) {
+                            {{ submitting() ? 'Salvando...' : 'Salvar alterações' }}
+                        } @else {
+                            {{ submitting() ? 'Criando...' : 'Criar' }}
+                        }
+                    </generic-button>
                 </div>
             </form>
         </div>

@@ -7,5 +7,6 @@ namespace API.Interfaces
     {
         Task<UserReport> AddAsync(UserReport userReport);
         Task<bool> ExistsAsync(Guid reporterId, Guid reportedUserId, Guid eventId, ReportReason reason);
+        Task<bool> ExistsEventReportAsync(Guid reporterId, Guid eventId, ReportReason reason);
     }
 }

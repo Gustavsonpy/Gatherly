@@ -62,7 +62,7 @@ export class Homepage implements OnInit {
   );
 
   ngOnInit(): void {
-    this.eventService.getEvents().subscribe({
+    this.eventService.getFutureEvents().subscribe({
       next: (data) => { this.events.set(data); this.loading.set(false); },
       error: (err) => { console.error(err); this.failed.set(true); this.loading.set(false); },
     });

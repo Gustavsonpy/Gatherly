@@ -158,6 +158,30 @@ namespace API.Controllers
         }
 
         [Authorize]
+        [HttpPut("{id:guid}")]
+        public async Task<IActionResult> Update(Guid id, UpdateEventDTO dto)
+        {
+            var result = await _eventService.UpdateAsync(id, dto);
+
+            if (!result.IsSuccess)
+                return BadRequest(new { errors = result.Errors });
+
+            return Ok(result.Value);
+        }
+
+        [Authorize]
+        [HttpDelete("{id:guid}")]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            var result = await _eventService.DeleteAsync(id);
+
+            if (!result.IsSuccess)
+                return BadRequest(new { errors = result.Errors });
+
+            return NoContent();
+        }
+
+        [Authorize]
         [HttpGet("future-events")]
         public async Task<IActionResult> GetFutureEvents()
         {
