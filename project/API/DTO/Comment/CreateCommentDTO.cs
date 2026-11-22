@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using System.ComponentModel.DataAnnotations;
 
 namespace API.DTO.Comment
@@ -8,6 +9,7 @@ namespace API.DTO.Comment
         [MaxLength(500, ErrorMessage = "O comentário deve ter no máximo 500 caracteres.")]
         public string Text { get; set; }
 
-        public Guid EventId { get; set; }   
+        [JsonRequired]
+        public Guid EventId { get; set; }
     }
 }

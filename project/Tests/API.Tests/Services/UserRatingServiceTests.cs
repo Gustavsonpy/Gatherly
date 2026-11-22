@@ -27,7 +27,7 @@ public class UserRatingServiceTests
 
     private CreateUserRatingDTO Dto(int rate = 5) => new()
     {
-        Rate = rate, ReporterId = _reporter, RatedUserId = _rated, EventId = _pastEvent.Id, Description = "Top"
+        Rate = rate, RatedUserId = _rated, EventId = _pastEvent.Id, Description = "Top"
     };
 
     private void SetupAttended(bool reporter = true, bool rated = true)
@@ -42,7 +42,7 @@ public class UserRatingServiceTests
     [InlineData(6)]
     public async Task CreateRatingAsync_NotaForaDoIntervalo_RetornaErro(int rate)
     {
-        var result = await CreateService().CreateRatingAsync(Dto(rate));
+        var result = await CreateService().CreateRatingAsync(_reporter, Dto(rate));
         Assert.Equal("A avaliação tem que ser entre 1 e 5 estrelas.", result.Errors.Single());
     }
 
@@ -52,7 +52,7 @@ public class UserRatingServiceTests
         var dto = Dto();
         dto.RatedUserId = _reporter;
 
-        var result = await CreateService().CreateRatingAsync(dto);
+        var result = await CreateService().CreateRatingAsync(_reporter, dto);
 
         Assert.Equal("Você não pode avaliar a si mesmo.", result.Errors.Single());
     }
@@ -60,7 +60,7 @@ public class UserRatingServiceTests
     [Fact]
     public async Task CreateRatingAsync_EventoInexistente_RetornaErro()
     {
-        var result = await CreateService().CreateRatingAsync(Dto());
+        var result = await CreateService().CreateRatingAsync(_reporter, Dto());
         Assert.Equal("Evento não encontrado.", result.Errors.Single());
     }
 
@@ -70,7 +70,7 @@ public class UserRatingServiceTests
         SetupAttended();
         _pastEvent.CanceledAt = DateTime.UtcNow;
 
-        var result = await CreateService().CreateRatingAsync(Dto());
+        var result = await CreateService().CreateRatingAsync(_reporter, Dto());
 
         Assert.Equal("Não é possível avaliar participantes de um evento cancelado.", result.Errors.Single());
     }
@@ -81,7 +81,7 @@ public class UserRatingServiceTests
         SetupAttended();
         _pastEvent.DateTimeEnd = DateTime.UtcNow.AddHours(1);
 
-        var result = await CreateService().CreateRatingAsync(Dto());
+        var result = await CreateService().CreateRatingAsync(_reporter, Dto());
 
         Assert.Contains("depois que o evento terminar", result.Errors.Single());
     }
@@ -90,7 +90,7 @@ public class UserRatingServiceTests
     public async Task CreateRatingAsync_AvaliadorNaoParticipou_RetornaErro()
     {
         SetupAttended(reporter: false);
-        var result = await CreateService().CreateRatingAsync(Dto());
+        var result = await CreateService().CreateRatingAsync(_reporter, Dto());
         Assert.Equal("Você não participou desse evento.", result.Errors.Single());
     }
 
@@ -98,7 +98,7 @@ public class UserRatingServiceTests
     public async Task CreateRatingAsync_AvaliadoNaoParticipou_RetornaErro()
     {
         SetupAttended(rated: false);
-        var result = await CreateService().CreateRatingAsync(Dto());
+        var result = await CreateService().CreateRatingAsync(_reporter, Dto());
         Assert.Equal("Este usuário não participou desse evento.", result.Errors.Single());
     }
 
@@ -108,7 +108,7 @@ public class UserRatingServiceTests
         SetupAttended();
         _ratings.Setup(r => r.AddAsync(It.IsAny<UserRating>())).ReturnsAsync((UserRating r) => r);
 
-        var result = await CreateService().CreateRatingAsync(Dto(4));
+        var result = await CreateService().CreateRatingAsync(_reporter, Dto(4));
 
         Assert.True(result.IsSuccess);
         Assert.Equal(4, result.Value!.Rate);

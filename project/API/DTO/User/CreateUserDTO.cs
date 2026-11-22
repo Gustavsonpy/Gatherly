@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using System.ComponentModel.DataAnnotations;
 
 namespace API.DTO
@@ -18,6 +19,7 @@ namespace API.DTO
         [MaxLength(72, ErrorMessage = "A senha deve ter no máximo 72 caracteres.")]
         public string Password { get; set; } = string.Empty;
 
+        [JsonRequired]
         public DateTime Birthday { get; set; }
     }
 }

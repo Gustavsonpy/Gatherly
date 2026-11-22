@@ -24,9 +24,8 @@ namespace API.Controllers
 
             if (userIdClaim is null || !Guid.TryParse(userIdClaim, out var userId))
                 return Unauthorized();
-            dto.ReporterId = userId;
 
-            var result = await _userRatingService.CreateRatingAsync(dto);
+            var result = await _userRatingService.CreateRatingAsync(userId, dto);
 
             if(!result.IsSuccess)
                 return BadRequest(new { errors = result.Errors });

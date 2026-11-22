@@ -24,9 +24,7 @@ namespace API.Controllers
             if (!Guid.TryParse(userIdClaim, out var reporterId))
                 return Unauthorized();
 
-            dto.ReporterId = reporterId;
-
-            var result = await _userReportService.CreateReport(dto);
+            var result = await _userReportService.CreateReport(reporterId, dto);
 
             if (!result.IsSuccess)
                 return BadRequest(new { errors = result.Errors });
