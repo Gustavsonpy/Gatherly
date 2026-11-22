@@ -13,6 +13,17 @@ namespace API.Tests.Services;
 
 public class EventServiceTests
 {
+    private static readonly string[] ExpectedCreateErrors =
+    {
+        "O título é obrigatório.",
+        "O evento deve começar no futuro.",
+        "O término deve ser depois do início",
+        "Imagem inválida.",
+        "Categoria não encontrada."
+    };
+    private static readonly string[] ExpectedImageError = { "Imagem inválida." };
+    private static readonly string[] ExpectedStatuses = { "upcoming", "ongoing", "done", "canceled" };
+
     private readonly Mock<IEventRepository> _events = new();
     private readonly Mock<IUserRepository> _users = new();
     private readonly Mock<IEventParticipantRepository> _participants = new();
@@ -75,14 +86,7 @@ public class EventServiceTests
         var result = await CreateService().CreateAsync(dto, _userId);
 
         Assert.False(result.IsSuccess);
-        Assert.Equal(new[]
-        {
-            "O título é obrigatório.",
-            "O evento deve começar no futuro.",
-            "O término deve ser depois do início",
-            "Imagem inválida.",
-            "Categoria não encontrada."
-        }, result.Errors);
+        Assert.Equal(ExpectedCreateErrors, result.Errors);
         _events.Verify(r => r.AddAsync(It.IsAny<Event>()), Times.Never);
     }
 
@@ -98,7 +102,7 @@ public class EventServiceTests
 
         var result = await CreateService().CreateAsync(dto, _userId);
 
-        Assert.Equal(new[] { "Imagem inválida." }, result.Errors);
+        Assert.Equal(ExpectedImageError, result.Errors);
     }
 
     // ---------- GetByIdAsync ----------
@@ -159,7 +163,7 @@ public class EventServiceTests
 
         var result = await CreateService().GetAllAsync();
 
-        Assert.Equal(new[] { "upcoming", "ongoing", "done", "canceled" }, result.Value!.Select(e => e.Status));
+        Assert.Equal(ExpectedStatuses, result.Value!.Select(e => e.Status));
         Assert.Equal(1, result.Value![0].ParticipantsCount);
         Assert.True(result.Value[0].IsParticipating);
         Assert.False(result.Value[1].IsParticipating);
@@ -253,12 +257,6 @@ public class EventServiceTests
         var result = await CreateService().GetParticipantsAsync(eventId);
 
         Assert.Same(list, result.Value);
-    }
-
-    [Fact]
-    public async Task UpdateTitleAsync_NaoImplementado()
-    {
-        await Assert.ThrowsAsync<NotImplementedException>(() => CreateService().UpdateTitleAsync("x"));
     }
 
     // ---------- JoinAsync ----------

@@ -60,6 +60,9 @@ namespace API.Controllers
                 new Claim("name", user.Name)
             };
 
+            if (user.IsAdmin)
+                claims.Add(new Claim(ClaimTypes.Role, AdminController.AdminRole));
+
             var jwtKey = _config["Jwt:Key"];
 
             if (string.IsNullOrWhiteSpace(jwtKey))

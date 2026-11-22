@@ -33,7 +33,20 @@ describe('AuthService', () => {
     const { service } = setup(token);
 
     expect(service.isAuthenticated()).toBe(true);
-    expect(service.currentUser()).toEqual({ id: 'abc', email: 'a@b.com', name: 'Ana Silva' });
+    expect(service.currentUser()).toEqual({ id: 'abc', email: 'a@b.com', name: 'Ana Silva', isAdmin: false });
+    expect(service.isAdmin()).toBe(false);
+  });
+
+  it('identifica admin pela claim de role (string ou array)', () => {
+    expect(setup(makeJwt({ role: 'Admin' })).service.isAdmin()).toBe(true);
+    TestBed.resetTestingModule();
+    expect(setup(makeJwt({ role: ['Outro', 'Admin'] })).service.isAdmin()).toBe(true);
+    TestBed.resetTestingModule();
+    expect(setup(makeJwt({ role: 'Outro' })).service.isAdmin()).toBe(false);
+  });
+
+  it('isAdmin é falso sem token', () => {
+    expect(setup().service.isAdmin()).toBe(false);
   });
 
   it('retorna currentUser nulo quando o token é inválido', () => {

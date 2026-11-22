@@ -21,7 +21,7 @@ public class UserReportServiceTests
     private readonly Event _event = TestData.Event(Guid.NewGuid(), Guid.NewGuid());
 
     private UserReportService CreateService() =>
-        new(_reports.Object, _events.Object, _participants.Object, NullLogger<string>.Instance);
+        new(_reports.Object, _events.Object, _participants.Object, NullLogger<UserReportService>.Instance);
 
     private CreateReportDTO Dto(ReportReason reason = ReportReason.Spam, string description = "") => new()
     {
