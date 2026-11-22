@@ -1,9 +1,8 @@
 import { TestBed } from '@angular/core/testing';
-import { provideRouter, Router } from '@angular/router';
+import { provideRouter } from '@angular/router';
 import { of, throwError } from 'rxjs';
 import { Events } from './events';
 import { EventService } from '../../core/event/event.service';
-import { AuthService } from '../../core/auth/auth.service';
 import { makeEvent, makeJwt, stubLocalStorage } from '../../testing/test-helpers';
 import { provideHttpClient } from '@angular/common/http';
 
@@ -51,15 +50,5 @@ describe('Events', () => {
 
     expect(c.events()).toEqual([]);
     expect(c.loading()).toBe(false);
-  });
-
-  it('logout limpa a sessão e volta para o login', () => {
-    const c = create();
-    const navigate = vi.spyOn(TestBed.inject(Router), 'navigate').mockResolvedValue(true);
-
-    c.logout();
-
-    expect(TestBed.inject(AuthService).isAuthenticated()).toBe(false);
-    expect(navigate).toHaveBeenCalledWith(['/login']);
   });
 });

@@ -1,17 +1,17 @@
-<main class="flex min-h-dvh bg-gray-50">
+<main class="flex flex-col md:flex-row min-h-dvh bg-gray-50">
     <app-sidebar />
 
-    <section class="flex-1 min-w-0 p-8 w-full flex flex-col gap-6">
+    <section class="flex-1 min-w-0 p-4 md:p-8 w-full flex flex-col gap-6">
         <header>
             <h1 class="text-xl font-semibold">Meus eventos</h1>
             <p class="text-xs text-gray-500 mt-1">Gerencie e organize os eventos que você criou ou está participando</p>
         </header>
 
-        <div id="tabOptions" class="flex justify-between px-8 max-w-[50%] h-10 border border-gray-200 rounded-lg bg-white">
+        <div id="tabOptions" class="flex justify-between gap-6 px-4 md:px-8 w-full md:w-fit overflow-x-auto h-10 border border-gray-200 rounded-lg bg-white">
             @for(tab of tabs; track tab.id) {
                 <button 
                     id="options" 
-                    class="flex justify-center items-center gap-2 cursor-pointer" 
+                    class="flex shrink-0 justify-center items-center gap-2 cursor-pointer whitespace-nowrap text-sm" 
                     [class]="tab.id === activeTab() ? 'border-b border-primary text-primary' : 'border-b border-b-transparent'"
                     (click)="setActiveTab(tab.id)"
                     >

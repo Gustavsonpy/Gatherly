@@ -9,9 +9,23 @@ import { UserService } from '../../core/user/user.service';
   imports: [GenericButton, RouterLink, RouterLinkActive],
   templateUrl: './sidebar.html',
   styleUrl: './sidebar.css',
+  host: {
+    // Fecha o menu do celular com a tecla Esc.
+    '(document:keydown.escape)': 'closeMenu()',
+  },
 })
 export class Sidebar implements OnInit {
   constructor(private readonly authService: AuthService, private readonly userService: UserService){}
+
+  menuOpen = signal(false);
+
+  toggleMenu(): void {
+    this.menuOpen.update((open) => !open);
+  }
+
+  closeMenu(): void {
+    this.menuOpen.set(false);
+  }
 
   usernamee = signal<string>('');
   userPhoto = signal<string | null>('');

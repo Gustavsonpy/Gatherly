@@ -1,11 +1,11 @@
-<main class="flex min-h-dvh justify-center items-center bg-primary">
-  <div id="form-container" class="flex justify-center items-center rounded-2xl w-3/5 h-200 bg-[white]">
-      <section id="form-content" class="flex flex-col justify-center w-full h-full ml-10 mr-10">
+<main class="flex min-h-dvh justify-center items-center bg-primary p-4 md:p-8">
+  <div id="form-container" class="flex justify-center items-center rounded-2xl w-full max-w-xl lg:w-3/5 lg:max-w-none py-8 md:py-10 bg-[white]">
+      <section id="form-content" class="flex flex-col justify-center gap-4 w-full mx-5 md:mx-10">
         <div id="logo" class="flex items-center">
-          <img src="images/logos/logo_gatherly.png" class="w-20 h-20" alt="Logo Gatherly">
+          <img src="images/logos/logo_gatherly.png" class="w-14 h-14 md:w-20 md:h-20" alt="Logo Gatherly">
           <h1 class="font-bold">Gatherly</h1>
         </div>
-        <h1 class="w-full flex justify-center items-center font-bold text-4xl">Criar sua conta</h1>
+        <h1 class="w-full flex justify-center items-center text-center font-bold text-3xl md:text-4xl">Criar sua conta</h1>
         <form [formGroup]="form" (ngSubmit)="submit()" class="flex flex-col gap-8" novalidate>
           <div id="form-inputs" class="flex flex-col gap-3">
             <generic-input
@@ -51,8 +51,8 @@
           </div>
 
           <div id="terms-container" class="flex gap-3">
-            <input type="checkbox" id="accept-terms">
-            <p>Li e estou de acordo com o <span class="text-primary">Termo de uso</span> e a <span class="text-primary">Política de privacidade</span></p>
+            <input type="checkbox" id="accept-terms" class="shrink-0 mt-1">
+            <p class="text-sm">Li e estou de acordo com o <span class="text-primary">Termo de uso</span> e a <span class="text-primary">Política de privacidade</span></p>
           </div>
           
           <generic-button type="submit" [disabled]="loading()">

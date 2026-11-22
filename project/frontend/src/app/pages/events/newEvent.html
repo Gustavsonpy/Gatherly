@@ -1,6 +1,6 @@
-<main class="flex min-h-dvh bg-[#F5F5F7]">
+<main class="flex flex-col md:flex-row min-h-dvh bg-[#F5F5F7]">
     <app-sidebar />
-    <section id="content" class="flex flex-1 flex-col p-6">
+    <section id="content" class="flex flex-1 flex-col min-w-0 p-4 md:p-6">
         <div id="title-container" class="flex flex-col">
             <h2 class="font-bold">{{ isEditing() ? 'Editar evento' : 'Criar evento' }}</h2>
             <span class="text-[12px] text-gray-400">
@@ -20,7 +20,7 @@
                 id="form-inputs"
                 [formGroup]="form"
                 (ngSubmit)="submit()"
-                class="border border-primary-dark rounded-xl w-[70%] max-w-4xl p-5 bg-white">
+                class="border border-primary-dark rounded-xl w-full lg:w-[70%] max-w-4xl p-4 md:p-5 bg-white">
 
                 <generic-input
                     id="event-name"
@@ -30,7 +30,7 @@
 
                 <div id="categories-container" class="flex flex-col w-full mb-4.5">
                     <h2>Categoria</h2>
-                    <div id="categories" class="flex flex-wrap w-full gap-5">
+                    <div id="categories" class="flex flex-wrap w-full gap-3 md:gap-5">
                         @if (loading()) {
                             <span class="text-xs text-gray-400">Carregando...</span>
                         } @else {
@@ -63,7 +63,7 @@
                     </textarea>
                 </div>
 
-                <div id="date-time-container" class="flex w-full gap-4">
+                <div id="date-time-container" class="flex flex-col sm:flex-row w-full sm:gap-4">
                     <generic-input
                         class="flex-1 min-w-0"
                         id="date-input"
@@ -173,7 +173,7 @@
                     <span class="block text-xs text-red-500 mb-3">{{ errorMessage() }}</span>
                 }
 
-                <div id="button-container" class="flex gap-3">
+                <div id="button-container" class="flex flex-col-reverse sm:flex-row gap-3">
                     <generic-button
                         variant="secondary"
                         class="flex-1"

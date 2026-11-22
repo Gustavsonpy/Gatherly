@@ -1,11 +1,11 @@
-<main class="flex min-h-dvh justify-center items-center bg-primary">
-  <div id="form-container" class="flex justify-center items-center rounded-2xl w-3/5 h-150 bg-[white]">
-      <section id="form-content" class="flex flex-col justify-center gap-10 w-[90%] h-[90%]">
+<main class="flex min-h-dvh justify-center items-center bg-primary p-4 md:p-8">
+  <div id="form-container" class="flex justify-center items-center rounded-2xl w-full max-w-xl lg:w-3/5 lg:max-w-none py-8 md:py-10 bg-[white]">
+      <section id="form-content" class="flex flex-col justify-center gap-8 md:gap-10 w-[90%]">
         <div id="logo" class="flex items-center">
-          <img src="images/logos/logo_gatherly.png" class="w-20 h-20" alt="Logo Gatherly">
+          <img src="images/logos/logo_gatherly.png" class="w-14 h-14 md:w-20 md:h-20" alt="Logo Gatherly">
           <h1 class="font-bold">Gatherly</h1>
         </div>
-        <h1 class="w-full flex justify-center items-center font-bold text-4xl">Fazer login</h1>
+        <h1 class="w-full flex justify-center items-center text-center font-bold text-3xl md:text-4xl">Fazer login</h1>
         <form [formGroup]="form" (ngSubmit)="submit()" class="flex flex-col gap-10">
           <div id="form-inputs" class="flex flex-col">
             <generic-input
@@ -25,7 +25,7 @@
               <span class="text-red-500 text-[12px]">{{ errorMessage() ??  errorMessage()}}</span>
           </div>
 
-          <div id="util-links" class="flex justify-between w-full">
+          <div id="util-links" class="flex flex-col sm:flex-row gap-2 sm:justify-between w-full text-sm">
             <a href="#" class="text-primary-dark underline">Esqueci a senha</a>
             <a href="/register" class="text-primary-dark underline">Ainda não possui uma conta?</a>
           </div>
