@@ -199,4 +199,4 @@ app.MapGet("/health/db", async (AppDbContext db) =>
 
 app.MapControllers();
 
-app.Run();
+await app.RunAsync();

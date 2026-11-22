@@ -1,4 +1,5 @@
 using API.Enums;
+using System.Text.Json.Serialization;
 
 namespace API.DTO.Admin
 {
@@ -78,6 +79,7 @@ namespace API.DTO.Admin
 
     public class UpdateFlagDTO
     {
+        [JsonRequired]
         public bool Value { get; set; }
     }
 }
