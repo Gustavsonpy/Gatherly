@@ -256,9 +256,14 @@ public class EventServiceTests
     }
 
     [Fact]
-    public async Task UpdateTitleAsync_NaoImplementado()
+    public async Task UpdateAsync_NaoOrganizador_RetornaErro()
     {
-        await Assert.ThrowsAsync<NotImplementedException>(() => CreateService().UpdateTitleAsync("x"));
+        var ev = FutureEvent(ownerId: Guid.NewGuid());
+        _events.Setup(r => r.GetByIdAsync(ev.Id)).ReturnsAsync(ev);
+
+        var result = await CreateService().UpdateAsync(ev.Id, new UpdateEventDTO());
+
+        Assert.Equal("Apenas o organizador pode editar o evento.", result.Errors.Single());
     }
 
     // ---------- JoinAsync ----------

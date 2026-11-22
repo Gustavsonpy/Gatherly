@@ -182,9 +182,11 @@ public class EventRepositoryTests : RepositoryTestBase
     }
 
     [Fact]
-    public async Task DeleteAsync_NaoImplementado()
+    public async Task DeleteAsync_RemoveEvento()
     {
-        await Assert.ThrowsAsync<NotImplementedException>(() => Repo.DeleteAsync(1));
+        await Repo.DeleteAsync(Event);
+
+        Assert.Null(await Repo.GetByIdAsync(Event.Id));
     }
 }
 
