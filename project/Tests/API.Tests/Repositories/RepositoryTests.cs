@@ -25,11 +25,17 @@ public abstract class RepositoryTestBase : IDisposable
         Db.SaveChanges();
     }
 
-    public void Dispose() => Db.Dispose();
+    public void Dispose()
+    {
+        Db.Dispose();
+        GC.SuppressFinalize(this);
+    }
 }
 
 public class UserRepositoryTests : RepositoryTestBase
 {
+    private static readonly string[] ExpectedUserNames = { "Convidado", "Organizador" };
+
     private UserRepository Repo => new(Db);
 
     [Fact]
@@ -53,7 +59,7 @@ public class UserRepositoryTests : RepositoryTestBase
     public async Task GetAllAsync_OrdenaPorNome()
     {
         var names = (await Repo.GetAllAsync()).Select(u => u.Name);
-        Assert.Equal(new[] { "Convidado", "Organizador" }, names);
+        Assert.Equal(ExpectedUserNames, names);
     }
 
     [Fact]
@@ -75,6 +81,8 @@ public class UserRepositoryTests : RepositoryTestBase
 
 public class CategoryRepositoryTests : RepositoryTestBase
 {
+    private static readonly string[] ExpectedCategoryNames = { "Esportes", "Música" };
+
     private CategoryRepository Repo => new(Db);
 
     [Fact]
@@ -82,7 +90,7 @@ public class CategoryRepositoryTests : RepositoryTestBase
     {
         var music = await Repo.AddAsync(TestData.Category("Música"));
 
-        Assert.Equal(new[] { "Esportes", "Música" }, (await Repo.GetAllAsync()).Select(c => c.Name));
+        Assert.Equal(ExpectedCategoryNames, (await Repo.GetAllAsync()).Select(c => c.Name));
         Assert.Equal(music.Id, (await Repo.GetByName("Música"))!.Id);
         Assert.NotNull(await Repo.GetByIdAsync(music.Id));
 
@@ -104,6 +112,8 @@ public class CategoryRepositoryTests : RepositoryTestBase
 
 public class EventRepositoryTests : RepositoryTestBase
 {
+    private static readonly string[] ExpectedEventTitles = { "Basquete", "Futebol" };
+
     private EventRepository Repo => new(Db);
 
     [Fact]
@@ -129,7 +139,7 @@ public class EventRepositoryTests : RepositoryTestBase
     {
         await Repo.AddAsync(TestData.Event(Owner.Id, Category.Id, title: "Basquete"));
 
-        Assert.Equal(new[] { "Basquete", "Futebol" }, (await Repo.GetAllAsync()).Select(e => e.Title));
+        Assert.Equal(ExpectedEventTitles, (await Repo.GetAllAsync()).Select(e => e.Title));
     }
 
     [Fact]
@@ -198,10 +208,23 @@ public class EventRepositoryTests : RepositoryTestBase
 
         Assert.Null(await Repo.GetByIdAsync(Event.Id));
     }
+
+    [Fact]
+    public async Task HasReportsOrRatingsAsync_DetectaDenunciaOuAvaliacao()
+    {
+        Assert.False(await Repo.HasReportsOrRatingsAsync(Event.Id));
+
+        Db.UserReports.Add(new UserReport { ReporterId = Other.Id, EventId = Event.Id, Reason = API.Enums.ReportReason.Spam });
+        await Db.SaveChangesAsync();
+
+        Assert.True(await Repo.HasReportsOrRatingsAsync(Event.Id));
+    }
 }
 
 public class EventParticipantRepositoryTests : RepositoryTestBase
 {
+    private static readonly string[] ExpectedParticipantNames = { "Organizador", "Convidado" };
+
     private EventParticipantRepository Repo => new(Db);
 
     private async Task AddParticipant(Guid userId, DateTime? leftAt = null, DateTime? registerDate = null)
@@ -236,7 +259,7 @@ public class EventParticipantRepositoryTests : RepositoryTestBase
 
         var result = await Repo.GetParticipantsByEventAsync(Event.Id);
 
-        Assert.Equal(new[] { "Organizador", "Convidado" }, result.Select(p => p.Name));
+        Assert.Equal(ExpectedParticipantNames, result.Select(p => p.Name));
         Assert.Equal(4.5, result[0].UserScore);
         Assert.Equal(2, result[0].RatingsCount);
         Assert.Equal(0, result[1].UserScore);
@@ -290,6 +313,8 @@ public class EventParticipantRepositoryTests : RepositoryTestBase
 
 public class CommentRepositoryTests : RepositoryTestBase
 {
+    private static readonly string[] ExpectedCommentTexts = { "primeiro", "segundo" };
+
     private CommentRepository Repo => new(Db);
 
     [Fact]
@@ -304,7 +329,7 @@ public class CommentRepositoryTests : RepositoryTestBase
         await Repo.AddAsync(new Comment { Text = "outro evento", EventId = otherEvent.Id, UserId = Owner.Id, RegisterDate = DateTime.UtcNow });
 
         var byEvent = await Repo.GetCommentsByEventAsync(Event.Id);
-        Assert.Equal(new[] { "primeiro", "segundo" }, byEvent.Select(c => c.Text));
+        Assert.Equal(ExpectedCommentTexts, byEvent.Select(c => c.Text));
         Assert.Equal("Convidado", byEvent[0].User.Name);
 
         Assert.Equal(3, (await Repo.GetAllAsync()).Count);

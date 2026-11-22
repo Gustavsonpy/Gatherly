@@ -13,10 +13,19 @@ export interface CurrentUser {
   id: string;
   email: string;
   name: string;
+  isAdmin: boolean;
 }
 
 const NAME_IDENTIFIER_CLAIM = 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier';
 const EMAIL_CLAIM = 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress';
+const ROLE_CLAIM = 'http://schemas.microsoft.com/ws/2008/06/identity/claims/role';
+export const ADMIN_ROLE = 'Admin';
+
+/** A claim de role pode vir como string (um papel) ou array (vários papéis). */
+function hasRole(payload: Record<string, unknown>, role: string): boolean {
+  const value = payload[ROLE_CLAIM];
+  return Array.isArray(value) ? value.includes(role) : value === role;
+}
 
 function decodeUserFromToken(token: string): CurrentUser | null {
   try {
@@ -28,6 +37,7 @@ function decodeUserFromToken(token: string): CurrentUser | null {
       id: payload[NAME_IDENTIFIER_CLAIM],
       email: payload[EMAIL_CLAIM],
       name: payload['name'],
+      isAdmin: hasRole(payload, ADMIN_ROLE),
     };
   } catch {
     return null;
@@ -46,6 +56,9 @@ export class AuthService {
     const token = this.tokenSignal();
     return token ? decodeUserFromToken(token) : null;
   });
+
+  /** Só controla o que aparece na tela; quem decide o acesso de verdade é o backend. */
+  readonly isAdmin = computed(() => this.currentUser()?.isAdmin ?? false);
 
   constructor(private readonly http: HttpClient) {}
 

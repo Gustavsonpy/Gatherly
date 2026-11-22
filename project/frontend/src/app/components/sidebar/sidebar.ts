@@ -35,7 +35,9 @@ export class Sidebar implements OnInit {
       next: (user) => {
         this.usernamee.set(this.transformUsername(user.name));
         this.userPhoto.set(user.urlPhoto)
-      }
+      },
+      // Se a API falhar (ex.: token expirado), mostra o nome que já está no token
+      error: () => this.usernamee.set(this.username()),
     });
 
   }
@@ -46,6 +48,8 @@ export class Sidebar implements OnInit {
 
     return nameSeparated[0] + " " + nameSeparated[nameLength-1];
   }
+
+  readonly isAdmin = computed(() => this.authService.isAdmin());
 
   readonly username = computed(() => {
     return this.transformUsername(this.authService.currentUser()?.name ?? "Não existente");

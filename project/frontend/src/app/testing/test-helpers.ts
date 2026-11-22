@@ -18,16 +18,22 @@ export function stubLocalStorage(initial: Record<string, string> = {}): Map<stri
 }
 
 /** Gera um JWT (sem assinatura válida) com as claims usadas pelo backend .NET. */
-export function makeJwt(claims: { id?: string; email?: string; name?: string } = {}): string {
-  const payload = {
+export function makeJwt(
+  claims: { id?: string; email?: string; name?: string; role?: string | string[] } = {},
+): string {
+  const payload: Record<string, unknown> = {
     'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier': claims.id ?? 'user-1',
     'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress':
       claims.email ?? 'user@email.com',
     name: claims.name ?? 'Usuário Teste',
   };
 
+  if (claims.role !== undefined) {
+    payload['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'] = claims.role;
+  }
+
   const base64Url = (obj: unknown) =>
-    btoa(JSON.stringify(obj)).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+    btoa(JSON.stringify(obj)).replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
 
   return `${base64Url({ alg: 'HS256', typ: 'JWT' })}.${base64Url(payload)}.signature`;
 }

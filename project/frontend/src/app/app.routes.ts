@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './core/auth/auth.guard';
+import { adminGuard } from './core/auth/admin.guard';
 
 export const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'login' },
@@ -55,6 +56,11 @@ export const routes: Routes = [
     path: 'history',
     canActivate: [authGuard],
     loadComponent: () => import('./pages/history/history').then((h) => h.HistoryPage),
+  },
+  {
+    path: 'admin',
+    canActivate: [authGuard, adminGuard],
+    loadComponent: () => import('./pages/admin/admin').then((a) => a.Admin),
   },
   { path: '**', redirectTo: 'login' },
 ];

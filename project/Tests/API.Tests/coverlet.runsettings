@@ -4,7 +4,7 @@
     <DataCollectors>
       <DataCollector friendlyName="XPlat code coverage">
         <Configuration>
-          <Format>cobertura</Format>
+          <Format>opencover</Format>
           <Include>[API]*</Include>
           <!-- Migrations são código gerado pelo EF Core e não fazem sentido em cobertura -->
           <ExcludeByFile>**/Migrations/*.cs</ExcludeByFile>

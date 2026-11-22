@@ -58,7 +58,10 @@ jobs:
             /k:"Gustavsonpy_Gatherly" \
             /o:"gustavsonpy" \
             /d:sonar.token="$SONAR_TOKEN" \
-            /d:sonar.scanner.scanAll=true
+            /d:sonar.scanner.scanAll=true \
+            /d:sonar.cs.opencover.reportsPaths="**/TestResults/**/coverage.opencover.xml" \
+            /d:sonar.javascript.lcov.reportPaths="project/frontend/coverage/frontend/lcov.info" \
+            /d:sonar.coverage.exclusions="**/Migrations/**,project/Tests/**,**/*.spec.ts"
 
       - name: Restore dependencies
         run: dotnet restore ${{ env.SOLUTION_PATH }}
@@ -67,7 +70,24 @@ jobs:
         run: dotnet build ${{ env.SOLUTION_PATH }} --no-restore --configuration Release --no-incremental
 
       - name: Run tests
-        run: dotnet test ${{ env.TEST_PROJECT_PATH }} --no-build --configuration Release --logger "trx;LogFileName=test-results.trx" --results-directory ./TestResults
+        run: dotnet test ${{ env.TEST_PROJECT_PATH }} --no-build --configuration Release --collect:"XPlat Code Coverage" --logger "trx;LogFileName=test-results.trx" --results-directory ./TestResults
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "npm"
+          cache-dependency-path: ${{ env.FRONTEND_DIR }}/package-lock.json
+
+      - name: Install frontend dependencies
+        working-directory: ${{ env.FRONTEND_DIR }}
+        run: npm ci --ignore-scripts
+
+      - name: Frontend coverage
+        working-directory: ${{ env.FRONTEND_DIR }}
+        run: |
+          npm run test:coverage
+          sed -i 's#^SF:#SF:project/frontend/#' coverage/frontend/lcov.info
 
       - name: SonarQube - End Analysis
         run: dotnet sonarscanner end /d:sonar.token="$SONAR_TOKEN"
@@ -116,7 +136,7 @@ jobs:
 
       - name: Install dependencies
         working-directory: ${{ env.FRONTEND_DIR }}
-        run: npm ci
+        run: npm ci --ignore-scripts
 
       - name: Lint
         working-directory: ${{ env.FRONTEND_DIR }}

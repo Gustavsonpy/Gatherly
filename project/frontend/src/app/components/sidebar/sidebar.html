@@ -52,6 +52,12 @@
                     <img src="icons/configuracao.svg" alt="Configuraçao icon">
                     <li>Configurações</li>
                 </a>
+                @if (isAdmin()) {
+                    <a routerLink="/admin" routerLinkActive="bg-primary-light text-primary font-medium" class="flex gap-5 -mx-3 -my-2 px-3 py-2 rounded-lg">
+                        <img src="icons/admin.svg" alt="Administração icon">
+                        <li>Administração</li>
+                    </a>
+                }
             </ul>
         </div>
         <a routerLink="/newEvent" (click)="closeMenu()"><generic-button>Criar evento</generic-button></a>
