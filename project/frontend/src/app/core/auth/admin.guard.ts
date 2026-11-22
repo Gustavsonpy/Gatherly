@@ -11,6 +11,6 @@ export const adminGuard: CanActivateFn = () => {
     return true;
   }
 
-  router.navigate([authService.isAuthenticated() ? '/homepage' : '/login']);
+  void router.navigate([authService.isAuthenticated() ? '/homepage' : '/login']);
   return false;
 };

@@ -81,7 +81,7 @@ jobs:
 
       - name: Install frontend dependencies
         working-directory: ${{ env.FRONTEND_DIR }}
-        run: npm ci
+        run: npm ci --ignore-scripts
 
       - name: Frontend coverage
         working-directory: ${{ env.FRONTEND_DIR }}
@@ -136,7 +136,7 @@ jobs:
 
       - name: Install dependencies
         working-directory: ${{ env.FRONTEND_DIR }}
-        run: npm ci
+        run: npm ci --ignore-scripts
 
       - name: Lint
         working-directory: ${{ env.FRONTEND_DIR }}

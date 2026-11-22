@@ -66,7 +66,8 @@ namespace API.Services
             report.Status = status;
             await _repository.SaveChangesAsync();
 
-            _logger.LogInformation("Admin {AdminId} alterou a denúncia {ReportId} para {Status}", adminId, reportId, status);
+            if (_logger.IsEnabled(LogLevel.Information))
+                _logger.LogInformation("Admin {AdminId} alterou a denúncia {ReportId} para {Status}", adminId, reportId, status);
             return Result<bool>.Success(true);
         }
 
@@ -85,8 +86,9 @@ namespace API.Services
             user.IsSuspended = suspended;
             await _repository.SaveChangesAsync();
 
-            _logger.LogInformation("Admin {AdminId} {Action} o usuário {UserId}",
-                adminId, suspended ? "suspendeu" : "reativou", userId);
+            if (_logger.IsEnabled(LogLevel.Information))
+                _logger.LogInformation("Admin {AdminId} {Action} o usuário {UserId}",
+                    adminId, suspended ? "suspendeu" : "reativou", userId);
             return Result<bool>.Success(true);
         }
 
@@ -105,8 +107,9 @@ namespace API.Services
             user.IsAdmin = isAdmin;
             await _repository.SaveChangesAsync();
 
-            _logger.LogInformation("Admin {AdminId} {Action} acesso de administrador do usuário {UserId}",
-                adminId, isAdmin ? "concedeu" : "removeu", userId);
+            if (_logger.IsEnabled(LogLevel.Information))
+                _logger.LogInformation("Admin {AdminId} {Action} acesso de administrador do usuário {UserId}",
+                    adminId, isAdmin ? "concedeu" : "removeu", userId);
             return Result<bool>.Success(true);
         }
 
@@ -125,7 +128,8 @@ namespace API.Services
             ev.CanceledAt = DateTime.UtcNow;
             await _repository.SaveChangesAsync();
 
-            _logger.LogInformation("Admin {AdminId} cancelou o evento {EventId}", adminId, eventId);
+            if (_logger.IsEnabled(LogLevel.Information))
+                _logger.LogInformation("Admin {AdminId} cancelou o evento {EventId}", adminId, eventId);
             return Result<bool>.Success(true);
         }
 
@@ -138,8 +142,9 @@ namespace API.Services
             _repository.RemoveComment(comment);
             await _repository.SaveChangesAsync();
 
-            _logger.LogInformation("Admin {AdminId} removeu o comentário {CommentId} do evento {EventId}",
-                adminId, commentId, comment.EventId);
+            if (_logger.IsEnabled(LogLevel.Information))
+                _logger.LogInformation("Admin {AdminId} removeu o comentário {CommentId} do evento {EventId}",
+                    adminId, commentId, comment.EventId);
             return Result<bool>.Success(true);
         }
     }
