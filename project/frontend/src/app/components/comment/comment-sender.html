@@ -1,5 +1,7 @@
 <div id="send-message" class="flex gap-5 justify-center items-stretch h-full w-full">
+    <label for="comment-text" class="sr-only">Escreva um comentário</label>
     <textarea
+        id="comment-text"
         [formControl]="commentControl"
         class="border border-primary-dark rounded-sm w-full h-full p-2 text-[12px]">
     </textarea>

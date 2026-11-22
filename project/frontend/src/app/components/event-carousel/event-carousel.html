@@ -43,6 +43,8 @@
         <div class="relative">
             <div
                 #track
+                role="region"
+                [attr.aria-label]="title()"
                 tabindex="0"
                 (scroll)="updateArrows()"
                 class="no-scrollbar flex gap-6 overflow-x-auto scroll-smooth snap-x snap-mandatory py-1

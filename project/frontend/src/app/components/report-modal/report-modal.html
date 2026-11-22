@@ -38,7 +38,9 @@
                 <div id="reports" class="flex flex-col gap-3">
                     @for (reason of reportReasons(); track reason.id){
                         <button 
+                            type="button"
                             id="report"
+                            [attr.aria-pressed]="selectedReason()?.id === reason.id"
                             [ngClass]="{
                                 'bg-primary-lighter border-primary-accent' : selectedReason()?.id === reason.id,
                                 'bg-white border-black' : selectedReason()?.id !== reason.id
@@ -56,13 +58,13 @@
                 </div>
 
                 <div id="description-container" class="flex flex-col h-[15%]">
-                    <h2>Descreva o que aconteceu
+                    <label for="description">Descreva o que aconteceu
                         @if (isDescriptionOptional()) {
                             <span class="text-gray-400">(opcional)</span>
                         }@else {
                             <span class="text-red-500">(obrigatório)</span>
                         }
-                    </h2>
+                    </label>
                     <textarea
                         name="description"
                         id="description"

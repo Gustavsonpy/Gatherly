@@ -294,10 +294,10 @@ export class NewEvent implements OnInit {
     cancel(): void {
         const editingId = this.editingId();
         if (editingId) {
-            this.router.navigate(['/events', editingId]);
+            void this.router.navigate(['/events', editingId]);
             return;
         }
-        this.router.navigate(['/events']);
+        void this.router.navigate(['/events']);
     }
 
     submit(): void {
@@ -357,12 +357,12 @@ export class NewEvent implements OnInit {
             .subscribe({
                 next: () => {
                     if(editingId){
-                        this.router.navigate(['/events', editingId])
+                        void this.router.navigate(['/events', editingId]);
                         this.toasterService.success(ToasterSuccessEventMessage.edited_event);
                         return;
                     } 
                     
-                    this.router.navigate(['/events'])
+                    void this.router.navigate(['/events']);
                     this.toasterService.success(ToasterSuccessEventMessage.new_event);
                 },
                 error: (err) => {

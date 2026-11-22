@@ -105,7 +105,7 @@ export class Homepage implements OnInit {
   };
 
   open(id: string): void {
-    this.router.navigate(['/events', id]);
+    void this.router.navigate(['/events', id]);
   }
 
   join(e: EventModel): void {

@@ -1,6 +1,8 @@
 using System.Security.Claims;
 using API.Interfaces;
 
+namespace API.Services;
+
 public class CurrentUserService : ICurrentUserService
 {
     private readonly IHttpContextAccessor _httpContextAccessor;

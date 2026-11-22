@@ -24,7 +24,7 @@ jobs:
           cache-dependency-path: project/frontend/package-lock.json
 
       - name: Install dependencies
-        run: npm ci
+        run: npm ci --ignore-scripts
         working-directory: project/frontend
 
       - name: Run tests
@@ -56,14 +56,14 @@ jobs:
           name: node-app
 
       - name: Login to Azure
-        uses: azure/login@v2
+        uses: azure/login@7184910d9eb2b1c5e48f7073824a90609bb9b6d6 # v2.3.1
         with:
           client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_D1DADC304A0946E8A57F734A74BC0AE9 }}
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_C4AF539E82414918A502950874328267 }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_5645846F3B60469C8B4125DF19934129 }}
 
       - name: Deploy to Azure Web App
-        uses: azure/webapps-deploy@v3
+        uses: azure/webapps-deploy@02a81bead70021f5284939794bcec79c271ab383 # v3.0.8
         with:
           app-name: 'gatherly-front'
           slot-name: 'Production'

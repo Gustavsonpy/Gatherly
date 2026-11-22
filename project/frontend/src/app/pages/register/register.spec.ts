@@ -81,4 +81,11 @@ describe('Register', () => {
     expect(c.errorMessage()).toBeNull();
     expect(c.loading()).toBe(false);
   });
+
+  it('o checkbox dos termos tem um label associado', () => {
+    create();
+    const field = document.querySelector<HTMLElement>('input[type="checkbox"]');
+    expect(field?.id).toBeTruthy();
+    expect(document.querySelector(`label[for="${field!.id}"]`)).not.toBeNull();
+  });
 });

@@ -1,5 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 
+namespace API.DTO.Event;
+
 public class CreateEventDTO
 {
     [Required(ErrorMessage = "O título é obrigatório.")]

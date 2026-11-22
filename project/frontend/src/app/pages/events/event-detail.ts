@@ -207,7 +207,7 @@ export class EventDetail implements OnInit {
   }
 
   editEvent(): void {
-    this.router.navigate(['/events', this.event()!.id, 'edit']);
+    void this.router.navigate(['/events', this.event()!.id, 'edit']);
   }
 
   deleteEvent(): void {
