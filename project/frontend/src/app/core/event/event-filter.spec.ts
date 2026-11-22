@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { EventModel } from './event.model';
-import { EMPTY_EVENT_FILTERS, EventFilters, filterEvents, hasActiveFilters } from './event-filter';
+import { EMPTY_EVENT_FILTERS, EventFilters, cityLabel, filterEvents, hasActiveFilters } from './event-filter';
 
 function makeEvent(overrides: Partial<EventModel>): EventModel {
     return {
@@ -54,6 +54,13 @@ describe('filterEvents', () => {
         expect(ids(filterEvents(all, filters({ city: 'Joinville' })))).toEqual(['2', '3']);
     });
 
+    it('diferencia cidades com o mesmo nome em estados diferentes', () => {
+        const noRS = makeEvent({ id: 'rs', city: 'Bom Jesus', state: 'RS' });
+        const noPI = makeEvent({ id: 'pi', city: 'Bom Jesus', state: 'PI' });
+
+        expect(ids(filterEvents([noRS, noPI], filters({ city: 'Bom Jesus - RS' })))).toEqual(['rs']);
+    });
+
     it('filtra por intervalo de datas (inclusivo)', () => {
         expect(ids(filterEvents(all, filters({ dateFrom: '2026-12-15' })))).toEqual(['2']);
         expect(ids(filterEvents(all, filters({ dateTo: '2026-12-10' })))).toEqual(['1', '3']);
@@ -67,6 +74,16 @@ describe('filterEvents', () => {
 
     it('combina filtros', () => {
         expect(ids(filterEvents(all, filters({ city: 'Joinville', minSpots: 20 })))).toEqual(['3']);
+    });
+});
+
+describe('cityLabel', () => {
+    it('junta cidade e UF quando o evento tem estado', () => {
+        expect(cityLabel(makeEvent({ city: 'Joinville', state: 'SC' }))).toBe('Joinville - SC');
+    });
+
+    it('usa só a cidade quando o evento não tem estado', () => {
+        expect(cityLabel(makeEvent({ city: 'Joinville' }))).toBe('Joinville');
     });
 });
 

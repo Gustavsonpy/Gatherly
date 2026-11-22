@@ -26,6 +26,11 @@ export function normalizeText(value: string | null | undefined): string {
         .trim();
 }
 
+/** "Joinville - SC" (mesmo formato do IBGE), ou só "Joinville" se o evento não tiver UF. */
+export function cityLabel(event: EventModel): string {
+    return event.state ? `${event.city} - ${event.state}` : event.city;
+}
+
 export function availableSpots(event: EventModel): number {
     return Math.max(event.maxCapacity - event.participantsCount, 0);
 }
@@ -59,7 +64,7 @@ export function filterEvents(events: EventModel[], filters: EventFilters): Event
 
         if (filters.categoryId && e.categoryId !== filters.categoryId) return false;
 
-        if (city && normalizeText(e.city) !== city) return false;
+        if (city && normalizeText(cityLabel(e)) !== city) return false;
 
         const day = localDateKey(e.dateTimeStart);
         if (filters.dateFrom && day < filters.dateFrom) return false;

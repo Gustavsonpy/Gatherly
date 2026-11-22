@@ -2,7 +2,6 @@ using API.Models;
 
 namespace API.Tests.Helpers;
 
-/// <summary>Fábricas de entidades válidas para os testes.</summary>
 public static class TestData
 {
     public static User User(string name = "Usuário Teste", string? email = null, string? city = "Curitiba") => new()
@@ -25,7 +24,8 @@ public static class TestData
         string title = "Futebol",
         string city = "Curitiba",
         int maxCapacity = 10,
-        DateTime? canceledAt = null)
+        DateTime? canceledAt = null,
+        string? state = null)
     {
         var s = start ?? DateTime.UtcNow.AddDays(1);
         return new Event
@@ -37,6 +37,7 @@ public static class TestData
             Localization = "Parque Barigui",
             MaxCapacity = maxCapacity,
             City = city,
+            State = state,
             UrlImage = "http://localhost/uploads/events/img.jpg",
             UserId = userId,
             CategoryId = categoryId,

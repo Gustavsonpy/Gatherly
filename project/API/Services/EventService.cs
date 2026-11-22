@@ -281,7 +281,11 @@ namespace API.Services
             if (string.IsNullOrWhiteSpace(user.City))
                 return Result<List<ReturnEventDTO>>.Failure("Usuário não possui cidade cadastrada.");
 
-            var events = await _eventRepository.GetByCityAsync(user.City);
+            var parts = user.City.Split(" - ");
+            var cityName = parts[0].Trim();
+            var state = parts.Length > 1 ? parts[1].Trim() : null;
+
+            var events = await _eventRepository.GetByCityAsync(cityName, state);
 
             return Result<List<ReturnEventDTO>>.Success(
                 events.Select(e => ToReturnDto(e, userId)).ToList());
