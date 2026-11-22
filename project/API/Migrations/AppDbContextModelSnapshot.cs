@@ -105,10 +105,6 @@ namespace API.Migrations
                     b.Property<double?>("Latitude")
                         .HasColumnType("double precision");
 
-                    b.Property<string>("Level")
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
-
                     b.Property<string>("Localization")
                         .IsRequired()
                         .HasMaxLength(500)

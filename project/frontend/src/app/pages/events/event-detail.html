@@ -5,8 +5,8 @@
     <section id="content-container" class="flex flex-col gap-6 w-full p-6">
 
       <!-- Voltar -->
-      <a routerLink="/eventos" class="flex items-center gap-2 text-[12px] text-gray-700 w-fit">
-        <img src="icons/arrow-left-sm.svg" alt="">
+      <a routerLink="/events" class="flex items-center gap-2 text-[12px] text-gray-700 w-fit">
+        <app-icon name="arrow" class="h-3.5 w-3.5"/>
         <span>Voltar para eventos</span>
       </a>
 
@@ -96,21 +96,21 @@
             <div class="flex gap-3">
               @if (isOrganizer()) {
                 @if (status() === 'upcoming') {
-                  <generic-button variant="secondary" class="block w-44" (click)="editEvent()">
+                  <generic-button variant="secondary" class="block w-55" (click)="editEvent()">
                     <span class="flex items-center justify-center gap-2 px-4">
                       <span>Editar evento</span>
                     </span>
                   </generic-button>
                 }
                 @if (status() === 'upcoming' || status() === 'canceled') {
-                  <generic-button variant="red_white" class="block w-44" [disabled]="deleting()" (click)="deleteEvent()">
+                  <generic-button variant="red_white" class="block w-55" [disabled]="deleting()" (click)="deleteEvent()">
                     <span class="flex items-center justify-center gap-2 px-4">
                       <span>{{ deleting() ? 'Excluindo...' : 'Excluir evento' }}</span>
                     </span>
                   </generic-button>
                 }
               } @else {
-                <generic-button variant="red_white" class="block w-48" (click)="openEventReportModal()">
+                <generic-button variant="red_white" class="block w-55" (click)="openEventReportModal()">
                   <span class="flex items-center justify-center gap-2 px-4">
                     <app-icon name="warning" class="w-3.5 h-3.5" />
                     <span>Denunciar evento</span>
@@ -158,9 +158,7 @@
             <!-- Sobre o evento -->
             <div id="about-event" class="flex flex-col gap-5 p-4 border border-primary-dark rounded-md">
               <h1 class="font-bold">Sobre o evento</h1>
-              <span class="text-[12px] leading-relaxed">
-                {{ e.description }}
-              </span>
+              <p class="text-[12px] leading-relaxed whitespace-pre-line break-words">{{ e.description }}</p>
             </div>
 
             <!-- Local -->
@@ -300,11 +298,11 @@
 
             <ul class="flex flex-col gap-3 text-[11px] text-gray-400">
               <li class="flex items-center gap-2">
-                <img src="icons/clock-sm.svg" alt="">
+                <app-icon name="clock" class="h-3.5 w-3.5 text-black"/>
                 <span>Chegue com 15 min de antecedência</span>
               </li>
               <li class="flex items-center gap-2">
-                <img src="icons/smile-sm.svg" alt="">
+                <app-icon name="happy-face" class="h-3.5 w-3.5 text-black"/>
                 <span>Respeito acima de tudo!</span>
               </li>
               <li class="flex items-center gap-2">
@@ -312,7 +310,7 @@
                 <span>Combinados no chat do evento</span>
               </li>
               <li class="flex items-center gap-2">
-                <img src="icons/help-sm.svg" alt="">
+                <app-icon name="user" class="h-3.5 w-3.5 text-black"/>
                 <span>Qualquer dúvida, fale com o anfitrião</span>
               </li>
             </ul>

@@ -19,7 +19,7 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
           [placeholder]="placeholder()"
           [class.date-input]="type() === 'date'"
           [class.pr-16]="type() === 'password'"
-          class="border border-primary-dark rounded-md p-2 text-[12px] w-full"
+          class="border border-primary-dark rounded-md p-2 text-[12px] w-full bg-white"
         />
 
         @if (type() === 'password') {

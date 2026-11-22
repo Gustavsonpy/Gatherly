@@ -31,7 +31,13 @@
         <a href="/newEvent"><generic-button>Criar evento</generic-button></a>
     </section>
     <section id="bottom-part" class="flex flex-col gap-5">
-        <p>{{ username() }}</p>
+        <div id="user-info">
+            <div class="flex items-center gap-3">
+                <img src="{{ userPhoto() }}" alt="user photo"
+                    class="w-11 h-11 rounded-full object-cover bg-black border-2 border-gray-50">
+                <p>{{ usernamee() }}</p>    
+            </div>
+        </div>
         <div id="view-mode" class="flex items-center justify-center gap-3">
             <img src="icons/lua.svg" alt="modo escuro icon">
             <span>Modo escuro</span>

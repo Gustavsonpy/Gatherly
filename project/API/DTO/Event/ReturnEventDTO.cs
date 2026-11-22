@@ -10,7 +10,6 @@ namespace API.DTO.Event
         public string Localization { get; set; }
         public int MaxCapacity { get; set; }
         public string City { get; set; }
-        public string Level { get; set; }
         public string UrlImage { get; set; }
         public DateTime RegisterDate { get; set; }
         public int ParticipantsCount { get; set; }

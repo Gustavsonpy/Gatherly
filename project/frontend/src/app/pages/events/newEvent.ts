@@ -37,7 +37,6 @@ interface NewEventForm {
     localization: FormControl<string>;
     city: FormControl<string>;
     spots: FormControl<number>;
-    level: FormControl<string>;
 }
 
 @Component({
@@ -101,7 +100,6 @@ export class NewEvent implements OnInit {
             nonNullable: true,
             validators: [Validators.required, Validators.min(1)],
         }),
-        level: new FormControl('', { nonNullable: true }),
     });
 
     ngOnInit(): void {
@@ -135,7 +133,6 @@ export class NewEvent implements OnInit {
                         timeEnd: this.toTimeInput(end),
                         city: ev.city,
                         spots: ev.maxCapacity,
-                        level: ev.level ?? '',
                     });
                     this.form.controls.localization.setValue(ev.localization, { emitEvent: false });
 
@@ -348,7 +345,6 @@ export class NewEvent implements OnInit {
                         maxCapacity: v.spots,
                         city: v.city.trim(),
                         ...this.placeDetails(),
-                        level: v.level || null,
                         urlImage: url,
                         categoryId: v.category,
                     };

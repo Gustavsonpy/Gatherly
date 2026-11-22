@@ -24,8 +24,6 @@ public class CreateEventDTO
     [MaxLength(200)]
     public string City { get; set; }
 
-    [MaxLength(200)] public string? Level { get; set; }
-
     [Required(ErrorMessage = "A imagem é obrigatória.")]
     public string UrlImage { get; set; }
 

@@ -12,7 +12,6 @@ function makeEvent(overrides: Partial<EventModel>): EventModel {
         localization: 'Rua A',
         maxCapacity: 10,
         city: 'Joinville',
-        level: null,
         urlImage: '',
         registerDate: '',
         userId: 'u1',

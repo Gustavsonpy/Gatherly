@@ -53,7 +53,7 @@
                     </div>
                 </div>
 
-                <div id="description-container" class="flex flex-col h-[15%] mb-4.5">
+                <div id="description-container" class="flex flex-col h-50 mb-4.5">
                     <h2>Descrição</h2>
                     <textarea
                         name="description"
@@ -122,28 +122,12 @@
                     }
                 </div>
 
-                <div id="spot-level-container" class="flex gap-3">
-                    <generic-input
-                        class="flex-1 min-w-0"
-                        id="spot-input"
-                        label="Vagas"
-                        [control]="form.controls.spots"
-                        type="number"
-                    />
-                    <div id="level-container" class="flex flex-col flex-3 min-w-0">
-                        <label for="select-level">Nível</label>
-                        <select
-                            id="select-level"
-                            [formControl]="form.controls.level"
-                            class="border border-primary-dark rounded-sm h-9 w-full p-2 text-[12px]"
-                        >
-                            <option value="">Selecione um nível</option>
-                            <option value="Iniciante">Iniciante</option>
-                            <option value="Intermediário">Intermediário</option>
-                            <option value="Avançado">Avançado</option>
-                        </select>
-                    </div>
-                </div>
+                <generic-input
+                    id="spot-input"
+                    label="Vagas"
+                    [control]="form.controls.spots"
+                    type="number"
+                />
 
                 <div class="flex flex-col w-full mb-4.5">
                     <label for="event-image" class="text-sm mb-2">

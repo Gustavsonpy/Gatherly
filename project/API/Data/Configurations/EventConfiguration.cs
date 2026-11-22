@@ -42,9 +42,6 @@ namespace API.Data.Configurations
                 .IsRequired()
                 .HasMaxLength(200);
             
-            builder.Property(e => e.Level)
-                .HasMaxLength(200);
-
             builder.Property(e => e.PlaceName).HasMaxLength(200);
             builder.Property(e => e.Street).HasMaxLength(200);
             builder.Property(e => e.District).HasMaxLength(100);

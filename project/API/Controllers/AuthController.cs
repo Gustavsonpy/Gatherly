@@ -72,7 +72,7 @@ namespace API.Controllers
                 issuer: _config["Jwt:Issuer"],
                 audience: _config["Jwt:Issuer"],
                 claims: claims,
-                expires: DateTime.UtcNow.AddMinutes(30),
+                expires: DateTime.UtcNow.AddMinutes(120),
                 signingCredentials: creds
             );
 
