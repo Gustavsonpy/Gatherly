@@ -48,7 +48,6 @@ export function makeEvent(overrides: Partial<EventModel> = {}): EventModel {
     localization: 'Parque Barigui',
     maxCapacity: 10,
     city: 'Curitiba',
-    level: null,
     urlImage: 'http://localhost:5008/uploads/events/img.jpg',
     registerDate: '2029-12-01T00:00:00Z',
     userId: 'user-1',

@@ -10,6 +10,7 @@ import { CategoryModel } from '../../core/category/CategoryModel';
 import {
   EMPTY_EVENT_FILTERS,
   EventFilters,
+  cityLabel,
   filterEvents,
   hasActiveFilters,
 } from '../../core/event/event-filter';
@@ -35,7 +36,7 @@ export class Events implements OnInit {
 
   /** Cidades que têm eventos futuros, para o select. */
   readonly cities = computed(() =>
-    [...new Set(this.events().map((e) => e.city).filter(Boolean))].sort((a, b) =>
+    [...new Set(this.events().map(cityLabel).filter(Boolean))].sort((a, b) =>
       a.localeCompare(b, 'pt-BR'),
     ),
   );

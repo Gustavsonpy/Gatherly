@@ -214,7 +214,19 @@ public class EventServiceTests
     public async Task GetMyCityEventsAsync_RetornaEventosDaCidadeDoUsuario()
     {
         _users.Setup(r => r.GetByIdAsync(_userId)).ReturnsAsync(TestData.User(city: "Maringá"));
-        _events.Setup(r => r.GetByCityAsync("Maringá")).ReturnsAsync(new List<Event> { FutureEvent() });
+        _events.Setup(r => r.GetByCityAsync("Maringá", null)).ReturnsAsync(new List<Event> { FutureEvent() });
+
+        var result = await CreateService().GetMyCityEventsAsync();
+
+        Assert.True(result.IsSuccess);
+        Assert.Single(result.Value!);
+    }
+
+    [Fact]
+    public async Task GetMyCityEventsAsync_CidadeNoFormatoIbge_SeparaCidadeEEstado()
+    {
+        _users.Setup(r => r.GetByIdAsync(_userId)).ReturnsAsync(TestData.User(city: "Joinville - SC"));
+        _events.Setup(r => r.GetByCityAsync("Joinville", "SC")).ReturnsAsync(new List<Event> { FutureEvent() });
 
         var result = await CreateService().GetMyCityEventsAsync();
 
@@ -257,6 +269,17 @@ public class EventServiceTests
         var result = await CreateService().GetParticipantsAsync(eventId);
 
         Assert.Same(list, result.Value);
+    }
+
+    [Fact]
+    public async Task UpdateAsync_NaoOrganizador_RetornaErro()
+    {
+        var ev = FutureEvent(ownerId: Guid.NewGuid());
+        _events.Setup(r => r.GetByIdAsync(ev.Id)).ReturnsAsync(ev);
+
+        var result = await CreateService().UpdateAsync(ev.Id, new UpdateEventDTO());
+
+        Assert.Equal("Apenas o organizador pode editar o evento.", result.Errors.Single());
     }
 
     // ---------- JoinAsync ----------

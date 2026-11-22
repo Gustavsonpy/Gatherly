@@ -1,5 +1,5 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { DatePipe, DecimalPipe, TitleCasePipe } from '@angular/common';
 import { EventService } from '../../core/event/event.service';
 import { EventModel, ParticipantModel } from '../../core/event/event.model';
@@ -33,7 +33,8 @@ type TabId = 'about' | 'participants' | 'chat';
     RatingUserModal,
     DecimalPipe, 
     EventComments,
-    MiniMap
+    MiniMap,
+    RouterLink
   ],
   templateUrl: './event-detail.html',
 })

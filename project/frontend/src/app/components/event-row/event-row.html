@@ -1,6 +1,6 @@
 <div id="event-row"
-     class="flex w-full h-40 border border-gray-300 rounded-lg p-2 gap-3 bg-white">
-    <div id="image-event-row" class="relative shrink-0 w-[20%] h-full rounded-md overflow-hidden">
+     class="flex flex-col sm:flex-row w-full sm:h-40 border border-gray-300 rounded-lg p-2 gap-3 bg-white">
+    <div id="image-event-row" class="relative shrink-0 w-full h-36 sm:w-[20%] sm:h-full rounded-md overflow-hidden">
         <img [src]="event().urlImage" alt="" class="w-full h-full object-cover">
         <div class="absolute inset-0 bg-linear-to-t from-black/60 to-transparent"></div>
         <div id="name-category-event" class="absolute bottom-0 left-0 flex flex-col gap-2 p-4 text-white">
@@ -12,7 +12,7 @@
         </div>
     </div>
 
-    <div id="event-details" class="flex flex-col flex-1 min-w-0 justify-between">
+    <div id="event-details" class="flex flex-col flex-1 min-w-0 justify-between gap-2 sm:gap-0">
         <div class="flex items-center gap-3 min-w-0">
             <h2 class="text-base font-bold truncate">{{ event().title }}</h2>
             @if (isOrganizer()) {
@@ -23,7 +23,7 @@
             }
         </div>
 
-        <div id="event-informations" class="flex gap-4">
+        <div id="event-informations" class="flex flex-wrap gap-x-4 gap-y-1">
             <div class="flex items-center gap-1 min-w-0">
                 <img src="icons/calendar-sm.svg" alt="" class="shrink-0">
                 <span class="text-[12px] truncate">{{ event().dateTimeStart | date: 'EEE, d \'de\' MMM' : '' : 'pt' | titlecase }}</span>
@@ -51,7 +51,7 @@
         </div>
     </div>
 
-    <div id="button-section" class="flex flex-col items-end justify-between shrink-0">
+    <div id="button-section" class="flex flex-row sm:flex-col items-center sm:items-end justify-between gap-2 shrink-0">
         @if (event().status === 'canceled') {
             <span class="bg-red-100 p-1 rounded-lg w-max">
                 <p class="text-[12px] text-red-700 font-bold">Cancelado</p>
@@ -66,7 +66,7 @@
         } @else {
             <span class="bg-green-100 p-1 rounded-lg w-max">
                 <p class="text-[12px] text-green-700 font-bold">
-                    {{ event().participantsCount }} / {{ event().maxCapacity }} vagas
+                    {{ participants().length }} / {{ event().maxCapacity }} vagas
                 </p>
             </span>
         }
@@ -78,7 +78,7 @@
                     Cancelar
                 </button>
             }
-            <generic-button variant="secondary" class="w-[200px]" (click)="goToEvent()">Ver detalhes</generic-button>
+            <generic-button variant="secondary" class="w-32 sm:w-[200px]" (click)="goToEvent()">Ver detalhes</generic-button>
         </div>
     </div>
 </div>

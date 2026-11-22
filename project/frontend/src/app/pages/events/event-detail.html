@@ -1,23 +1,23 @@
 @if (event(); as e) {
-  <main class="flex min-h-dvh bg-white">
+  <main class="flex flex-col md:flex-row min-h-dvh bg-white">
     <app-sidebar />
 
-    <section id="content-container" class="flex flex-col gap-6 w-full p-6">
+    <section id="content-container" class="flex flex-col gap-6 w-full min-w-0 p-4 md:p-6">
 
       <!-- Voltar -->
-      <a routerLink="/eventos" class="flex items-center gap-2 text-[12px] text-gray-700 w-fit">
-        <img src="icons/arrow-left-sm.svg" alt="">
+      <a routerLink="/events" class="flex items-center gap-2 text-[12px] text-gray-700 w-fit">
+        <app-icon name="arrow" class="h-3.5 w-3.5"/>
         <span>Voltar para eventos</span>
       </a>
 
       <!-- ===================== TOPO ===================== -->
       <section id="top-container" class="w-full border border-primary rounded-md overflow-hidden">
 
-        <div id="banner-container" class="relative h-60">
+        <div id="banner-container" class="relative h-44 md:h-60">
           <img [src]="e.urlImage" alt="" class="w-full h-full object-cover">
           <div class="absolute inset-0 bg-linear-to-t from-black/60 to-transparent"></div>
           <div id="name-category-event" class="absolute bottom-0 left-0 flex flex-col gap-2 p-4 text-white">
-            <span class="text-2xl font-bold">{{ e.title }}</span>
+            <span class="text-xl md:text-2xl font-bold">{{ e.title }}</span>
             <div
               id="event-category"
               class="flex w-fit items-center gap-1 text-[10px] bg-black/40 rounded-sm px-2 py-1 whitespace-nowrap">
@@ -27,8 +27,8 @@
           </div>
         </div>
 
-        <div id="middle-banner-container" class="flex items-center justify-between px-4 py-4">
-          <div id="important-info-container" class="flex items-center gap-10">
+        <div id="middle-banner-container" class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 px-4 py-4">
+          <div id="important-info-container" class="flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-3 sm:gap-x-10">
             <div id="date-time" class="flex gap-2">
               <img src="icons/calendar-md.svg" alt="Calendar icon">
               <div class="flex flex-col text-[12px]">
@@ -52,20 +52,20 @@
             </div>
           </div>
 
-          <div id="join-container" class="flex flex-col items-end gap-2">
+          <div id="join-container" class="flex flex-col items-stretch lg:items-end gap-2">
             @if (!joined() || isOrganizer()){
               <button
                 id="join-button"
                 (click)="join()"
                 [disabled]="joined() || joining() || status() == 'canceled'"
-                class="flex justify-center items-center gap-2 rounded-md text-sm py-2 px-8 min-w-[220px] cursor-pointer transition-colors
+                class="flex justify-center items-center gap-2 rounded-md text-sm py-2 px-8 w-full lg:w-auto lg:min-w-[220px] cursor-pointer transition-colors
                       bg-primary-accent text-white
                       disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed">
                 <img src="icons/people-sm.svg" alt="">
                 <span>Participar do evento</span>
               </button>
             } @else {
-              <div id="leave-button" class="min-w-[220px]">
+              <div id="leave-button" class="w-full lg:w-auto lg:min-w-[220px]">
                 <generic-button
                   variant="red_white" 
                   (click)="leave()">
@@ -82,7 +82,7 @@
 
         <hr class="border-gray-200 mx-4">
 
-        <div id="organizer-container" class="flex items-center justify-between px-4 py-4">
+        <div id="organizer-container" class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 px-4 py-4">
           <div id="organizer" class="flex items-center gap-3">
             <img [src]="e.creatorPhoto ?? 'images/default_profile_pic.jpg'" alt=""
                 class="rounded-full bg-black w-10 h-10 object-cover">
@@ -92,25 +92,25 @@
             </div>
           </div>
 
-          <div id="event-actions" class="flex flex-col items-end gap-2 shrink-0">
-            <div class="flex gap-3">
+          <div id="event-actions" class="flex flex-col items-stretch sm:items-end gap-2 shrink-0">
+            <div class="flex flex-col sm:flex-row gap-3">
               @if (isOrganizer()) {
                 @if (status() === 'upcoming') {
-                  <generic-button variant="secondary" class="block w-44" (click)="editEvent()">
+                  <generic-button variant="secondary" class="block w-full sm:w-55" (click)="editEvent()">
                     <span class="flex items-center justify-center gap-2 px-4">
                       <span>Editar evento</span>
                     </span>
                   </generic-button>
                 }
                 @if (status() === 'upcoming' || status() === 'canceled') {
-                  <generic-button variant="red_white" class="block w-44" [disabled]="deleting()" (click)="deleteEvent()">
+                  <generic-button variant="red_white" class="block w-full sm:w-55" [disabled]="deleting()" (click)="deleteEvent()">
                     <span class="flex items-center justify-center gap-2 px-4">
                       <span>{{ deleting() ? 'Excluindo...' : 'Excluir evento' }}</span>
                     </span>
                   </generic-button>
                 }
               } @else {
-                <generic-button variant="red_white" class="block w-48" (click)="openEventReportModal()">
+                <generic-button variant="red_white" class="block w-full sm:w-55" (click)="openEventReportModal()">
                   <span class="flex items-center justify-center gap-2 px-4">
                     <app-icon name="warning" class="w-3.5 h-3.5" />
                     <span>Denunciar evento</span>
@@ -130,19 +130,19 @@
       </section>
 
       <!-- ===================== PARTE DE BAIXO (2 colunas) ===================== -->
-      <section id="bottom-container" class="grid grid-cols-[1fr_280px] gap-6 flex-1">
+      <section id="bottom-container" class="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-6 flex-1">
 
         <!-- ---------- Coluna esquerda ---------- -->
-        <div id="left-container" class="flex flex-col gap-4">
+        <div id="left-container" class="flex flex-col gap-4 min-w-0">
 
           <!-- Abas -->
-          <div id="info-options" class="flex gap-7 p-3 border border-primary-dark rounded-md list-none text-[12px]">
+          <div id="info-options" class="flex gap-5 md:gap-7 p-3 overflow-x-auto border border-primary-dark rounded-md list-none text-[12px]">
           @for (tab of tabs; track tab.id) {
                 <button
                     type="button"
                     role="tab"
                     [attr.aria-selected]="tab.id === activeTab()"
-                    class="flex items-center gap-2 text-sm cursor-pointer transition-colors"
+                    class="flex shrink-0 items-center gap-2 text-sm whitespace-nowrap cursor-pointer transition-colors"
                     [class]="tab.id === activeTab()
                         ? 'border-primary text-primary'
                         : 'border-transparent text-gray-900 hover:text-primary'"
@@ -158,19 +158,17 @@
             <!-- Sobre o evento -->
             <div id="about-event" class="flex flex-col gap-5 p-4 border border-primary-dark rounded-md">
               <h1 class="font-bold">Sobre o evento</h1>
-              <span class="text-[12px] leading-relaxed">
-                {{ e.description }}
-              </span>
+              <p class="text-[12px] leading-relaxed whitespace-pre-line break-words">{{ e.description }}</p>
             </div>
 
             <!-- Local -->
             <div id="localization-event" class="flex flex-col gap-5 p-4 border border-primary-dark rounded-md">
               <h1 class="font-bold text-[12px]">Local</h1>
-              <div id="localization-img-text" class="flex gap-5">
+              <div id="localization-img-text" class="flex flex-col sm:flex-row gap-3 sm:gap-5">
                 @if (e.latitude != null && e.longitude != null) {
-                  <mini-map [latitude]="e.latitude" [longitude]="e.longitude" class="w-40 h-24 shrink-0" />
+                  <mini-map [latitude]="e.latitude" [longitude]="e.longitude" class="w-full h-32 sm:w-40 sm:h-24 shrink-0" />
                 } @else {
-                  <div class="flex items-center justify-center w-40 h-24 shrink-0 rounded-md bg-gray-100">
+                  <div class="flex items-center justify-center w-full h-32 sm:w-40 sm:h-24 shrink-0 rounded-md bg-gray-100">
                     <img src="icons/localization-md.svg" alt="">
                   </div>
                 }
@@ -207,14 +205,14 @@
             <div id="participants-container" class="flex flex-col gap-5 p-4 border border-primary-dark rounded-md">
               <div id="participants-columns" class="flex justify-around items-center w-full">
                 <h1 class="font-bold">Todos os participantes</h1>
-                <h1 class="font-bold">Ação</h1>
+                <h1 class="hidden sm:block font-bold">Ação</h1>
               </div>
               <div id="participants-action" class="flex flex-col">
                 @for (p of participants(); track p.id) {
-                  <div id="user-infos" class="flex w-full">
-                    <div class="flex items-center w-full gap-10">
+                  <div id="user-infos" class="flex flex-col sm:flex-row w-full gap-3">
+                    <div class="flex items-center w-full gap-4 sm:gap-10">
                       <img [src]="p.urlPhoto ?? 'images/default_profile_pic.jpg'" [alt]="p.name"
-                      class="w-20 h-20 rounded-full object-cover bg-black border-2 border-gray-50">
+                      class="w-14 h-14 sm:w-20 sm:h-20 shrink-0 rounded-full object-cover bg-black border-2 border-gray-50">
                       <div class="flex flex-col">
                         <span>{{ p.name }}</span>
                         <span class="flex text-sm text-gray-400 gap-1 items-center">
@@ -223,14 +221,14 @@
                         </span>
                       </div>
                     </div>
-                    <div class="flex justify-end w-full gap-10">
-                      <generic-button variant="red_white" (click)="openReportModal(p)" class="w-[25%]">
+                    <div class="flex justify-end w-full gap-3 sm:gap-10">
+                      <generic-button variant="red_white" (click)="openReportModal(p)" class="flex-1 sm:flex-none sm:w-[25%]">
                           <span class="flex items-center justify-center gap-2">
                             <app-icon name="warning" class="w-3.5 h-3.5" />
                             <span>Denunciar</span>
                           </span>
                       </generic-button>
-                      <generic-button variant="secondary" (click)="openRatingModal(p)" class="w-[25%]">
+                      <generic-button variant="secondary" (click)="openRatingModal(p)" class="flex-1 sm:flex-none sm:w-[25%]">
                           <span class="flex items-center justify-center gap-2">
                             <app-icon name="star-outline" class="w-3.5 h-3.5" />
                             <span>Avaliar</span>
@@ -300,11 +298,11 @@
 
             <ul class="flex flex-col gap-3 text-[11px] text-gray-400">
               <li class="flex items-center gap-2">
-                <img src="icons/clock-sm.svg" alt="">
+                <app-icon name="clock" class="h-3.5 w-3.5 text-black"/>
                 <span>Chegue com 15 min de antecedência</span>
               </li>
               <li class="flex items-center gap-2">
-                <img src="icons/smile-sm.svg" alt="">
+                <app-icon name="happy-face" class="h-3.5 w-3.5 text-black"/>
                 <span>Respeito acima de tudo!</span>
               </li>
               <li class="flex items-center gap-2">
@@ -312,7 +310,7 @@
                 <span>Combinados no chat do evento</span>
               </li>
               <li class="flex items-center gap-2">
-                <img src="icons/help-sm.svg" alt="">
+                <app-icon name="user" class="h-3.5 w-3.5 text-black"/>
                 <span>Qualquer dúvida, fale com o anfitrião</span>
               </li>
             </ul>

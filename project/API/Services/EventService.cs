@@ -66,7 +66,6 @@ namespace API.Services
                 Localization = createEventDTO.Localization,
                 MaxCapacity = createEventDTO.MaxCapacity,
                 City = createEventDTO.City,
-                Level = createEventDTO.Level,
                 UrlImage = createEventDTO.UrlImage,
                 PlaceName = createEventDTO.PlaceName,
                 Street = createEventDTO.Street,
@@ -99,7 +98,6 @@ namespace API.Services
                 Localization = created.Localization,
                 MaxCapacity = created.MaxCapacity,
                 City = created.City,
-                Level = created.Level,
                 UrlImage = created.UrlImage,
                 PlaceName = created.PlaceName,
                 Street = created.Street,
@@ -135,7 +133,6 @@ namespace API.Services
                 Localization = eventId.Localization,
                 MaxCapacity = eventId.MaxCapacity,
                 City = eventId.City,
-                Level = eventId.Level,
                 UrlImage = eventId.UrlImage,
                 PlaceName = eventId.PlaceName,
                 Street = eventId.Street,
@@ -225,7 +222,6 @@ namespace API.Services
             ev.Localization = dto.Localization;
             ev.MaxCapacity = dto.MaxCapacity;
             ev.City = dto.City;
-            ev.Level = dto.Level;
             ev.UrlImage = dto.UrlImage;
             ev.PlaceName = dto.PlaceName;
             ev.Street = dto.Street;
@@ -285,7 +281,11 @@ namespace API.Services
             if (string.IsNullOrWhiteSpace(user.City))
                 return Result<List<ReturnEventDTO>>.Failure("Usuário não possui cidade cadastrada.");
 
-            var events = await _eventRepository.GetByCityAsync(user.City);
+            var parts = user.City.Split(" - ");
+            var cityName = parts[0].Trim();
+            var state = parts.Length > 1 ? parts[1].Trim() : null;
+
+            var events = await _eventRepository.GetByCityAsync(cityName, state);
 
             return Result<List<ReturnEventDTO>>.Success(
                 events.Select(e => ToReturnDto(e, userId)).ToList());
@@ -424,7 +424,6 @@ namespace API.Services
             Localization = e.Localization,
             MaxCapacity = e.MaxCapacity,
             City = e.City,
-            Level = e.Level,
             UrlImage = e.UrlImage,
             PlaceName = e.PlaceName,
             Street = e.Street,

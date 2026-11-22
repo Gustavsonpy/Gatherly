@@ -147,9 +147,20 @@ public class EventRepositoryTests : RepositoryTestBase
     {
         await Repo.AddAsync(TestData.Event(Owner.Id, Category.Id, city: "Maringá"));
 
-        var result = await Repo.GetByCityAsync("Maringá");
+        var result = await Repo.GetByCityAsync("Maringá", null);
 
         Assert.Equal("Maringá", Assert.Single(result).City);
+    }
+
+    [Fact]
+    public async Task GetByCityAsync_CidadesHomonimas_FiltraPorEstado()
+    {
+        await Repo.AddAsync(TestData.Event(Owner.Id, Category.Id, title: "No RS", city: "Bom Jesus", state: "RS"));
+        await Repo.AddAsync(TestData.Event(Owner.Id, Category.Id, title: "No PI", city: "Bom Jesus", state: "PI"));
+
+        var result = await Repo.GetByCityAsync("Bom Jesus", "RS");
+
+        Assert.Equal("No RS", Assert.Single(result).Title);
     }
 
     [Fact]

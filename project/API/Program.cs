@@ -1,4 +1,5 @@
 using System.Text;
+using API.Common;
 using API.Data;
 using API.Interfaces;
 using API.Interfaces.Category;
@@ -104,7 +105,7 @@ builder.Services.AddScoped<ICommentService, CommentService>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 
-builder.Services.AddScoped<IImageStorage, LocalImageStorage>();
+builder.Services.AddImageStorage(builder.Configuration);
 
 builder.Services.AddScoped<IEventParticipantRepository, EventParticipantRepository>();
 

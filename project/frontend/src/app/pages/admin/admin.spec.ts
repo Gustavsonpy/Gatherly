@@ -6,6 +6,7 @@ import { AdminService } from '../../core/admin/admin.service';
 import { AdminComment, AdminEvent, AdminReport, AdminUser } from '../../core/admin/admin.model';
 import { AuthService } from '../../core/auth/auth.service';
 import { ToastService } from '../../core/toaster/toaster.service';
+import { UserService } from '../../core/user/user.service';
 
 const report = (overrides: Partial<AdminReport> = {}): AdminReport => ({
   id: 'r1',
@@ -105,6 +106,8 @@ describe('Admin', () => {
         provideRouter([]),
         { provide: AdminService, useValue: api },
         { provide: ToastService, useValue: toast },
+        // O Sidebar busca o usuário logado; aqui ele vem de um stub, sem chamar a API
+        { provide: UserService, useValue: { getMe: () => of({ id: 'ME', name: 'Eu Admin', urlPhoto: null }) } },
         {
           provide: AuthService,
           useValue: {

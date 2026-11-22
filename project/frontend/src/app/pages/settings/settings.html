@@ -1,17 +1,17 @@
-<main class="flex min-h-dvh bg-gray-50">
+<main class="flex flex-col md:flex-row min-h-dvh bg-gray-50">
     <app-sidebar />
 
-    <section class="flex-1 min-w-0 p-8 w-full flex flex-col gap-6">
+    <section class="flex-1 min-w-0 p-4 md:p-8 w-full flex flex-col gap-6">
         <header>
             <h1 class="text-xl font-semibold">Configurações</h1>
             <p class="text-xs text-gray-500 mt-1">Configure sua conta ou o Gatherly do seu jeito</p>
         </header>
         
-        <div id="tabOptions" class="flex justify-between w-fit px-8 h-10 border border-gray-200 rounded-lg bg-white">
+        <div id="tabOptions" class="flex justify-between gap-6 w-full md:w-fit max-w-full overflow-x-auto px-4 md:px-8 h-10 border border-gray-200 rounded-lg bg-white">
             @for(tab of tabs; track tab.id) {
                 <button 
                     id="options" 
-                    class="flex justify-center items-center gap-2 cursor-pointer" 
+                    class="flex shrink-0 justify-center items-center gap-2 cursor-pointer whitespace-nowrap text-sm" 
                     [class]="tab.id === activeTab() ? 'border-b border-primary text-primary' : 'border-b border-b-transparent'"
                     (click)="setActiveTab(tab.id)"
                     >
@@ -26,15 +26,15 @@
             <p class="text-xs text-gray-500 mt-1">Atualize seus dados pessoais e como as pessoas te veem no Gatherly</p>
         </div>
 
-        <div id="essential-account-info" class="flex gap-10">
-            <div id="user-picture" class="flex flex-col gap-5 shrink-0">
+        <div id="essential-account-info" class="flex flex-col sm:flex-row gap-6 md:gap-10">
+            <div id="user-picture" class="flex flex-col items-center sm:items-start gap-5 shrink-0">
                 <span>Foto de perfil</span>
 
-                <div id="account-profile" class="relative w-40 h-40">
+                <div id="account-profile" class="relative w-32 h-32 md:w-40 md:h-40">
                     <img
                         [src]="photoUrl() ?? 'images/default_profile_pic.jpg'"
                         alt="Foto de perfil"
-                        class="rounded-full object-cover w-40 h-40 max-w-none"
+                        class="rounded-full object-cover w-32 h-32 md:w-40 md:h-40 max-w-none"
                         [class.opacity-50]="uploadingPhoto()"
                     >
 
@@ -84,10 +84,10 @@
                     name="biography"
                     [formControl]="form.controls.biography"
                     id="biography"
-                    class="border border-primary-dark rounded-sm w-full h-40 p-2 text-[12px]">
+                    class="border border-primary-dark rounded-sm w-full h-40 p-2 text-[12px] bg-white">
                 </textarea>
             </div>
-            <div id="birthdate-city" class="flex w-full justify-between gap-4">
+            <div id="birthdate-city" class="flex flex-col md:flex-row w-full justify-between md:gap-4">
                 <generic-input
                     id="birthdate-input"
                     type="date"
@@ -104,9 +104,9 @@
                 />
             </div>
         </div>
-        <div id="settings-buttons" class="flex w-full justify-end gap-3">
+        <div id="settings-buttons" class="flex flex-col-reverse sm:flex-row w-full justify-end gap-3">
             <generic-button
-                class="w-[15%]"
+                class="w-full sm:w-44"
                 variant="secondary"
                 [disabled]="loading()"
                 (clicked)="logout()"
@@ -114,7 +114,7 @@
                 Fazer log out
             </generic-button>
             <generic-button
-                class="w-[15%]"
+                class="w-full sm:w-44"
                 [disabled]="loading() || form.invalid || form.pristine"
                 (clicked)="save()"
             >

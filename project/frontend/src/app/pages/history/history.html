@@ -1,19 +1,19 @@
-<main class="flex min-h-dvh bg-gray-50">
+<main class="flex flex-col md:flex-row min-h-dvh bg-gray-50">
     <app-sidebar />
 
-    <section class="flex-1 min-w-0 p-8 w-full flex flex-col gap-6">
+    <section class="flex-1 min-w-0 p-4 md:p-8 w-full flex flex-col gap-6">
         <header>
             <h1 class="text-xl font-semibold">Histórico</h1>
             <p class="text-xs text-gray-500 mt-1">Relembre dos eventos que você já participou ou já organizou</p>
         </header>
 
-        <div role="tablist" class="flex w-fit h-11 gap-8 px-6 border border-gray-200 rounded-lg bg-white">
+        <div role="tablist" class="flex w-full md:w-fit max-w-full overflow-x-auto h-11 gap-6 md:gap-8 px-4 md:px-6 border border-gray-200 rounded-lg bg-white">
             @for (tab of tabs; track tab.id) {
                 <button
                     type="button"
                     role="tab"
                     [attr.aria-selected]="tab.id === activeTab()"
-                    class="flex items-center gap-2 text-sm cursor-pointer border-b-2 transition-colors"
+                    class="flex shrink-0 items-center gap-2 text-sm whitespace-nowrap cursor-pointer border-b-2 transition-colors"
                     [class]="tab.id === activeTab()
                         ? 'border-primary text-primary'
                         : 'border-transparent text-gray-900 hover:text-primary'"
