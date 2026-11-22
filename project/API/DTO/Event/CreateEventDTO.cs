@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using System.ComponentModel.DataAnnotations;
 
 namespace API.DTO.Event;
@@ -12,7 +13,9 @@ public class CreateEventDTO
     [MaxLength(1000, ErrorMessage = "A descrição deve ter no máximo 1000 caracteres.")]
     public string Description { get; set; }
 
+    [JsonRequired]
     public DateTime DateTimeStart { get; set; }
+    [JsonRequired]
     public DateTime DateTimeEnd { get; set; }
 
     [Required(ErrorMessage = "A localização é obrigatória.")]
@@ -40,5 +43,6 @@ public class CreateEventDTO
     [Range(-180, 180, ErrorMessage = "Longitude inválida.")]
     public double? Longitude { get; set; }
 
+    [JsonRequired]
     public Guid CategoryId { get; set; }
 }

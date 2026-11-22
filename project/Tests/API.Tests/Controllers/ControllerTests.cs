@@ -280,9 +280,9 @@ public class SmallControllersTests
     public async Task UserRatingController()
     {
         var service = new Mock<IUserRatingService>();
-        CreateUserRatingDTO? sent = null;
-        service.Setup(s => s.CreateRatingAsync(It.IsAny<CreateUserRatingDTO>()))
-            .Callback<CreateUserRatingDTO>(d => sent = d)
+        Guid? sentReporter = null;
+        service.Setup(s => s.CreateRatingAsync(It.IsAny<Guid>(), It.IsAny<CreateUserRatingDTO>()))
+            .Callback<Guid, CreateUserRatingDTO>((reporterId, _) => sentReporter = reporterId)
             .ReturnsAsync(Result<UserRatingDTO>.Success(new UserRatingDTO()));
         service.Setup(s => s.GetRatingByUser(_userId)).ReturnsAsync(new List<UserRatingDTO>());
         service.Setup(s => s.GetUserScore(_userId)).ReturnsAsync(new UserScoreDTO());
@@ -290,13 +290,13 @@ public class SmallControllersTests
         Assert.IsType<UnauthorizedResult>(await new UserRatingController(service.Object).WithUser(null).Create(new CreateUserRatingDTO()));
 
         var c = new UserRatingController(service.Object).WithUser(_userId);
-        // O ReporterId sempre vem do token, nunca do corpo da requisição.
-        Assert.IsType<OkObjectResult>(await c.Create(new CreateUserRatingDTO { ReporterId = Guid.NewGuid() }));
-        Assert.Equal(_userId, sent!.ReporterId);
+        // Quem avalia sempre vem do token, nunca do corpo da requisição.
+        Assert.IsType<OkObjectResult>(await c.Create(new CreateUserRatingDTO()));
+        Assert.Equal(_userId, sentReporter);
         Assert.IsType<OkObjectResult>(await c.GetByUser(_userId));
         Assert.IsType<OkObjectResult>(await c.GetScore(_userId));
 
-        service.Setup(s => s.CreateRatingAsync(It.IsAny<CreateUserRatingDTO>())).ReturnsAsync(Result<UserRatingDTO>.Failure("x"));
+        service.Setup(s => s.CreateRatingAsync(It.IsAny<Guid>(), It.IsAny<CreateUserRatingDTO>())).ReturnsAsync(Result<UserRatingDTO>.Failure("x"));
         Assert.IsType<BadRequestObjectResult>(await c.Create(new CreateUserRatingDTO()));
     }
 
@@ -304,18 +304,19 @@ public class SmallControllersTests
     public async Task UserReportController()
     {
         var service = new Mock<IUserReportService>();
-        CreateReportDTO? sent = null;
-        service.Setup(s => s.CreateReport(It.IsAny<CreateReportDTO>()))
-            .Callback<CreateReportDTO>(d => sent = d)
+        Guid? sentReporter = null;
+        service.Setup(s => s.CreateReport(It.IsAny<Guid>(), It.IsAny<CreateReportDTO>()))
+            .Callback<Guid, CreateReportDTO>((reporterId, _) => sentReporter = reporterId)
             .ReturnsAsync(Result<UserReportDTO>.Success(new UserReportDTO()));
 
         Assert.IsType<UnauthorizedResult>(await new UserReportController(service.Object).WithUser(null).Create(new CreateReportDTO()));
 
         var c = new UserReportController(service.Object).WithUser(_userId);
-        Assert.IsType<OkObjectResult>(await c.Create(new CreateReportDTO { ReporterId = Guid.NewGuid() }));
-        Assert.Equal(_userId, sent!.ReporterId);
+        // Quem denuncia sempre vem do token, nunca do corpo da requisição.
+        Assert.IsType<OkObjectResult>(await c.Create(new CreateReportDTO()));
+        Assert.Equal(_userId, sentReporter);
 
-        service.Setup(s => s.CreateReport(It.IsAny<CreateReportDTO>())).ReturnsAsync(Result<UserReportDTO>.Failure("x"));
+        service.Setup(s => s.CreateReport(It.IsAny<Guid>(), It.IsAny<CreateReportDTO>())).ReturnsAsync(Result<UserReportDTO>.Failure("x"));
         Assert.IsType<BadRequestObjectResult>(await c.Create(new CreateReportDTO()));
     }
 

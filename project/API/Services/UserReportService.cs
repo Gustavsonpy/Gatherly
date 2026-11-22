@@ -60,27 +60,27 @@ namespace API.Services
             return Result<UserReportDTO>.Success(ToReturnDTO(created));
         }
 
-        public async Task<Result<UserReportDTO>> CreateReport(CreateReportDTO reportDTO)
+        public async Task<Result<UserReportDTO>> CreateReport(Guid reporterId, CreateReportDTO reportDTO)
         {
             var ev = await _eventRepository.GetByIdAsync(reportDTO.EventId);
 
             if (ev is null)
                 return Result<UserReportDTO>.Failure("Evento não encontrado.");
 
-            if (!await _eventParticipantRepository.HasJoinedAsync(ev.Id, reportDTO.ReporterId))
+            if (!await _eventParticipantRepository.HasJoinedAsync(ev.Id, reporterId))
                 return Result<UserReportDTO>.Failure("Você não participou deste evento.");
 
             if (!await _eventParticipantRepository.HasJoinedAsync(ev.Id, reportDTO.ReportedUserId))
                 return Result<UserReportDTO>.Failure("Este usuário não participou deste evento.");
 
-            if (reportDTO.ReporterId == reportDTO.ReportedUserId)
+            if (reporterId == reportDTO.ReportedUserId)
                 return Result<UserReportDTO>.Failure("Você não pode denunciar a si mesmo.");
 
             if (!Enum.IsDefined(typeof(ReportReason), reportDTO.Reason))
                 return Result<UserReportDTO>.Failure("Motivo da denúncia inválido.");
 
             var alreadyReported = await _userReportRepository.ExistsAsync(
-                reportDTO.ReporterId,
+                reporterId,
                 reportDTO.ReportedUserId,
                 reportDTO.EventId,
                 reportDTO.Reason
@@ -94,7 +94,7 @@ namespace API.Services
 
             var report = new UserReport
             {
-                ReporterId = reportDTO.ReporterId,
+                ReporterId = reporterId,
                 ReportedUserId = reportDTO.ReportedUserId,
                 EventId = reportDTO.EventId,
                 Reason = reportDTO.Reason,

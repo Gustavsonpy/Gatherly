@@ -25,7 +25,7 @@ public class UserReportServiceTests
 
     private CreateReportDTO Dto(ReportReason reason = ReportReason.Spam, string description = "") => new()
     {
-        ReporterId = _reporter, ReportedUserId = _reported, EventId = _event.Id, Reason = reason, Description = description
+        ReportedUserId = _reported, EventId = _event.Id, Reason = reason, Description = description
     };
 
     private void SetupJoined(bool reporter = true, bool reported = true)
@@ -38,7 +38,7 @@ public class UserReportServiceTests
     [Fact]
     public async Task CreateReport_EventoInexistente_RetornaErro()
     {
-        var result = await CreateService().CreateReport(Dto());
+        var result = await CreateService().CreateReport(_reporter, Dto());
         Assert.Equal("Evento não encontrado.", result.Errors.Single());
     }
 
@@ -46,7 +46,7 @@ public class UserReportServiceTests
     public async Task CreateReport_DenuncianteNaoParticipou_RetornaErro()
     {
         SetupJoined(reporter: false);
-        var result = await CreateService().CreateReport(Dto());
+        var result = await CreateService().CreateReport(_reporter, Dto());
         Assert.Equal("Você não participou deste evento.", result.Errors.Single());
     }
 
@@ -54,7 +54,7 @@ public class UserReportServiceTests
     public async Task CreateReport_DenunciadoNaoParticipou_RetornaErro()
     {
         SetupJoined(reported: false);
-        var result = await CreateService().CreateReport(Dto());
+        var result = await CreateService().CreateReport(_reporter, Dto());
         Assert.Equal("Este usuário não participou deste evento.", result.Errors.Single());
     }
 
@@ -66,7 +66,7 @@ public class UserReportServiceTests
         var dto = Dto();
         dto.ReportedUserId = _reporter;
 
-        var result = await CreateService().CreateReport(dto);
+        var result = await CreateService().CreateReport(_reporter, dto);
 
         Assert.Equal("Você não pode denunciar a si mesmo.", result.Errors.Single());
     }
@@ -75,7 +75,7 @@ public class UserReportServiceTests
     public async Task CreateReport_MotivoInvalido_RetornaErro()
     {
         SetupJoined();
-        var result = await CreateService().CreateReport(Dto((ReportReason)99));
+        var result = await CreateService().CreateReport(_reporter, Dto((ReportReason)99));
         Assert.Equal("Motivo da denúncia inválido.", result.Errors.Single());
     }
 
@@ -85,7 +85,7 @@ public class UserReportServiceTests
         SetupJoined();
         _reports.Setup(r => r.ExistsAsync(_reporter, _reported, _event.Id, ReportReason.Spam)).ReturnsAsync(true);
 
-        var result = await CreateService().CreateReport(Dto());
+        var result = await CreateService().CreateReport(_reporter, Dto());
 
         Assert.Contains("Você já denunciou", result.Errors.Single());
     }
@@ -94,7 +94,7 @@ public class UserReportServiceTests
     public async Task CreateReport_MotivoOutroSemDescricao_RetornaErro()
     {
         SetupJoined();
-        var result = await CreateService().CreateReport(Dto(ReportReason.Other, "  "));
+        var result = await CreateService().CreateReport(_reporter, Dto(ReportReason.Other, "  "));
         Assert.Equal("A descrição é obrigatória", result.Errors.Single());
     }
 
@@ -104,7 +104,7 @@ public class UserReportServiceTests
         SetupJoined();
         _reports.Setup(r => r.AddAsync(It.IsAny<UserReport>())).ReturnsAsync((UserReport r) => r);
 
-        var result = await CreateService().CreateReport(Dto(ReportReason.Other, "Comportamento agressivo"));
+        var result = await CreateService().CreateReport(_reporter, Dto(ReportReason.Other, "Comportamento agressivo"));
 
         Assert.True(result.IsSuccess);
         Assert.Equal(ReportReason.Other, result.Value!.Reason);

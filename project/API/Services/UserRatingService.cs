@@ -20,12 +20,12 @@ namespace API.Services
             _eventParticipantRepository = eventParticipantRepository;
         }
 
-        public async Task<Result<UserRatingDTO>> CreateRatingAsync(CreateUserRatingDTO userRatingDTO)
+        public async Task<Result<UserRatingDTO>> CreateRatingAsync(Guid reporterId, CreateUserRatingDTO userRatingDTO)
         {
             if (userRatingDTO.Rate < 1 || userRatingDTO.Rate > 5)
                 return Result<UserRatingDTO>.Failure("A avaliação tem que ser entre 1 e 5 estrelas.");
 
-            if (userRatingDTO.ReporterId == userRatingDTO.RatedUserId)
+            if (reporterId == userRatingDTO.RatedUserId)
                 return Result<UserRatingDTO>.Failure("Você não pode avaliar a si mesmo.");
 
             var ev = await _eventRepository.GetByIdAsync(userRatingDTO.EventId);
@@ -39,7 +39,7 @@ namespace API.Services
             if (ev.DateTimeEnd > DateTime.UtcNow)
                 return Result<UserRatingDTO>.Failure("Sé é possível avaliar depois que o evento terminar.");
 
-            if (!await _eventParticipantRepository.AttendedAsync(ev.Id, userRatingDTO.ReporterId, ev.DateTimeStart))
+            if (!await _eventParticipantRepository.AttendedAsync(ev.Id, reporterId, ev.DateTimeStart))
                 return Result<UserRatingDTO>.Failure("Você não participou desse evento.");
 
             if (!await _eventParticipantRepository.AttendedAsync(ev.Id, userRatingDTO.RatedUserId, ev.DateTimeStart))
@@ -49,7 +49,7 @@ namespace API.Services
             {
                 Rate = userRatingDTO.Rate,
                 Description = userRatingDTO.Description,
-                ReporterId = userRatingDTO.ReporterId,
+                ReporterId = reporterId,
                 RatedUserId = userRatingDTO.RatedUserId,
                 EventId = userRatingDTO.EventId
             };
