@@ -86,4 +86,11 @@ describe('RatingUserModal', () => {
 
     expect(c.errorMessage()).toBe('Não foi possível avaliar o usuário.');
   });
+
+  it('o campo de descrição tem um label associado', () => {
+    create();
+    const field = document.querySelector<HTMLElement>('textarea');
+    expect(field?.id).toBeTruthy();
+    expect(document.querySelector(`label[for="${field!.id}"]`)).not.toBeNull();
+  });
 });

@@ -63,4 +63,11 @@ describe('CommentSender', () => {
     expect(c.sending()).toBe(false);
     expect(c.commentControl.value).toBe('oi');
   });
+
+  it('o campo de comentário tem um label associado', () => {
+    create();
+    const field = document.querySelector<HTMLElement>('textarea');
+    expect(field?.id).toBeTruthy();
+    expect(document.querySelector(`label[for="${field!.id}"]`)).not.toBeNull();
+  });
 });

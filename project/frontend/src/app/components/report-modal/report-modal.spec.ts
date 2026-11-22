@@ -111,4 +111,23 @@ describe('ReportModal', () => {
 
     expect(c.errorMessage()).toBe('Não foi possível enviar a denúncia. Tente novamente.');
   });
+
+  it('o campo de descrição tem um label associado', () => {
+    create();
+    const field = document.querySelector<HTMLElement>('textarea');
+    expect(field?.id).toBeTruthy();
+    expect(document.querySelector(`label[for="${field!.id}"]`)).not.toBeNull();
+  });
+
+  it('cada motivo é um botão que indica se está selecionado (aria-pressed)', () => {
+    const fixture = create();
+    const buttons = () => Array.from(fixture.nativeElement.querySelectorAll('#reports button')) as HTMLElement[];
+
+    expect(buttons().map((b) => b.getAttribute('aria-pressed'))).toEqual(['false', 'false']);
+
+    buttons()[1].click();
+    fixture.detectChanges();
+
+    expect(buttons().map((b) => b.getAttribute('aria-pressed'))).toEqual(['false', 'true']);
+  });
 });
