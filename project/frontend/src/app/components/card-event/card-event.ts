@@ -20,6 +20,6 @@ export class CardEvent {
   description = input<string>('');
 
   goToEvent(): void {
-    this.router.navigate(['/events', this.id()]);
+    void this.router.navigate(['/events', this.id()]);
   }
 }

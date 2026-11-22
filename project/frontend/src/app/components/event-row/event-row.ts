@@ -37,6 +37,6 @@ export class EventRow implements OnInit {
   }
 
   goToEvent(): void {
-    this.router.navigate(['/events', this.event().id]);
+    void this.router.navigate(['/events', this.event().id]);
   }
 }
