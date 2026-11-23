@@ -1,12 +1,13 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { CreateEventReport, CreateReport, ReportReasonModel } from './report-reason.model';
+import { environment } from '../../../environments/environment';
 
 @Injectable({providedIn: 'root'})
 export class ReportService {
   private http = inject(HttpClient);
-  private apiUrl = 'http://localhost:5008/api';
-  private reportUrl = `${this.apiUrl}/report`;
+  private readonly apiUrl = `${environment.apiUrl}`;
+  private readonly reportUrl = `${this.apiUrl}/report`;
 
   getReportReasons() {
     return this.http.get<ReportReasonModel[]>(`${this.apiUrl}/report-reasons`);
