@@ -19,7 +19,7 @@ export class EventRow implements OnInit {
   event = input.required<EventModel>();
   isOrganizer = input(false);
   allowCancel = input(true);
-  cancel = output<void>();
+  canceled = output<void>();
 
   participants = signal<ParticipantModel[]>([]);
 

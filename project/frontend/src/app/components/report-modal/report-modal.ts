@@ -22,7 +22,7 @@ export class ReportModal implements OnInit {
   reportedEvent = input<EventModel | null>(null);
   eventId = input.required<string>();
 
-  close = output<void>();
+  closed = output<void>();
   reported = output<void>();
 
   reportReasons = signal<ReportReasonModel[]>([]);
@@ -83,7 +83,7 @@ export class ReportModal implements OnInit {
       next: () => {
         this.loading.set(false);
         this.reported.emit();
-        this.close.emit();
+        this.closed.emit();
         this.toastService.success(ToasterSuccessEventMessage.report_user);
       },
       error: (err) => {

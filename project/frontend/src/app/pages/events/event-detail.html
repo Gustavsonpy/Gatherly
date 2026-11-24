@@ -257,11 +257,11 @@
               [reportedEvent]="reportingEvent() ? e : null"
               [eventId]="e.id"
               (reported)="onReported()"
-              (close)="closeReportModal()" />
+              (closed)="closeReportModal()" />
           }
 
           @if (activeRatingModal()){
-            <user-rating-modal [ratedUser]="ratedUser()!" (close)="closeRatingModal()" (rated)="onUserRated()" [event]="e"/>
+            <user-rating-modal [ratedUser]="ratedUser()!" (closed)="closeRatingModal()" (rated)="onUserRated()" [event]="e"/>
           }
         </div>
 

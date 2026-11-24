@@ -52,7 +52,7 @@
         <span class="text-red-500">{{ errorMessage() }}</span>
 
         <div id="report-buttons" class="flex gap-10">
-            <generic-button variant="secondary" (click)="close.emit()" class="w-full">Cancelar</generic-button>
+            <generic-button variant="secondary" (click)="closed.emit()" class="w-full">Cancelar</generic-button>
             <generic-button class="w-full"  (click)="submitRating()">Enviar avaliação</generic-button>
         </div>
     </div>

@@ -103,6 +103,9 @@ public class BlobImageStorageTests
                 It.IsAny<CancellationToken>()))
             .ThrowsAsync(new RequestFailedException("falhou"));
 
-        await CreateStorage().DeleteAsync("https://conta.blob.core.windows.net/uploads/events/abc.jpg");
+        var exception = await Record.ExceptionAsync(() =>
+            CreateStorage().DeleteAsync("https://conta.blob.core.windows.net/uploads/events/abc.jpg"));
+
+        Assert.Null(exception);
     }
 }
