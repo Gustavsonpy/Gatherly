@@ -1,4 +1,4 @@
-import { Component, computed, inject, input, OnInit, output, signal } from '@angular/core';
+import { Component, computed, inject, input, output, signal } from '@angular/core';
 import { Icon } from '../icon/icon';
 import { AuthService } from '../../core/auth/auth.service';
 import { EventModel, ParticipantModel } from '../../core/event/event.model';
@@ -14,7 +14,7 @@ import { ToasterErrorEventMessage, ToasterSuccessEventMessage } from '../../enum
   imports: [Icon, GenericButton, DatePipe, TitleCasePipe],
   templateUrl: './user-rating-modal.html',
 })
-export class RatingUserModal implements OnInit {
+export class RatingUserModal {
   private authService = inject(AuthService);
   private userRatingService = inject(RateService);
   private toastService = inject(ToastService);
@@ -25,7 +25,7 @@ export class RatingUserModal implements OnInit {
   ratedUser = input.required<ParticipantModel>();
   event = input.required<EventModel>();
   loading = signal(false);
-  close = output<void>();
+  closed = output<void>();
   rated = output<void>();
   starValue = signal<number>(0);
   rateFeedback = signal<string>("");
@@ -35,9 +35,6 @@ export class RatingUserModal implements OnInit {
   activeRatingModal = signal<boolean>(false);
 
   private readonly userId = computed(() => this.authService.currentUser()?.id);
-
-  ngOnInit(): void{
-  }
 
   onDescriptionInput(event: Event): void {
     this.description.set((event.target as HTMLTextAreaElement).value);
@@ -56,7 +53,7 @@ export class RatingUserModal implements OnInit {
     this.userRatingService.sendRating(rating).subscribe({
       next: () => {
         this.rated.emit();
-        this.close.emit();
+        this.closed.emit();
         this.toastService.success(ToasterSuccessEventMessage.rating_user);
       },
       error: (error) => {

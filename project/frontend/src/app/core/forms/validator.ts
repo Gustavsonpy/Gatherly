@@ -8,7 +8,10 @@ export function passwordsMatchValidator(group: AbstractControl): ValidationError
 
   if (password !== confirmControl.value) {
     confirmControl.setErrors({ ...confirmControl.errors, mismatch: true });
-  } else if (confirmControl.hasError('mismatch')) {
+    return { passwordsMismatch: true };
+  }
+
+  if (confirmControl.hasError('mismatch')) {
     const { mismatch, ...rest } = confirmControl.errors ?? {};
     confirmControl.setErrors(Object.keys(rest).length ? rest : null);
   }

@@ -61,8 +61,9 @@ describe('places', () => {
       http.expectOne(URL).flush([]);
       await first;
 
-      await service.load();
+      const second = await service.load();
       http.expectNone(URL);
+      expect(second).toEqual([]);
     });
 
     it('limpa o cache quando a requisição falha', async () => {

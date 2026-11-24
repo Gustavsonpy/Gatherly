@@ -74,7 +74,7 @@ describe('ReportModal', () => {
     const reported = vi.fn();
     const close = vi.fn();
     c.reported.subscribe(reported);
-    c.close.subscribe(close);
+    c.closed.subscribe(close);
 
     c.activateReason(reasons[0]);
     c.description.set('  spam demais  ');

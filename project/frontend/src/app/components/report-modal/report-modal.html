@@ -75,7 +75,7 @@
                 <span class="text-red-500">{{ errorMessage() }}</span>
 
                 <div id="report-buttons" class="flex gap-10">
-                    <generic-button variant="secondary" (click)="close.emit()" class="w-full">Cancelar</generic-button>
+                    <generic-button variant="secondary" (click)="closed.emit()" class="w-full">Cancelar</generic-button>
                     <generic-button class="w-full" [disabled]="!selectedReason() || loading()" (click)="submitReport()">Enviar a denúncia</generic-button>
                 </div>
             </div>

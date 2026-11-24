@@ -54,7 +54,7 @@ describe('RatingUserModal', () => {
     const rated = vi.fn();
     const close = vi.fn();
     c.rated.subscribe(rated);
-    c.close.subscribe(close);
+    c.closed.subscribe(close);
 
     c.paintStars(5);
     c.description.set('Ótimo');
