@@ -48,11 +48,13 @@ namespace API.Repositories
 
         public Task<List<Event>> GetEventsByActiveUser(Guid UserId)
         {
-            return _context.EventParticipants
-                .Where(p =>
+            return _context.Events
+                .Where(e => e.Participants.Any(p =>
                     p.UserId == UserId &&
-                    p.LeftAt == null)
-                .Select(p => p.Event)
+                    p.LeftAt == null))
+                .Include(e => e.Category)
+                .Include(e => e.User)
+                .Include(e => e.Participants)
                 .ToListAsync();
         }
 

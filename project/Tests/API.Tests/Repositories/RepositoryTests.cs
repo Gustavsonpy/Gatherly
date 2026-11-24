@@ -280,6 +280,20 @@ public class EventParticipantRepositoryTests : RepositoryTestBase
     }
 
     [Fact]
+    public async Task GetEventsByActiveUser_CarregaCategoriaCriadorEParticipantes()
+    {
+        await AddParticipant(Other.Id);
+        Db.ChangeTracker.Clear(); // simula uma requisição nova: nada carregado em memória
+
+        var ev = Assert.Single(await Repo.GetEventsByActiveUser(Other.Id));
+
+        Assert.NotNull(ev.Category);
+        Assert.Equal(Category.Name, ev.Category.Name);
+        Assert.NotNull(ev.User);
+        Assert.Single(ev.Participants);
+    }
+
+    [Fact]
     public async Task RemoveAsync_MarcaSaida()
     {
         await AddParticipant(Other.Id);
